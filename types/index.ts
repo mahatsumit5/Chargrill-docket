@@ -1,8 +1,9 @@
 export type CartItem = {
+  id: string;
   name: string;
-  instructions: string;
-  quantity: number;
-  size: "LG" | "RG" | null;
+  instructions?: string;
+  quantity: string;
+  size?: string;
 };
 
 export interface ICustomer {

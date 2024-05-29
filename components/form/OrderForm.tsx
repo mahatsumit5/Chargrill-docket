@@ -1,6 +1,6 @@
 "use client";
-import { useAppDispatch } from "@/hook";
-import { setDisplay } from "@/redux/cart.slice";
+import { useAppDispatch, useAppSelector } from "@/hook";
+import { setCart, setDisplay } from "@/redux/cart.slice";
 import React from "react";
 import { Button } from "../ui/button";
 import {
@@ -18,8 +18,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "../ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { cn } from "@/lib/utils";
-import { Command, CommandGroup, CommandItem } from "../ui/command";
+import { IoCaretBackOutline } from "react-icons/io5";
+import { LiaCartPlusSolid } from "react-icons/lia";
+import { v4 } from "uuid";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { Textarea } from "../ui/textarea";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import { CartItem } from "@/types";
 
 const size = [
   { label: "Large", value: "LG" },
@@ -29,30 +39,53 @@ const size = [
 const formSchema = z.object({
   name: z.string({ required_error: "Name is required" }).min(3).max(50),
   instructions: z.string().max(500).optional(),
-  quantity: z.number({ required_error: "Quantity is required" }).min(1),
+  quantity: z.string({ required_error: "Quantity is required" }).min(1),
   size: z.string().optional(),
 });
 
-const OrderForm = () => {
+const OrderForm = ({ item }: { item?: CartItem }) => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
+  const { items } = useAppSelector((store) => store.cart);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: item?.name || "",
+      instructions: item?.instructions || "",
+      quantity: item?.quantity || "",
+      size: item?.size || "",
+    },
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    dispatch(setCart({ id: v4(), ...values }));
+    form.clearErrors();
+    form.reset();
   }
   return (
     <div className="flex flex-col">
-      <div>
+      <div className="flex justify-between">
         <Button
           variant={"link"}
           onClick={() => {
             dispatch(setDisplay("UserForm"));
           }}
         >
-          Back
+          <IoCaretBackOutline /> Back
+        </Button>
+        <Button
+          variant={"link"}
+          className="relative "
+          onClick={() => router.push("/dashboard/cart")}
+        >
+          {/* {items.length} */}
+          <LiaCartPlusSolid size={30} color="" />
+          {items.length && (
+            <span className="absolute right-2 -top-1 font-bold  rounded-full text-sm  h-5 w-5">
+              {items.length}
+            </span>
+          )}
         </Button>
       </div>
 
@@ -101,34 +134,31 @@ const OrderForm = () => {
                     <FormControl>
                       <Button
                         variant="outline"
-                        role="combobox"
                         className={cn(" justify-between")}
                       >
-                        {/* {field.value
-                          ? languages.find(
-                              (language) => language.value === field.value
-                            )?.label
-                          : "Select language"} */}
-                        select
+                        {field.value
+                          ? size.find((item) => item.value === field.value)
+                              ?.label
+                          : "Select Size"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
-                    <Command>
-                      <CommandGroup>
-                        {size.map((size) => (
-                          <CommandItem
-                            key={size.value}
-                            onSelect={() => {
-                              form.setValue("size", size.value);
-                            }}
-                          >
-                            {size.label}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </Command>
+                  <PopoverContent className="w-[200px] p-4">
+                    <div className="flex flex-col gap-4">
+                      {size.map((item) => (
+                        <button
+                          className="bg-slate-200 p-2 rounded-md"
+                          key={item.value}
+                          value={item.value}
+                          onClick={() => {
+                            form.setValue("size", item.value);
+                          }}
+                        >
+                          {item.label}
+                        </button>
+                      ))}
+                    </div>
                   </PopoverContent>
                 </Popover>
                 <FormDescription>Select the size if applicable</FormDescription>
@@ -136,9 +166,28 @@ const OrderForm = () => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="instructions"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Order notes</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Any special instructions"
+                    className="resize-none"
+                    {...field}
+                    rows={5}
+                  />
+                </FormControl>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className=" flex items-end">
             <Button type="submit" variant={"default"} className=" w-full">
-              Submit
+              Add item
             </Button>
           </div>
         </form>
