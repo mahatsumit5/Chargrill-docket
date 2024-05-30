@@ -5,19 +5,28 @@ export type form = "UserForm" | "OrderForm";
 interface IinitialState {
   items: CartItem[];
   display: form;
-  customer: ICustomer | null;
+  customer: ICustomer;
 }
 const initialState: IinitialState = {
   items: [],
   display: "UserForm",
-  customer: null,
+  customer: {
+    date: new Date(),
+    fullName: "",
+    mobile: "",
+    time: "",
+    notes: "",
+  },
 };
 const cartSlice = createSlice({
   name: "cart",
   initialState,
   reducers: {
     setCart: (state, { payload }: PayloadAction<CartItem>) => {
-      state.items = [...state.items, payload];
+      state.items = [
+        ...state.items.filter((item) => item.id !== payload.id),
+        payload,
+      ];
     },
     setDisplay: (state, { payload }: PayloadAction<form>) => {
       state.display = payload;

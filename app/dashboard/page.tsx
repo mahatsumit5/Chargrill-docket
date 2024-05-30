@@ -1,6 +1,7 @@
 "use client";
 import OrderForm from "@/components/form/OrderForm";
 import UserForm from "@/components/form/UserForm";
+import { Button } from "@/components/ui/button";
 import { useAppSelector } from "@/hook";
 import React from "react";
 
@@ -11,7 +12,7 @@ function Page() {
   const { display } = useAppSelector((store) => store.cart);
   const components: Components = {
     UserForm: <UserForm />,
-    OrderForm: <OrderForm />,
+    OrderForm: <OrderForm type="new" />,
   };
   return (
     <div className=" rounded-md text-sm shadow-lg p-4 w-full md:w-2/3 border sm:m-4">

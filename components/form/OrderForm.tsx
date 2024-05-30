@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/hook";
+import { useAppDispatch, useAppSelector, useToaster } from "@/hook";
 import { setCart, setDisplay } from "@/redux/cart.slice";
 import React from "react";
 import { Button } from "../ui/button";
@@ -23,12 +23,7 @@ import { LiaCartPlusSolid } from "react-icons/lia";
 import { v4 } from "uuid";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useRouter } from "next/navigation";
 import { CartItem } from "@/types";
 
 const size = [
@@ -43,10 +38,17 @@ const formSchema = z.object({
   size: z.string().optional(),
 });
 
-const OrderForm = ({ item }: { item?: CartItem }) => {
+const OrderForm = ({
+  item,
+  type,
+}: {
+  item?: CartItem;
+  type: "new" | "update";
+}) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((store) => store.cart);
+  const { open, toast } = useToaster();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,9 +61,20 @@ const OrderForm = ({ item }: { item?: CartItem }) => {
   });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    dispatch(setCart({ id: v4(), ...values }));
-    form.clearErrors();
-    form.reset();
+    switch (type) {
+      case "new":
+        dispatch(setCart({ id: v4(), ...values }));
+        form.clearErrors();
+        form.reset();
+        toast("new item added");
+
+        break;
+      case "update":
+        dispatch(setCart({ id: (item?.id as string) || "", ...values }));
+        router.push("/dashboard/cart");
+
+        break;
+    }
   }
   return (
     <div className="flex flex-col">
@@ -187,7 +200,7 @@ const OrderForm = ({ item }: { item?: CartItem }) => {
           />
           <div className=" flex items-end">
             <Button type="submit" variant={"default"} className=" w-full">
-              Add item
+              {type === "new" ? "Add" : "Update"} Order
             </Button>
           </div>
         </form>
