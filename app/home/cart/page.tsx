@@ -16,7 +16,7 @@ export default function Page() {
       <CustomerTable />
       <p className="text-2xl font-bold">Order details</p>
       <OrderTable />
-      <PDFViewer className="min-h-screen">
+      <PDFViewer className="">
         <PdfFile cart={items} customer={customer} />
       </PDFViewer>
       <div>

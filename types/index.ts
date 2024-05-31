@@ -14,6 +14,14 @@ export interface ICustomer {
   date: Date;
 }
 
+export type createUserParams = {
+  clerkId: string;
+  userName?: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  photo: string;
+};
 const cartItems = [
   {
     name: "BBq chicken",
