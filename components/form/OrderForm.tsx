@@ -1,6 +1,6 @@
 "use client";
-import { useAppDispatch, useAppSelector, useToaster } from "@/hook";
-import { setCart, setDisplay } from "@/redux/cart.slice";
+import { useAppDispatch, useAppSelector, useToaster } from "@/lib/hook";
+import { setCart, setDisplay } from "@/features/cart.slice";
 import React from "react";
 import { Button } from "../ui/button";
 import {

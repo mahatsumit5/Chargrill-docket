@@ -1,5 +1,5 @@
 "use client";
-import { useToaster } from "@/hook";
+import { useToaster } from "@/lib/hook";
 import { useState } from "react";
 import { IoClose } from "react-icons/io5";
 

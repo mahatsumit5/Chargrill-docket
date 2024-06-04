@@ -3,6 +3,7 @@ import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import Toaster from "@/components/Toaster";
+import StoreProvider from "./StoreProvider";
 
 const inter = Montserrat({ subsets: ["latin"], weight: ["400"] });
 
@@ -25,7 +26,7 @@ export default function RootLayout({
     >
       <html lang="en">
         <body className={inter.className}>
-          {children}
+          <StoreProvider>{children}</StoreProvider>
           <Toaster />
         </body>
       </html>

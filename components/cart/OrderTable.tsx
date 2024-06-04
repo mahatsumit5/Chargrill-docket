@@ -1,11 +1,11 @@
-import { useAppDispatch, useAppSelector } from "@/hook";
+import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { CartItem } from "@/types";
 import React from "react";
 import { Button } from "../ui/button";
 import { MdModeEdit } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/navigation";
-import { removeItem } from "@/redux/cart.slice";
+import { removeItem } from "@/features/cart.slice";
 export default function OrderTable() {
   const { items } = useAppSelector((store) => store.cart);
   return (
