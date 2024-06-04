@@ -5,7 +5,7 @@ import { Button } from "../ui/button";
 import { MdModeEdit } from "react-icons/md";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useRouter } from "next/navigation";
-import { removeItem } from "@/features/cart.slice";
+import { removeItem } from "@/lib/features/cart.slice";
 export default function OrderTable() {
   const { items } = useAppSelector((store) => store.cart);
   return (

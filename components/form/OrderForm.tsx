@@ -1,6 +1,5 @@
 "use client";
 import { useAppDispatch, useAppSelector, useToaster } from "@/lib/hook";
-import { setCart, setDisplay } from "@/features/cart.slice";
 import React from "react";
 import { Button } from "../ui/button";
 import {
@@ -25,6 +24,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { useRouter } from "next/navigation";
 import { CartItem } from "@/types";
+import { setCart, setDisplay } from "@/lib/features/cart.slice";
 
 const size = [
   { label: "Large", value: "LG" },
