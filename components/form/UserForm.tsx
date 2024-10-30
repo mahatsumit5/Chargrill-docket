@@ -55,7 +55,7 @@ function UserForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className=" grid grid-cols-1 sm:grid-cols-2 gap-3 md:grid-cols-2"
+        className="flex flex-col gap-4 w-[400px]"
       >
         <FormField
           control={form.control}
@@ -135,7 +135,7 @@ function UserForm() {
           name="time"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Mobile</FormLabel>
+              <FormLabel>Time</FormLabel>
               <FormControl>
                 <Input {...field} type="time" className="" />
               </FormControl>

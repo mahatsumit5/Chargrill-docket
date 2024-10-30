@@ -20,7 +20,7 @@ function Page() {
         </h1>
         <p className="text-gray-600 ">Order now only at our website.</p>
         <span className="flex gap-5">
-          <Button>Get Started</Button>
+          <Button onClick={() => {}}>Create new order</Button>
           <Button variant={"outline"}>Explore now</Button>
         </span>
       </div>

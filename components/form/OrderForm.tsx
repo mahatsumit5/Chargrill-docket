@@ -77,7 +77,7 @@ const OrderForm = ({
     }
   }
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-w-[400px]">
       <div className="flex justify-between">
         <Button
           variant={"link"}

@@ -14,7 +14,7 @@ function Page() {
     OrderForm: <OrderForm type="new" />,
   };
   return (
-    <div className=" rounded-md text-sm shadow-lg p-4 w-full md:w-2/3 border sm:m-4">
+    <div className=" rounded-md text-sm  p-5 shadow-lg m-5">
       {components[display]}
     </div>
   );
