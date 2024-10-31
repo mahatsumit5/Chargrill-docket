@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/lib/hook";
+import { useAppSelector } from "@/hooks";
 import { CartItem, ICustomer } from "@/types";
 import {
   Page,

@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch, useAppSelector, useToaster } from "@/lib/hook";
+import { useAppDispatch, useAppSelector, useToaster } from "@/hooks";
 import React from "react";
 import { Button } from "../ui/button";
 import {
@@ -24,7 +24,7 @@ import { Check, ChevronsUpDown } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { useRouter } from "next/navigation";
 import { CartItem } from "@/types";
-import { setCart, setDisplay } from "@/lib/features/cart.slice";
+import { setCart, setDisplay } from "@/redux/features/cart.slice";
 
 const size = [
   { label: "Large", value: "LG" },

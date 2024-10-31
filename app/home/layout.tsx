@@ -1,8 +1,7 @@
-"use client";
 import Footer from "@/components/Footer";
+import CalendarPage from "@/components/FullCalendar";
 import Header from "@/components/Header";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
+
 export default function Layout({
   children,
 }: Readonly<{
@@ -11,7 +10,9 @@ export default function Layout({
   return (
     <div className="flex flex-col min-h-screen ">
       <Header />
-      <main className="flex h-full justify-center ">{children}</main>
+      <main className="flex h-full justify-center ">
+        <CalendarPage />
+      </main>
       <Footer />
     </div>
   );

@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
+import {  persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import cartReducer from "./features/cart.slice";
 const persistConfig = {
@@ -8,7 +8,7 @@ const persistConfig = {
 };
 
 const persistedReducer = persistReducer(persistConfig, cartReducer);
-const makeStore = () => {
+const store = () => {
   return configureStore({
     reducer: {
       cart: persistedReducer,
@@ -20,9 +20,9 @@ const makeStore = () => {
   });
 };
 
-// const persistor = persistStore(makeStore);
-export { makeStore };
-export type AppStore = ReturnType<typeof makeStore>;
+// const persistor = persistStore(store);
+export { store };
+export type AppStore = ReturnType<typeof store>;
 export type RootState = ReturnType<AppStore["getState"]>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = AppStore["dispatch"];

@@ -2,17 +2,17 @@
 
 import { createUserParams } from "@/types";
 import { prisma } from "..";
-export async function createUser(user: createUserParams) {
+export async function createUser() {
   try {
     const newUser = await prisma.user.create({
       data: {
-        clerkId: "",
-        email: "",
-        firstName: "",
-        lastName: "",
+        clerkId: "asdfasdf",
+        email: "mahatsumit5@gmail.com",
+        firstName: "sumit",
+        lastName: "mahat",
         userName: "",
         photo: "",
-        location: { connect: { id: 1 } },
+        // location: { connect: { id: 1 } },
       },
     });
 

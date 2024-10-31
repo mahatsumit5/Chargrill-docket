@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import Toaster from "@/components/Toaster";
-import StoreProvider from "./StoreProvider";
+import StoreProvider from "../redux/StoreProvider";
+import { createUser } from "@/database/actions/user.action";
+import { createLocation } from "@/database/actions/location.action";
 
 const inter = Montserrat({ subsets: ["latin"], weight: ["400"] });
 
@@ -17,6 +18,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // createUser();
+
   return (
     <ClerkProvider
       signInUrl="/"
@@ -27,7 +30,6 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           <StoreProvider>{children}</StoreProvider>
-          <Toaster />
         </body>
       </html>
     </ClerkProvider>

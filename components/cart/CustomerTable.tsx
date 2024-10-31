@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/lib/hook";
+import { useAppSelector } from "@/hooks";
 import { ICustomer } from "@/types";
 
 type key = keyof ICustomer;

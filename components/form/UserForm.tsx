@@ -19,8 +19,8 @@ import { CalendarIcon } from "@radix-ui/react-icons";
 import { Calendar } from "../ui/calendar";
 import { cn } from "@/lib/utils";
 import { Textarea } from "../ui/textarea";
-import { useAppDispatch, useAppSelector } from "@/lib/hook";
-import { setCustomer, setDisplay } from "@/lib/features/cart.slice";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { setCustomer, setDisplay } from "@/redux/features/cart.slice";
 const formSchema = z.object({
   fullName: z.string({
     required_error: "Full Name is required",
