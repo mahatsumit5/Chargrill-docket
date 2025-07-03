@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Customer" ALTER COLUMN "postCode" DROP NOT NULL,
+ALTER COLUMN "postCode" SET DATA TYPE TEXT;

@@ -83,7 +83,7 @@ model Customer {
   address   String?
   city      String?
   state     String?
-  postCode  Int
+  postCode  String?
   country   String?  @default("Australia")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

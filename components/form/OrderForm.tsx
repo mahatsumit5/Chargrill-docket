@@ -1,5 +1,5 @@
 "use client";
-import { useAppDispatch, useAppSelector, useToaster } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import React from "react";
 import { Button } from "../ui/button";
 import {
@@ -48,7 +48,6 @@ const OrderForm = ({
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((store) => store.cart);
-  const { open, toast } = useToaster();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,7 +65,6 @@ const OrderForm = ({
         dispatch(setCart({ id: v4(), ...values }));
         form.clearErrors();
         form.reset();
-        toast("new item added");
 
         break;
       case "update":

@@ -1,21 +1,25 @@
-import { CartItem, ICustomer } from "@/types";
+import { CartItem, CreateCustomerParams, ICustomer } from "@/types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 export type form = "UserForm" | "OrderForm";
 interface IinitialState {
   items: CartItem[];
   display: form;
-  customer: ICustomer;
+  customer: CreateCustomerParams;
 }
 const initialState: IinitialState = {
   items: [],
   display: "UserForm",
   customer: {
-    date: new Date(),
-    fullName: "",
-    mobile: "",
-    time: "",
-    notes: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    address: "",
+    city: "",
+    state: "",
+    postCode: "",
+    country: "",
   },
 };
 const cartSlice = createSlice({
@@ -31,7 +35,7 @@ const cartSlice = createSlice({
     setDisplay: (state, { payload }: PayloadAction<form>) => {
       state.display = payload;
     },
-    setCustomer: (state, { payload }: PayloadAction<ICustomer>) => {
+    setCustomer: (state, { payload }: PayloadAction<CreateCustomerParams>) => {
       state.customer = payload;
     },
     removeItem: (state, { payload }: PayloadAction<CartItem>) => {

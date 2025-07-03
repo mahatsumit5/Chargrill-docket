@@ -5,6 +5,7 @@ import { Anton } from "next/font/google";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
+import CalendarPage from "@/components/FullCalendar";
 const anton = Anton({
   weight: ["400"],
   subsets: ["latin"],

@@ -16,32 +16,6 @@ export interface ICustomer {
   date: Date;
 }
 
-const cartItems = [
-  {
-    name: "BBq chicken",
-    instructions: "cut in 8s",
-    quantity: 10,
-    size: null,
-  },
-  {
-    name: "Chicken Skewers",
-    instructions: "extra sauce",
-    quantity: 1,
-    size: null,
-  },
-  {
-    name: "Greek Salad",
-    instructions: "make it full",
-    quantity: 2,
-    size: "Regular",
-  },
-  {
-    name: "Honey Mustard",
-    instructions: "no honey",
-    quantity: 1,
-    size: "Large",
-  },
-];
 export type User = Prisma.UserFieldRefs;
 export type CreateUserParams = Prisma.UserCreateInput;
 export type UpdateUserParams = Prisma.UserUpdateInput;
@@ -55,3 +29,8 @@ export type CreateCategoryParams = Prisma.CategoryCreateInput;
 export type UpdateCategoryParams = Prisma.CategoryUpdateInput;
 export type CreateCustomerParams = Prisma.CustomerCreateInput;
 export type UpdateCustomerParams = Prisma.CustomerUpdateInput;
+
+export type ServerReturnType<T> = Promise<{
+  data?: T;
+  error?: any;
+}>;

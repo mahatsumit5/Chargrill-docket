@@ -1,19 +1,23 @@
 "use server";
 
-import { CreateCustomerParams } from "@/types";
+import { CreateCustomerParams, ServerReturnType } from "@/types";
 import { prisma } from "..";
+import { databaseActionHandle } from ".";
 
-export async function createCustomer(data: CreateCustomerParams) {
-  try {
-    const newCustomer = await prisma.customer.create({
-      data,
-    });
-    if (!newCustomer.id) {
-      throw new Error("Customer creation failed");
-    }
-    return JSON.parse(JSON.stringify(newCustomer));
-  } catch (error) {
-    console.log(error);
-    throw new Error("Failed to create customer");
+export async function createCustomer(
+  data: CreateCustomerParams
+): ServerReturnType<CreateCustomerParams> {
+  console.log("Creating customer with data:", data);
+  const newCustomer = await prisma.customer.create({
+    data,
+  });
+  console.log(newCustomer);
+  if (!newCustomer.id) {
+    throw new Error("Customer creation failed");
   }
+  return {
+    data: JSON.parse(JSON.stringify(newCustomer)),
+    error: undefined,
+  };
 }
+databaseActionHandle(() => {});

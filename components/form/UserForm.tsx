@@ -2,11 +2,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { date, z } from "zod";
+import { z } from "zod";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,23 +13,35 @@ import {
 } from "../ui/form";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { CalendarIcon } from "@radix-ui/react-icons";
-import { Calendar } from "../ui/calendar";
-import { cn } from "@/lib/utils";
-import { Textarea } from "../ui/textarea";
+
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setCustomer, setDisplay } from "@/redux/features/cart.slice";
+import { createCustomer } from "@/database/actions/customer.action";
+import { toast } from "sonner";
 const formSchema = z.object({
-  fullName: z.string({
+  firstName: z.string({
     required_error: "Full Name is required",
   }),
-  mobile: z.string({}),
-  date: z.date({
-    required_error: "Pickup time slot is required",
+  lastName: z.string({
+    required_error: "Last Name is required",
   }),
-  time: z.string(),
-  notes: z.string().optional(),
+  email: z.string().email().optional(),
+  phone: z
+    .string({
+      required_error: "Phone number is required",
+    })
+    .min(12, {
+      message:
+        "Phone number must be at least 10 digits and should start with +61",
+    })
+    .max(12, { message: "Phone number must be at most 10 digits   " })
+    .startsWith("+61"),
+
+  address: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
+  postCode: z.string().optional(),
+  country: z.string().optional(),
 });
 
 function UserForm() {
@@ -39,107 +50,156 @@ function UserForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      notes: customer?.notes,
-      fullName: customer?.fullName,
-      date: new Date(customer?.date || new Date()),
-      mobile: customer?.mobile,
-      time: customer?.time,
+      firstName: customer?.firstName,
+      lastName: customer?.lastName,
+      phone: customer?.phone,
+      email: customer?.email || "",
+      address: customer?.address || "",
+      city: customer?.city || "",
+      state: customer?.state || "",
+      postCode: customer?.postCode || "",
+      country: customer?.country || "",
     },
+    mode: "onChange",
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     dispatch(setCustomer(values));
-    dispatch(setDisplay("OrderForm"));
+    const { data, error } = await createCustomer(values);
+    if (error) {
+      toast("Error creating customer: " + error);
+    }
+    console.log(data);
   }
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 w-[400px]"
+        className="flex flex-col gap-4 w-[400px] p-3 border-1 rounded-2xl  shadow-2xl"
       >
+        <div className="grid grid-cols-2 gap-2">
+          <FormField
+            control={form.control}
+            name="firstName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>First Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Tracy " {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="lastName"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Last Name</FormLabel>
+                <FormControl>
+                  <Input placeholder=" Champman" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        {/* Phone */}
         <FormField
           control={form.control}
-          name="fullName"
+          name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>FullName</FormLabel>
+              <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="Tracy Champman" {...field} />
+                <Input placeholder="enter your email" {...field} type="email" />
               </FormControl>
-              <FormDescription>Enter customer Full Name</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+        {/* Phone */}
         <FormField
           control={form.control}
-          name="mobile"
+          name="phone"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Mobile</FormLabel>
               <FormControl>
-                <Input placeholder="+6145678965" {...field} type="number" />
+                <Input placeholder="+6145678965" {...field} type="tel" />
               </FormControl>
-              <FormDescription>Enter customer contact details</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* calender */}
+        {/* Address */}
         <FormField
           control={form.control}
-          name="date"
+          name="address"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Order date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        " pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        <>{field.value.toDateString()}</>
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date < new Date() || date < new Date("1900-01-01")
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormDescription>Select order date</FormDescription>
-
+              <FormLabel>Address</FormLabel>
+              <FormControl>
+                <Input placeholder="sydney" {...field} />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+        <div className="grid grid-cols-3 gap-2">
+          <FormField
+            control={form.control}
+            name="city"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>City</FormLabel>
+                <FormControl>
+                  <Input placeholder="sydney" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="state"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>State</FormLabel>
+                <FormControl>
+                  <Input placeholder="sydney" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="postCode"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>PostCode</FormLabel>
+                <FormControl>
+                  <Input placeholder="sydney" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         {/* time */}
         <FormField
           control={form.control}
-          name="time"
+          name="country"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Time</FormLabel>
+              <FormLabel>Country</FormLabel>
               <FormControl>
-                <Input {...field} type="time" className="" />
+                <Input {...field} type="" className="" />
               </FormControl>
-              <FormDescription>Enter Pickup time slot</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -147,27 +207,12 @@ function UserForm() {
         {/* Notes
          */}
 
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Instructions</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Any special instructions"
-                  className="resize-none"
-                  {...field}
-                  rows={5}
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         <div className=" flex items-end">
-          <Button type="submit" variant={"default"} className=" w-full">
+          <Button
+            type="submit"
+            variant={"default"}
+            className=" w-full hover:bg-accent hover:text-accent-foreground hover:cursor-pointer"
+          >
             Next
           </Button>
         </div>
