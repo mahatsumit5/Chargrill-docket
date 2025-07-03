@@ -1,5 +1,4 @@
 import Footer from "@/components/Footer";
-import CalendarPage from "@/components/FullCalendar";
 import Header from "@/components/Header";
 
 export default function Layout({
@@ -10,10 +9,7 @@ export default function Layout({
   return (
     <div className="flex flex-col min-h-screen ">
       <Header />
-      <main className="flex h-full justify-center ">
-        {/* <CalendarPage /> */}
-        {children}
-      </main>
+      <main className="flex-1 h-full justify-center ">{children}</main>
       <Footer />
     </div>
   );

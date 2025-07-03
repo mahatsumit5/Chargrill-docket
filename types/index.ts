@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+
 export type CartItem = {
   id: string;
   name: string;
@@ -14,14 +16,6 @@ export interface ICustomer {
   date: Date;
 }
 
-export type createUserParams = {
-  clerkId: string;
-  userName?: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  photo: string;
-};
 const cartItems = [
   {
     name: "BBq chicken",
@@ -48,3 +42,16 @@ const cartItems = [
     size: "Large",
   },
 ];
+export type User = Prisma.UserFieldRefs;
+export type CreateUserParams = Prisma.UserCreateInput;
+export type UpdateUserParams = Prisma.UserUpdateInput;
+export type CreateOrderParams = Prisma.OrderCreateInput;
+export type UpdateOrderParams = Prisma.OrderUpdateInput;
+export type CreateCartParams = Prisma.CartCreateInput;
+export type UpdateCartParams = Prisma.CartUpdateInput;
+export type CreateItemParams = Prisma.ItemCreateInput;
+export type UpdateItemParams = Prisma.ItemUpdateInput;
+export type CreateCategoryParams = Prisma.CategoryCreateInput;
+export type UpdateCategoryParams = Prisma.CategoryUpdateInput;
+export type CreateCustomerParams = Prisma.CustomerCreateInput;
+export type UpdateCustomerParams = Prisma.CustomerUpdateInput;

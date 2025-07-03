@@ -1,19 +1,11 @@
 "use server";
 
-import { createUserParams } from "@/types";
+import { CreateUserParams } from "@/types";
 import { prisma } from "..";
-export async function createUser() {
+export async function createUser(data: CreateUserParams) {
   try {
     const newUser = await prisma.user.create({
-      data: {
-        clerkId: "asdfasdf",
-        email: "mahatsumit5@gmail.com",
-        firstName: "sumit",
-        lastName: "mahat",
-        userName: "",
-        photo: "",
-        // location: { connect: { id: 1 } },
-      },
+      data,
     });
 
     return JSON.parse(JSON.stringify(newUser));
@@ -21,5 +13,21 @@ export async function createUser() {
     // todo handle error
 
     console.log(error);
+  }
+}
+export async function getUserByEmail(email: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    // todo handle error
+
+    console.log(error);
+    throw new Error("Failed to fetch user by email");
   }
 }

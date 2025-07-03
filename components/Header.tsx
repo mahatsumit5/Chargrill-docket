@@ -1,21 +1,18 @@
-"use client";
 import React from "react";
-import { SignedIn, UserButton } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { UserButton } from "@clerk/nextjs";
 import { Concert_One } from "next/font/google";
 import Link from "next/link";
 const links = [
-  { href: "/home", label: "Home" },
+  { href: "/", label: "Home" },
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/home/order", label: "Order" },
-  { href: "/home/history", label: "History" },
+  { href: "/order", label: "Order" },
+  { href: "/history", label: "History" },
 ];
 const conConcert_One = Concert_One({
   weight: ["400"],
   subsets: ["latin"],
 });
-function Header() {
-  const router = useRouter();
+const Header = () => {
   return (
     <header className="flex justify-between w-full p-4 border-b ">
       <p className={`${conConcert_One.className} text-3xl text-blue-800`}>
@@ -32,11 +29,10 @@ function Header() {
           ))}
         </ul>
       </div>
-      <SignedIn>
-        <UserButton afterSignOutUrl="/" />
-      </SignedIn>
+
+      <UserButton />
     </header>
   );
-}
+};
 
 export default Header;
