@@ -4,6 +4,8 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { databaseActionHandle } from "@/database/actions";
+import { getAllItems } from "@/database/actions/item.action";
 const inter = Montserrat({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
@@ -11,7 +13,7 @@ export const metadata: Metadata = {
   description: "Create docket for CharGrill",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -26,7 +28,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ClerkProvider>{children} </ClerkProvider>
-          <Toaster position="top-center" />
+          <Toaster position="bottom-right" richColors />
         </ThemeProvider>
       </body>
     </html>

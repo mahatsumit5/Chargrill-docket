@@ -18,6 +18,8 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setCustomer, setDisplay } from "@/redux/features/cart.slice";
 import { createCustomer } from "@/database/actions/customer.action";
 import { toast } from "sonner";
+import { databaseActionHandle } from "@/database/actions";
+import { CreateCustomerParams } from "@/types";
 const formSchema = z.object({
   firstName: z.string({
     required_error: "Full Name is required",
@@ -65,10 +67,17 @@ function UserForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     dispatch(setCustomer(values));
-    const { data, error } = await createCustomer(values);
-    if (error) {
-      toast("Error creating customer: " + error);
-    }
+    const { data, error, status, message } = await databaseActionHandle<
+      CreateCustomerParams,
+      CreateCustomerParams
+    >(values, createCustomer, {
+      successMessage: "User Created Succesfully",
+      errorMessage: "Unable to create new user.",
+    });
+    console.log(error);
+
+    toast[status](message);
+
     console.log(data);
   }
   return (
