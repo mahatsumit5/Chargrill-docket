@@ -13,21 +13,95 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Location {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  user User[]
-}
-
 model User {
-  clerkId   String @id @unique
-  userName  String @default("")
-  email     String @unique
+  clerkId   String  @id @unique
+  userName  String  @default("")
+  email     String  @unique
   firstName String
   lastName  String
-  photo     String @default("")
-  location Location? @relation(fields: [locationId],references: [id])
-  locationId Int
-  verified Boolean @default(false)
+  photo     String  @default("")
+  verified  Boolean @default(false)
+  order     Order[]
+
   @@index([email])
+}
+
+model Order {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [createdBy], references: [clerkId])
+  createdBy   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  totalAmount Float
+  status      String   @default("pending")
+  pickupTime  DateTime
+  items       Item[]   @relation("OrderItems")
+  customer    Customer @relation("CustomerOrders", fields: [customerId], references: [id])
+  customerId  String
+
+  @@index([createdBy])
+}
+
+model Item {
+  id          String     @id @default(uuid())
+  name        String
+  description String?
+  price       Float
+  images      String[]
+  dietary     Dietary[]
+  order       Order[]    @relation("OrderItems")
+  size        String[]
+  category    Category[] @relation("CategoryItems")
+
+  @@index([id])
+}
+
+model Category {
+  id    String     @id @default(uuid())
+  name  Categories
+  items Item[]     @relation("CategoryItems")
+
+  @@index([name])
+}
+
+model Customer {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String?  @unique
+  phone     String
+  address   String?
+  city      String?
+  state     String?
+  postCode  Int
+  country   String?  @default("Australia")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Order[]  @relation("CustomerOrders")
+
+  @@index([email])
+}
+
+enum Categories {
+  CHICKEN
+  SALAD
+  SIDES
+  SHARING_BOXES
+  DESSERTS
+  DRINKS
+  SAUCES
+  FINGER_FOOD
+}
+
+enum Dietary {
+  VEGAN
+  VEGETARIAN
+  GLUTEN_FREE
+  DAIRY_FREE
+  NUT_FREE
+}
+
+enum Size {
+  REGULAR
+  LARGE
 }

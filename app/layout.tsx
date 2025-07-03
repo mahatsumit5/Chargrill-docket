@@ -21,17 +21,17 @@ export default function RootLayout({
   // createUser();
 
   return (
-    <ClerkProvider
-      signInUrl="/"
-      afterSignOutUrl={"/"}
-      signUpUrl="/sign-up"
-      signInForceRedirectUrl={"/home"}
-    >
-      <html lang="en">
-        <body className={inter.className}>
+    <html lang="en">
+      <body className={inter.className}>
+        <ClerkProvider
+          signInUrl="/"
+          afterSignOutUrl={"/"}
+          signUpUrl="/sign-up"
+          signInForceRedirectUrl={"/home"}
+        >
           <StoreProvider>{children}</StoreProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }

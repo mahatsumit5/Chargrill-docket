@@ -11,7 +11,8 @@ export default function Layout({
     <div className="flex flex-col min-h-screen ">
       <Header />
       <main className="flex h-full justify-center ">
-        <CalendarPage />
+        {/* <CalendarPage /> */}
+        {children}
       </main>
       <Footer />
     </div>

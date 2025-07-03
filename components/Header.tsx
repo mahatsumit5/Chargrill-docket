@@ -6,6 +6,7 @@ import { Concert_One } from "next/font/google";
 import Link from "next/link";
 const links = [
   { href: "/home", label: "Home" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/home/order", label: "Order" },
   { href: "/home/history", label: "History" },
 ];
