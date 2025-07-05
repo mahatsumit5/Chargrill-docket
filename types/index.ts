@@ -30,6 +30,8 @@ export type UpdateCategoryParams = Prisma.CategoryUpdateInput;
 export type CreateCustomerParams = Prisma.CustomerCreateInput;
 export type UpdateCustomerParams = Prisma.CustomerUpdateInput;
 
+export type Customer = Pick<Prisma.$CustomerPayload, "scalars">;
+
 export type ServerReturnType<T> = Promise<{
   data?: T;
   error?: any;

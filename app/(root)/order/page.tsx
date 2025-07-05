@@ -10,8 +10,8 @@ function Page() {
     UserForm: <UserForm />,
   };
   return (
-    <div className="  flex flex-col items-center justify-center ">
-      <p>Create new customer</p>
+    <div className="  flex flex-col items-center justify-center p-3">
+      <p className="text-xl md:text-2xl p-5">Add new customer</p>
       <UserForm />
     </div>
   );

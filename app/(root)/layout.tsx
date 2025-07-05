@@ -1,5 +1,6 @@
 "use client";
 import { AppSidebar } from "@/components/app-sidebar";
+import BreadCrumbComponent from "@/components/breadCrumb/BreadCrumb";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,12 @@ export default function Layout({
               )}
             </Button>
           </header>
-          <main className="flex-1 h-full w-full">{children}</main>
+          <main className="flex-1 h-full w-full p-3">
+            <div>
+              <BreadCrumbComponent />
+            </div>
+            {children}
+          </main>
           <Footer />
         </div>
       </SidebarProvider>

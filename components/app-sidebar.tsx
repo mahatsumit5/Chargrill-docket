@@ -12,7 +12,14 @@ const conConcert_One = Concert_One({
   subsets: ["latin"],
 });
 import Link from "next/link";
-import { Book, Dock, History, House, LayoutDashboard } from "lucide-react";
+import {
+  Book,
+  Dock,
+  History,
+  House,
+  LayoutDashboard,
+  Users,
+} from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
 const links = [
@@ -22,7 +29,8 @@ const links = [
     label: "Dashboard",
     icon: <LayoutDashboard size={16} />,
   },
-  { href: "/order", label: "Order", icon: <Book size={16} /> },
+  { href: "/order", label: "Orders", icon: <Book size={16} /> },
+  { href: "/users", label: "Users", icon: <Users size={16} /> },
   { href: "/history", label: "History", icon: <History size={16} /> },
 ];
 export function AppSidebar() {

@@ -1,20 +1,29 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 
 export const prisma = new PrismaClient();
-interface DataBaseReturnObj<T> {
-  data: T | undefined;
-  error: any | undefined;
+type ReturnType<TResult> = Promise<{
+  data: TResult | undefined;
+  error: any;
+  status: "error" | "success";
+  message: string;
+}>;
+
+interface options {
+  successMessage?: string;
+  errorMessage?: string;
 }
-export async function executeQuery<T>(
-  query: any
-): Promise<DataBaseReturnObj<T>> {
-  let data;
-  let err;
+
+export async function executeQuery<TResult, TParams>(
+  query: any,
+  options?: options
+): ReturnType<TResult> {
   try {
-    const data: T = await query;
+    const data = await query;
     return {
       data: JSON.parse(JSON.stringify(data)),
       error: undefined,
+      status: "success",
+      message: options?.successMessage || "Query Success",
     };
   } catch (error) {
     let message = "Unknown database operation failed";
@@ -26,8 +35,13 @@ export async function executeQuery<T>(
         error instanceof Error ? error.message : "Unknown error occurred";
     }
     return {
-      data,
+      data: undefined,
       error: { message },
+      status: "error",
+      message:
+        error instanceof Error
+          ? error.message
+          : options?.errorMessage || "Unknown error occured",
     };
   } finally {
     await prisma.$disconnect();

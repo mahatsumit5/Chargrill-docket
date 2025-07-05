@@ -20,6 +20,7 @@ import { createCustomer } from "@/database/actions/customer.action";
 import { toast } from "sonner";
 import { databaseActionHandle } from "@/database/actions";
 import { CreateCustomerParams } from "@/types";
+import { usePathname } from "next/navigation";
 const formSchema = z.object({
   firstName: z.string({
     required_error: "Full Name is required",
@@ -48,6 +49,8 @@ const formSchema = z.object({
 
 function UserForm() {
   const dispatch = useAppDispatch();
+  const pathname = usePathname();
+  console.log(pathname);
   const { customer } = useAppSelector((store) => store.cart);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -74,17 +77,20 @@ function UserForm() {
       successMessage: "User Created Succesfully",
       errorMessage: "Unable to create new user.",
     });
-    console.log(error);
 
     toast[status](message);
 
-    console.log(data);
+    if (data?.id) {
+      const newPath = `/${data.id}`;
+      window.history.replaceState(null, "", `${pathname + newPath}`);
+      window.location.reload();
+    }
   }
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 w-[400px] p-3 border-1 rounded-2xl  shadow-2xl"
+        className="flex flex-col gap-4 w-[380px] md:w-[400px] lg:w-[650px] p-4 border-1 rounded-2xl  shadow-2xl"
       >
         <div className="grid grid-cols-2 gap-2">
           <FormField

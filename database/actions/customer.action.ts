@@ -8,3 +8,14 @@ export async function createCustomer(data: CreateCustomerParams) {
     data,
   });
 }
+export async function getCustomerById(id: string) {
+  return await prisma.customer.findFirst({
+    where: {
+      id,
+    },
+  });
+}
+
+export async function getAllCustomers(page: number) {
+  return await prisma.customer.findMany();
+}
