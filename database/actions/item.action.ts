@@ -1,22 +1,22 @@
 "use server";
 
-import { CreateItemParams } from "@/types";
-import { prisma } from "..";
-import { databaseActionHandle } from ".";
-export async function createItem(data: CreateItemParams) {
-  try {
-    const newItem = await prisma.item.create({
-      data,
-    });
-
-    if (!newItem.id) {
-      throw new Error("Item creation failed");
-    }
-    return JSON.parse(JSON.stringify(newItem));
-  } catch (error) {
-    console.error("Error creating item:", error);
-    throw new Error("Failed to create item");
-  }
+import { executeQuery, prisma } from "..";
+export async function createItem(data: any) {
+  const { category, ...rest } = data;
+  const result = executeQuery(
+    await prisma.item.create({
+      data: {
+        category: {
+          connect: {
+            id: category,
+          },
+        },
+        ...rest,
+      },
+    })
+  );
+  console.log(result);
+  return result;
 }
 export async function getAllItems() {
   try {

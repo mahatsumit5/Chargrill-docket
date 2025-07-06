@@ -1,3 +1,4 @@
+import OrderForm from "@/components/form/OrderForm";
 import { executeQuery } from "@/database";
 import { databaseActionHandle } from "@/database/actions";
 import { getCustomerById } from "@/database/actions/customer.action";
@@ -10,7 +11,7 @@ const page = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { data: dta2 } = await databaseActionHandle(id, (id) =>
     getCustomerById(id)
   );
-  console.log(dta2);
+
   return <div>This is user id {JSON.stringify(data)}</div>;
 };
 

@@ -1,12 +1,14 @@
 "use server";
 
 import { CreateUserParams } from "@/types";
-import { prisma } from "..";
+import { executeQuery, prisma } from "..";
 export async function createUser(data: CreateUserParams) {
   try {
-    const newUser = await prisma.user.create({
-      data,
-    });
+    const newUser = executeQuery<{ id: string }>(
+      await prisma.user.create({
+        data,
+      })
+    );
 
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {

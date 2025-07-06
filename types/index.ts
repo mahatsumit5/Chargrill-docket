@@ -35,4 +35,15 @@ export type Customer = Pick<Prisma.$CustomerPayload, "scalars">;
 export type ServerReturnType<T> = Promise<{
   data?: T;
   error?: any;
+  status: "success" | "error";
+  message: string;
 }>;
+export const Dietary = {
+  VEGAN: "VEGAN",
+  VEGETARIAN: "VEGETARIAN",
+  GLUTEN_FREE: "GLUTEN_FREE",
+  DAIRY_FREE: "DAIRY_FREE",
+  NUT_FREE: "NUT_FREE",
+} as const;
+
+export type Dietary = (typeof Dietary)[keyof typeof Dietary];

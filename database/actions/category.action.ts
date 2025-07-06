@@ -1,30 +1,11 @@
-"user server";
+"use server";
 import { CreateCategoryParams } from "@/types";
-import { prisma } from "..";
+import { executeQuery, prisma } from "..";
+import { Category } from "@prisma/client";
 
 export async function createCategory(data: CreateCategoryParams) {
-  try {
-    const newCategory = await prisma.category.create({
-      data,
-    });
-
-    return JSON.parse(JSON.stringify(newCategory));
-  } catch (error) {
-    console.error("Error creating category:", error);
-    throw new Error("Failed to create category");
-  }
+  return await prisma.category.create({ data });
 }
 export async function getAllCategories() {
-  try {
-    const categories = await prisma.category.findMany({
-      include: {
-        items: true,
-      },
-    });
-
-    return JSON.parse(JSON.stringify(categories));
-  } catch (error) {
-    console.error("Error fetching categories:", error);
-    throw new Error("Failed to fetch categories");
-  }
+  return await executeQuery<Category[]>(await prisma.category.findMany());
 }

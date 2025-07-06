@@ -18,9 +18,10 @@ import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setCustomer, setDisplay } from "@/redux/features/cart.slice";
 import { createCustomer } from "@/database/actions/customer.action";
 import { toast } from "sonner";
-import { databaseActionHandle } from "@/database/actions";
-import { CreateCustomerParams } from "@/types";
+
 import { usePathname } from "next/navigation";
+import { executeDatabaseAction, executeQuery } from "@/database";
+import { CreateCustomerParams } from "@/types";
 const formSchema = z.object({
   firstName: z.string({
     required_error: "Full Name is required",
@@ -50,41 +51,34 @@ const formSchema = z.object({
 function UserForm() {
   const dispatch = useAppDispatch();
   const pathname = usePathname();
-  console.log(pathname);
   const { customer } = useAppSelector((store) => store.cart);
+  const initialState = {
+    firstName: customer?.firstName,
+    lastName: customer?.lastName,
+    phone: customer?.phone,
+    email: customer?.email || "",
+    address: customer?.address || "",
+    city: customer?.city || "",
+    state: customer?.state || "",
+    postCode: customer?.postCode || "",
+    country: customer?.country || "",
+  };
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      firstName: customer?.firstName,
-      lastName: customer?.lastName,
-      phone: customer?.phone,
-      email: customer?.email || "",
-      address: customer?.address || "",
-      city: customer?.city || "",
-      state: customer?.state || "",
-      postCode: customer?.postCode || "",
-      country: customer?.country || "",
-    },
+    defaultValues: initialState,
     mode: "onChange",
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    dispatch(setCustomer(values));
-    const { data, error, status, message } = await databaseActionHandle<
-      CreateCustomerParams,
-      CreateCustomerParams
-    >(values, createCustomer, {
-      successMessage: "User Created Succesfully",
-      errorMessage: "Unable to create new user.",
-    });
-
+    const { data, error, message, status } = await createCustomer(values);
+    console.log(error);
     toast[status](message);
-
     if (data?.id) {
       const newPath = `/${data.id}`;
-      window.history.replaceState(null, "", `${pathname + newPath}`);
-      window.location.reload();
+      // window.history.replaceState(null, "", `${pathname + newPath}`);
+      // window.location.reload();
     }
+    // form.reset(initialState);
   }
   return (
     <Form {...form}>

@@ -1,11 +1,10 @@
+import { ServerReturnType } from "@/types";
 import { Prisma, PrismaClient } from "@prisma/client";
 
 export const prisma = new PrismaClient();
 type ReturnType<TResult> = Promise<{
-  data: TResult | undefined;
+  result: TResult | undefined;
   error: any;
-  status: "error" | "success";
-  message: string;
 }>;
 
 interface options {
@@ -13,21 +12,17 @@ interface options {
   errorMessage?: string;
 }
 
-export async function executeQuery<TResult, TParams>(
-  query: any,
-  options?: options
-): ReturnType<TResult> {
+export async function executeQuery<TResult>(query: any): ReturnType<TResult> {
   try {
-    const data = await query;
+    const result: TResult = await query;
     return {
-      data: JSON.parse(JSON.stringify(data)),
+      result,
       error: undefined,
-      status: "success",
-      message: options?.successMessage || "Query Success",
     };
   } catch (error) {
     let message = "Unknown database operation failed";
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      console.log("this is error code", error.code);
       const code = error.code;
       message = PrismaErrorCode[code] || message;
     } else {
@@ -35,16 +30,35 @@ export async function executeQuery<TResult, TParams>(
         error instanceof Error ? error.message : "Unknown error occurred";
     }
     return {
-      data: undefined,
+      result: undefined,
       error: { message },
-      status: "error",
-      message:
-        error instanceof Error
-          ? error.message
-          : options?.errorMessage || "Unknown error occured",
     };
   } finally {
     await prisma.$disconnect();
+  }
+}
+
+export async function executeDatabaseAction<T>({
+  error,
+  result,
+}: {
+  result: T | undefined;
+  error: any;
+}): ServerReturnType<T> {
+  try {
+    return {
+      status: "success",
+      message: "",
+      data: JSON.parse(JSON.stringify(result)),
+      error: undefined,
+    };
+  } catch (error) {
+    return {
+      data: undefined,
+      error: error instanceof Error ? error.message : "Unknown error",
+      status: "error",
+      message: "error occured",
+    };
   }
 }
 
