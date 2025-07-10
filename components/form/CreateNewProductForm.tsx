@@ -45,6 +45,7 @@ import { createItem } from "@/database/actions/item.action";
 import { Size } from "@/types";
 import { executeDatabaseAction } from "@/database";
 import { toast } from "sonner";
+import { RotateCcw, Save } from "lucide-react";
 const imageSchema = z
   .array(
     z
@@ -237,7 +238,7 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
               <FormControl>
                 <Popover>
                   <PopoverTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-input rounded-md ">
-                    <span className="w-full border p-1 rounded-md hover:bg-accent sm:h-10 h-9">
+                    <span className="w-full border p-1 rounded-md hover:bg-primary/50 sm:h-10 h-9">
                       {field.value.length > 0
                         ? field.value.length + " selected"
                         : "Select your diet"}
@@ -339,10 +340,24 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
             </FormItem>
           )}
         />
-
-        <Button className="grid" type="submit">
-          Save
-        </Button>
+        <div className="flex  h-full justify-start col-end-2 items-end gap-3">
+          <Button
+            className="text-lg flex gap-2 items-center"
+            type="submit"
+            size={"lg"}
+          >
+            <Save size={18} /> Save
+          </Button>
+          <Button
+            className="text-lg flex gap-2 items-center"
+            type="submit"
+            size={"lg"}
+            variant={"destructive"}
+          >
+            <RotateCcw size={18} />
+            Reset
+          </Button>
+        </div>
       </form>
     </Form>
   );

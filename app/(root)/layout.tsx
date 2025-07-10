@@ -24,7 +24,7 @@ export default function Layout({
         <AppSidebar />
         <div className="flex w-full flex-col min-h-screen ">
           {/* header */}
-          <header className="flex w-full justify-between items-center py-3 bg-background border-b border-primary/10 px-4 ">
+          <header className="flex w-full justify-between items-center py-3  border-b border-primary/10 px-4 ">
             <div className="flex gap-5 justify-start items-center  w-full">
               <SidebarTrigger className="" />
               <span>

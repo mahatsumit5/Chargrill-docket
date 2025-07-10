@@ -77,9 +77,15 @@ function UserForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 w-full md:w-[400px] lg:w-[650px] p-4 border-1 rounded-2xl   shadow-2xl bg-form"
+        className="flex flex-col gap-5 w-full md:w-[400px]   my-4 border rounded-md p-4 bg-form "
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          <h4 className="scroll-m-20 text-lg font-semibold tracking-tight col-span-2 ">
+            Create a new user
+          </h4>
+          <p className="text-muted-foreground text-sm col-span-2 mb-8">
+            Let's start with some facts about you.
+          </p>
           <FormField
             control={form.control}
             name="firstName"
@@ -87,7 +93,7 @@ function UserForm() {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Tracy " {...field} />
+                  <Input placeholder="Harry " {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -100,7 +106,7 @@ function UserForm() {
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
                 <FormControl>
-                  <Input placeholder=" Champman" {...field} />
+                  <Input placeholder=" Potter" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -144,7 +150,7 @@ function UserForm() {
             <FormItem className="flex flex-col">
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input placeholder="sydney" {...field} />
+                <Input placeholder="100 king st" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -171,7 +177,7 @@ function UserForm() {
               <FormItem className="flex flex-col">
                 <FormLabel>State</FormLabel>
                 <FormControl>
-                  <Input placeholder="sydney" {...field} />
+                  <Input placeholder="NSW" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -184,7 +190,7 @@ function UserForm() {
               <FormItem className="flex flex-col">
                 <FormLabel>PostCode</FormLabel>
                 <FormControl>
-                  <Input placeholder="sydney" {...field} />
+                  <Input placeholder="2000" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -200,7 +206,12 @@ function UserForm() {
             <FormItem>
               <FormLabel>Country</FormLabel>
               <FormControl>
-                <Input {...field} type="" className="" />
+                <Input
+                  {...field}
+                  type=""
+                  className=""
+                  placeholder="Australia"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -209,15 +220,13 @@ function UserForm() {
         {/* Notes
          */}
 
-        <div className=" flex items-end">
-          <Button
-            type="submit"
-            variant={"default"}
-            className=" w-full hover:bg-accent hover:text-accent-foreground hover:cursor-pointer"
-          >
-            Next
-          </Button>
-        </div>
+        <Button
+          type="submit"
+          variant={"default"}
+          className=" w-full hover:bg-primary/75  hover:cursor-pointer"
+        >
+          Save
+        </Button>
       </form>
     </Form>
   );

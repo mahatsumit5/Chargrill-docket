@@ -9,7 +9,7 @@ import { Category } from "@prisma/client";
 const page = async () => {
   const { result } = await getAllCategories();
   return (
-    <div className="p-5 bg-accent h-full  rounded-md my-3 flex flex-col gap-4">
+    <div className="p-5  h-full border border-border  rounded-lg  my-3 flex flex-col gap-4">
       <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
         Add a new product
       </h4>
