@@ -21,9 +21,18 @@ export type CreateUserParams = Prisma.UserCreateInput;
 export type UpdateUserParams = Prisma.UserUpdateInput;
 export type CreateOrderParams = Prisma.OrderCreateInput;
 export type UpdateOrderParams = Prisma.OrderUpdateInput;
-export type CreateCartParams = Prisma.CartCreateInput;
-export type UpdateCartParams = Prisma.CartUpdateInput;
-export type CreateItemParams = Prisma.ItemCreateInput;
+
+type SizeAndPrice = {
+  price: number;
+  size: (typeof SIZE)[keyof typeof SIZE];
+}[];
+export type CreateItemParams = Omit<
+  Prisma.ItemCreateInput,
+  "id" | "category" | "cart" | "sizes"
+> & {
+  sizeAndPrice: SizeAndPrice;
+  categoryId: string;
+};
 export type UpdateItemParams = Prisma.ItemUpdateInput;
 export type CreateCategoryParams = Prisma.CategoryCreateInput;
 export type UpdateCategoryParams = Prisma.CategoryUpdateInput;
@@ -46,4 +55,15 @@ export const Dietary = {
   NUT_FREE: "NUT_FREE",
 } as const;
 
+export const SIZE = {
+  REGULAR: "REGULAR",
+  LARGE: "LARGE",
+  FAMILY: "FAMILY",
+  EXTRA_LARGE: "EXTRA_LARGE",
+  SMALL: "SMALL",
+  MEDIUM: "MEDIUM",
+} as const;
+
 export type Dietary = (typeof Dietary)[keyof typeof Dietary];
+export type Size = (typeof SIZE)[keyof typeof SIZE];
+console.log(typeof SIZE);

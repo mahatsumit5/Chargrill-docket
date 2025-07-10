@@ -27,44 +27,63 @@ model User {
 }
 
 model Order {
-  id          String   @id @default(uuid())
-  user        User     @relation(fields: [createdBy], references: [clerkId])
-  createdBy   String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  totalAmount Float
-  status      String   @default("pending")
-  pickupTime  DateTime
-  cartItems       OrderItems[]   @relation("OrderItems")
-  customer    Customer @relation("CustomerOrders", fields: [customerId], references: [id],onDelete: Cascade,onUpdate: Cascade )
-  customerId  String
+  id            String        @id @default(uuid())
+  user          User          @relation(fields: [createdBy], references: [clerkId])
+  createdBy     String
+  totalAmount   Float
+  status        OrderStatus   @default(DRAFT)
+  paymentStatus PaymentStatus @default(AWAITING_PAYMENT)
+  pickupTime    DateTime
+  cartItems     OrderItems[]  @relation("OrderItems")
+  customer      Customer      @relation("CustomerOrders", fields: [customerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  customerId    String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   @@index([createdBy])
 }
+
 model OrderItems {
   id        String   @id @default(uuid())
-  items     Item   @relation("cartItems", fields: [itemId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  items     Item     @relation("cartItems", fields: [itemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   itemId    String
-  quanity    Int @default(1)
-  order     Order  @relation("OrderItems",fields: [orderId], references: [id],onDelete: Cascade,onUpdate: Cascade)
+  quanity   Int      @default(1)
+  order     Order    @relation("OrderItems", fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   orderId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
 }
+
 model Item {
-  id          String     @id @default(uuid())
+  id          String       @id @default(uuid())
   name        String
   description String?
-  price       Float
   images      String[]
   dietary     Dietary[]
-  size        Size[]
-  category    Category @relation("CategoryItems",fields: [categoryId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+  category    Category     @relation("CategoryItems", fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   categoryId  String
-  cart        OrderItems[]     @relation("cartItems")
+  cart        OrderItems[] @relation("cartItems")
+  sizes       ItemSize[]
 
   @@index([id])
+}
+
+model Size {
+  name  SizeEnum   @unique
+  items ItemSize[]
+
+  @@id([name])
+}
+
+model ItemSize {
+  id     String   @id @default(uuid())
+  item   Item     @relation(fields: [itemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  itemId String
+  size   Size     @relation(fields: [sizeId], references: [name])
+  sizeId SizeEnum
+  price  Float
+
+  @@unique([itemId, sizeId])
 }
 
 model Category {
@@ -112,11 +131,29 @@ enum Dietary {
   NUT_FREE
 }
 
-enum Size {
+enum OrderStatus {
+  DRAFT
+  PENDING
+  CONFIRMED
+  READY
+  DISPATCHED
+  DELIVERED
+  AWAITING_PICKUP
+  COMPLETED
+}
+
+enum SizeEnum {
   REGULAR
   LARGE
   FAMILY
   EXTRA_LARGE
   SMALL
   MEDIUM
+}
+
+enum PaymentStatus {
+  AWAITING_PAYMENT
+  REFUNDED
+  DECLINED
+  PAYMENT_COMPLETED
 }

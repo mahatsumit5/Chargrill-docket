@@ -40,13 +40,21 @@ export async function createCustomer(
 //   return executeDatabaseAction<Customer>({ error, result });
 // }
 export async function getCustomerById(id: string) {
-  return await prisma.customer.findFirst({
+  return await prisma.customer.findFirstOrThrow({
     where: {
       id,
     },
   });
 }
 
-export async function getAllCustomers(page: number) {
-  return await prisma.customer.findMany();
+export async function getAllCustomers(email: string) {
+  return await executeQuery<Customer[]>(
+    await prisma.customer.findMany({
+      where: {
+        email: {
+          contains: email,
+        },
+      },
+    })
+  );
 }

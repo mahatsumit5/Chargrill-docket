@@ -24,16 +24,36 @@ import {
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
 const links = [
-  { href: "/", label: "Home", icon: <House size={16} /> },
+  {
+    href: "/",
+    label: "Home",
+    icon: <House size={16} className="text-primary" />,
+  },
   {
     href: "/dashboard",
     label: "Dashboard",
-    icon: <LayoutDashboard size={16} />,
+    icon: <LayoutDashboard size={16} className="text-primary" />,
   },
-  { href: "/order", label: "Orders", icon: <Book size={16} /> },
-  { href: "/users", label: "Users", icon: <Users size={16} /> },
-  { href: "/items", label: "Items", icon: <Hamburger size={16} /> },
-  { href: "/history", label: "History", icon: <History size={16} /> },
+  {
+    href: "/order",
+    label: "Orders",
+    icon: <Book size={16} className="text-primary" />,
+  },
+  {
+    href: "/users",
+    label: "Users",
+    icon: <Users size={16} className="text-primary" />,
+  },
+  {
+    href: "/items",
+    label: "Items",
+    icon: <Hamburger size={16} className="text-primary" />,
+  },
+  {
+    href: "/history",
+    label: "History",
+    icon: <History size={16} className="text-primary" />,
+  },
 ];
 export function AppSidebar() {
   const { setTheme } = useTheme();
@@ -41,7 +61,7 @@ export function AppSidebar() {
     <Sidebar className="  border-r border-primary/10 ">
       <SidebarHeader className="bg-background border-b flex  justify-between p-3">
         <p
-          className={`${conConcert_One.className} text-3xl text-blue-800 flex items-center gap-2 font-bold`}
+          className={`${conConcert_One.className} text-3xl text-primary flex items-center gap-2 font-bold`}
         >
           <Dock />
           Docker
@@ -54,7 +74,7 @@ export function AppSidebar() {
               <Link key={item.href} href={item.href}>
                 <li
                   key={item.href}
-                  className="font-bold text-sm text-foreground flex gap-2 items-center  hover:bg-accent p-3 hover:scale-125 transition-all duration-200 rounded-md cursor-pointer"
+                  className="font-bold text-sm text-foreground flex gap-2 items-center  hover:bg-accent p-3 hover:scale-125 transition-all duration-200 border rounded-md cursor-pointer"
                 >
                   {item.icon} {item.label}
                 </li>

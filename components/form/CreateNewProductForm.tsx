@@ -15,10 +15,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-import { Categories, Category, Dietary, Size } from "@prisma/client";
+import { Categories, Category, Dietary, SizeEnum } from "@prisma/client";
 
 import { Textarea } from "../ui/textarea";
-const SIZE = ["REGULAR", "LARGE", "FAMILY", "EXTRA_LARGE", "SMALL", "MEDIUM"];
+const SIZE: SizeEnum[] = [
+  "REGULAR",
+  "LARGE",
+  "FAMILY",
+  "EXTRA_LARGE",
+  "SMALL",
+  "MEDIUM",
+];
 const DIETARY = [
   "VEGAN",
   "VEGETARIAN",
@@ -34,8 +41,9 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { executeQuery } from "@/database";
 import { createItem } from "@/database/actions/item.action";
+import { Size } from "@/types";
+import { executeDatabaseAction } from "@/database";
 import { toast } from "sonner";
 const imageSchema = z
   .array(
@@ -56,16 +64,25 @@ const formSchema = z.object({
       message: "Must be at least 3 characters long.",
     })
     .max(50),
-  description: z.string({ message: "Must be a string" }),
-  price: z.number({ message: "Must be a number" }),
+  description: z.string({ message: "Must be a string" }).optional(),
   images: imageSchema,
   dietary: z.array(
     z.enum(["GLUTEN_FREE", "VEGAN", "VEGETARIAN", "NUT_FREE", "DAIRY_FREE"])
   ),
-  size: z.array(
-    z.enum(["REGULAR", "LARGE", "FAMILY", "EXTRA_LARGE", "SMALL", "MEDIUM"])
+  sizeAndPrice: z.array(
+    z.object({
+      size: z.enum([
+        "REGULAR",
+        "LARGE",
+        "FAMILY",
+        "EXTRA_LARGE",
+        "SMALL",
+        "MEDIUM",
+      ]),
+      price: z.number(),
+    })
   ),
-  category: z.string(),
+  categoryId: z.string({}),
 });
 const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
   // 1. Define your form.
@@ -74,8 +91,7 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
     defaultValues: {
       name: "",
       description: "",
-      price: 1,
-      size: [],
+      sizeAndPrice: [],
       dietary: [],
       images: [],
     },
@@ -83,13 +99,24 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { result } = await createItem(values);
+    const { images, ...rest } = values;
+    const { message, status, data, error } = await executeDatabaseAction({
+      ...(await createItem({ images: [], ...rest })),
+      options: {
+        successMessage: "Item created",
+        errorMessage: "Unable to create item",
+      },
+    });
+    toast[status](error);
+    if (status === "success") {
+      form.reset();
+    }
   }
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="grid grid-cols-1 gap-5 items-start w-[600px] bg-background p-4 rounded-md"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-5 items-start sm:w-full w-[400px]    rounded-md"
       >
         <FormField
           control={form.control}
@@ -98,28 +125,7 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
             <FormItem>
               <FormLabel> Name</FormLabel>
               <FormControl>
-                <Input placeholder="Salad" {...field} />
-              </FormControl>
-              <FormDescription>Enter a item name.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="price"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel> Price</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Salad"
-                  {...field}
-                  type="number"
-                  onChange={(e) => {
-                    form.setValue("price", Number(e.target.value));
-                  }}
-                />
+                <Input placeholder="Salad" {...field} className="sm:h-10" />
               </FormControl>
               <FormDescription>Enter a item name.</FormDescription>
               <FormMessage />
@@ -129,22 +135,23 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
 
         <FormField
           control={form.control}
-          name="size"
+          name="sizeAndPrice"
           render={({ field }) => (
             <FormItem className="flex flex-col items-start">
               <FormLabel> Size</FormLabel>
               <FormControl>
                 <Popover>
-                  <PopoverTrigger className="flex w-full">
-                    <span className="w-full border p-1 rounded-md hover:bg-accent">
-                      {field.value.length > 0
-                        ? field.value.length + " selected"
-                        : "Select your size"}
-                    </span>
+                  <PopoverTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-input rounded-md ">
+                    {field.value.length > 0
+                      ? field.value.length + " selected"
+                      : "Select your size"}
                   </PopoverTrigger>
                   <PopoverContent>
                     {SIZE.map((item, index) => (
-                      <div className="flex items-center justify-start gap-3">
+                      <div
+                        className="flex items-center justify-between  w-full gap-3"
+                        key={index}
+                      >
                         <Input
                           key={index}
                           type="checkbox"
@@ -153,22 +160,62 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
                           name={item}
                           onChange={(e) => {
                             const { value } = e.target;
-                            const currentState = form.getValues("size");
-                            if (currentState?.includes(value as Size)) {
-                              const filtered = currentState?.filter(
-                                (i) => i !== value
+                            const previousState =
+                              form.getValues("sizeAndPrice");
+
+                            if (
+                              previousState.some((item) => item.size === value)
+                            ) {
+                              const newFilteredArray = previousState.filter(
+                                (item) => item.size !== value
                               );
-                              form.setValue("size", filtered);
+                              form.setValue("sizeAndPrice", newFilteredArray);
                             } else {
-                              form.setValue("size", [
-                                ...currentState,
-                                value as Size,
+                              form.setValue("sizeAndPrice", [
+                                ...previousState,
+                                { size: value as Size, price: 0 },
                               ]);
                             }
+
+                            console.log(previousState);
                           }}
                           value={item}
                         />
-                        <label htmlFor="id">{item}</label>
+                        <label htmlFor={item}>{item}</label>
+                        <Input
+                          type="number "
+                          className="w-18 mt-1"
+                          defaultValue={0}
+                          id={item}
+                          disabled={
+                            !form
+                              .getValues("sizeAndPrice")
+                              // check Size is already in the array
+                              .some(({ size }) => size === item)
+                          }
+                          onChange={(e) => {
+                            const { id } = e.target;
+                            const previousState =
+                              form.getValues("sizeAndPrice");
+                            const newValueWithPrice = previousState.map(
+                              (item) => {
+                                if (item.size === id) {
+                                  return {
+                                    price: Number(e.target.value),
+                                    size: item.size,
+                                  };
+                                } else {
+                                  return {
+                                    price: item.price,
+                                    size: item.size,
+                                  };
+                                }
+                              }
+                            );
+                            form.setValue("sizeAndPrice", newValueWithPrice);
+                          }}
+                          required
+                        />
                       </div>
                     ))}
                   </PopoverContent>
@@ -189,8 +236,8 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
               <FormLabel> Dietary</FormLabel>
               <FormControl>
                 <Popover>
-                  <PopoverTrigger className="flex w-full">
-                    <span className="w-full border p-1 rounded-md hover:bg-accent">
+                  <PopoverTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-input rounded-md ">
+                    <span className="w-full border p-1 rounded-md hover:bg-accent sm:h-10 h-9">
                       {field.value.length > 0
                         ? field.value.length + " selected"
                         : "Select your diet"}
@@ -198,7 +245,10 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
                   </PopoverTrigger>
                   <PopoverContent>
                     {DIETARY.map((item, id) => (
-                      <div className="flex items-center justify-start gap-3">
+                      <div
+                        className="flex items-center justify-start gap-3"
+                        key={id}
+                      >
                         <Input
                           key={id}
                           type="checkbox"
@@ -235,28 +285,9 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
             </FormItem>
           )}
         />
-
         <FormField
           control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel> Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Salad"
-                  {...field}
-                  className="resize-y h-28"
-                />
-              </FormControl>
-              <FormDescription>Enter a item name.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="category"
+          name="categoryId"
           render={({ field }) => (
             <FormItem>
               <FormLabel> Categories</FormLabel>
@@ -264,9 +295,12 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
                 onValueChange={field.onChange}
                 defaultValue={categories?.[0].id}
               >
-                <FormControl>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select your size" />
+                <FormControl className="">
+                  <SelectTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-input rounded-md ">
+                    <SelectValue
+                      placeholder="Select your size"
+                      className="border-input"
+                    />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
@@ -285,6 +319,27 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel> Description</FormLabel>
+              <FormControl>
+                <Textarea
+                  placeholder="Enter item details"
+                  {...field}
+                  className=" resize-y h-32   items-center justify-center bg-input  border-input rounded-md "
+                />
+              </FormControl>
+              <FormDescription>
+                Enter a description of your item
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
         <Button className="grid" type="submit">
           Save
         </Button>

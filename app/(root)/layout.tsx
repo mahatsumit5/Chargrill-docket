@@ -24,7 +24,7 @@ export default function Layout({
         <AppSidebar />
         <div className="flex w-full flex-col min-h-screen ">
           {/* header */}
-          <header className="flex w-full justify-between items-center p-3 bg-background border-b border-primary/10 ">
+          <header className="flex w-full justify-between items-center py-3 bg-background border-b border-primary/10 px-4 ">
             <div className="flex gap-5 justify-start items-center  w-full">
               <SidebarTrigger className="" />
               <span>
@@ -53,7 +53,7 @@ export default function Layout({
             </div>
           </header>
           <main className="flex-1 h-full w-full p-3">
-            <div>
+            <div className="px-3">
               <BreadCrumbComponent />
             </div>
             {children}

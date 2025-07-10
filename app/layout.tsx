@@ -4,8 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { databaseActionHandle } from "@/database/actions";
-import { getAllItems } from "@/database/actions/item.action";
+import { createItem, getAllItems } from "@/database/actions/item.action";
 const inter = Montserrat({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
@@ -28,7 +27,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <ClerkProvider>{children} </ClerkProvider>
-          <Toaster position="bottom-right" richColors />
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

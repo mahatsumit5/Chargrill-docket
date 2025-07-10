@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import CalendarPage from "@/components/FullCalendar";
+import { toast } from "sonner";
 const anton = Anton({
   weight: ["400"],
   subsets: ["latin"],
@@ -21,7 +22,16 @@ function Page() {
         </h1>
         <p className="text-gray-600 ">Order now only at our website.</p>
         <span className="flex gap-5">
-          <Button onClick={() => {}}>Create new order</Button>
+          <Button
+            onClick={() => {
+              console.log("asdfdsf");
+              toast("New order cratedf");
+            }}
+            variant={"default"}
+            size={"lg"}
+          >
+            Create new order
+          </Button>
           <Button variant={"outline"}>Explore now</Button>
         </span>
       </div>

@@ -1,23 +1,46 @@
 "use server";
 
+import { CreateItemParams } from "@/types";
 import { executeQuery, prisma } from "..";
-export async function createItem(data: any) {
-  const { category, ...rest } = data;
-  const result = executeQuery(
+import { Item } from "@prisma/client";
+
+export async function createItem(data: CreateItemParams) {
+  const { name, description, dietary, images, categoryId, sizeAndPrice } = data;
+
+  const result = await executeQuery<Item>(
     await prisma.item.create({
       data: {
+        name,
+        description,
+        images,
+        dietary,
         category: {
           connect: {
-            id: category,
+            id: categoryId,
           },
         },
-        ...rest,
+        sizes: {
+          create: sizeAndPrice.map(({ price, size }) => ({
+            price,
+            size: {
+              connectOrCreate: {
+                create: {
+                  name: size,
+                },
+                where: {
+                  name: size,
+                },
+              },
+            },
+          })),
+        },
       },
     })
   );
-  console.log(result);
+  console.log("New Item created", result);
   return result;
 }
+
 export async function getAllItems() {
   try {
     const items = await prisma.item.findMany({

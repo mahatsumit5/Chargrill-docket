@@ -15,13 +15,9 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
 import { useAppDispatch, useAppSelector } from "@/hooks";
-import { setCustomer, setDisplay } from "@/redux/features/cart.slice";
 import { createCustomer } from "@/database/actions/customer.action";
 import { toast } from "sonner";
 
-import { usePathname } from "next/navigation";
-import { executeDatabaseAction, executeQuery } from "@/database";
-import { CreateCustomerParams } from "@/types";
 const formSchema = z.object({
   firstName: z.string({
     required_error: "Full Name is required",
@@ -49,8 +45,6 @@ const formSchema = z.object({
 });
 
 function UserForm() {
-  const dispatch = useAppDispatch();
-  const pathname = usePathname();
   const { customer } = useAppSelector((store) => store.cart);
   const initialState = {
     firstName: customer?.firstName,
@@ -66,13 +60,12 @@ function UserForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: initialState,
-    mode: "onChange",
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { data, error, message, status } = await createCustomer(values);
-    console.log(error);
-    toast[status](message);
+    console.log(status, error, message);
+    toast("ghcghc");
     if (data?.id) {
       const newPath = `/${data.id}`;
       // window.history.replaceState(null, "", `${pathname + newPath}`);
@@ -84,9 +77,9 @@ function UserForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-4 w-[380px] md:w-[400px] lg:w-[650px] p-4 border-1 rounded-2xl  shadow-2xl"
+        className="flex flex-col gap-4 w-full md:w-[400px] lg:w-[650px] p-4 border-1 rounded-2xl   shadow-2xl bg-form"
       >
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <FormField
             control={form.control}
             name="firstName"

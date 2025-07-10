@@ -41,21 +41,26 @@ export async function executeQuery<TResult>(query: any): ReturnType<TResult> {
 export async function executeDatabaseAction<T>({
   error,
   result,
+  options,
 }: {
   result: T | undefined;
   error: any;
+  options?: options;
 }): ServerReturnType<T> {
   try {
     return {
       status: "success",
-      message: "",
+      message: options?.successMessage || "Operation sucess",
       data: JSON.parse(JSON.stringify(result)),
       error: undefined,
     };
   } catch (error) {
     return {
       data: undefined,
-      error: error instanceof Error ? error.message : "Unknown error",
+      error:
+        error instanceof Error
+          ? error.message
+          : options?.errorMessage || "Error Ocurred. Please try again.",
       status: "error",
       message: "error occured",
     };
