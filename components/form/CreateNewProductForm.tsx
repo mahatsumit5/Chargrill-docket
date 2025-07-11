@@ -142,7 +142,7 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
               <FormLabel> Size</FormLabel>
               <FormControl>
                 <Popover>
-                  <PopoverTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-input rounded-md ">
+                  <PopoverTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-border border rounded-md ">
                     {field.value.length > 0
                       ? field.value.length + " selected"
                       : "Select your size"}
@@ -238,7 +238,7 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
               <FormControl>
                 <Popover>
                   <PopoverTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-input rounded-md ">
-                    <span className="w-full border p-1 rounded-md hover:bg-primary/50 sm:h-10 h-9">
+                    <span className="w-full border p-1 rounded-md  sm:h-10 h-9">
                       {field.value.length > 0
                         ? field.value.length + " selected"
                         : "Select your diet"}
