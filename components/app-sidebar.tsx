@@ -58,8 +58,8 @@ const links = [
 export function AppSidebar() {
   const { setTheme } = useTheme();
   return (
-    <Sidebar className="  border-r border-primary/10 ">
-      <SidebarHeader className="bg-background border-b flex  justify-between p-3">
+    <Sidebar className="  border-r border-primary/10  ">
+      <SidebarHeader className=" border-b flex  justify-between p-3">
         <p
           className={`${conConcert_One.className} text-3xl text-primary flex items-center gap-2 font-bold`}
         >
@@ -67,7 +67,7 @@ export function AppSidebar() {
           Docker
         </p>
       </SidebarHeader>
-      <SidebarContent draggable={true} className="bg-background border-b">
+      <SidebarContent draggable={true} className=" border-b">
         <SidebarGroup>
           <ul className="flex gap-2 flex-col">
             {links.map((item) => (
@@ -83,7 +83,7 @@ export function AppSidebar() {
           </ul>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-background">
+      <SidebarFooter className="">
         <UserButton />
       </SidebarFooter>
     </Sidebar>

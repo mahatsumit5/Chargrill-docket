@@ -1,17 +1,130 @@
-createItem({
-  name: "Cabbage Kale",
-  description: "test",
-  dietary: ["DAIRY_FREE"],
-  categoryId: "88684497-db6f-40b9-8845-988f28847efa",
-  images: [],
-  sizeAndPrice: [
-    {
-      price: 75.0,
-      size: "REGULAR",
-    },
-    {
-      price: 100.0,
-      size: "LARGE",
-    },
-  ],
-});
+const data = [
+  {
+    name: "Avocado & Bean Vinaigrette Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images:
+      "https://cdn.foodstorm.com/44a1713504ed4a92bf95ebf448236c9e/images/2f0e8e2c94414290b3cdb242ee5b0ee8_720w.jpg",
+  },
+  {
+    name: "Roasted Cauliflower & Quinoa Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images:
+      "https://cdn.foodstorm.com/44a1713504ed4a92bf95ebf448236c9e/images/f8caf09a228c451785fb19b6c48e06a1_720w.jpg",
+  },
+  {
+    name: "Golden Turmeric Quinoa Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Chicken Caesar Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Classic Coleslaw",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Thai Marinated Chicken Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Greek Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Garden Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Charlie’s Chop",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Japanese Coleslaw",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Superfood Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Avocado & Rocket Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Vege Poke Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Tabouli",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Potato Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Shredded Waldorf Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Chicken Wonton Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Middle Eastern Love",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Fattoush Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Avocado Queen",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+  {
+    name: "Green Goddess Salad",
+    price: [75.0, 100.0],
+    sizes: ["Regular", "Large"],
+    images: "https://catering.chargrillcharlies.com/items/category/salads",
+  },
+];

@@ -31,7 +31,7 @@ const UserCard: FC<{ customer: Customer; user?: User }> = ({
         <small className="text-lg leading-none font-medium">{email}</small>
       </header>
 
-      <section className=" flex flex-col gap-2 items-center justify-center w-full bg-background-secondary p-2">
+      <section className=" flex flex-col gap-2 items-center justify-center w-full bg-background-secondary p-2 ">
         <small className="text-sm leading-none font-medium">
           {firstName} {lastName}
         </small>

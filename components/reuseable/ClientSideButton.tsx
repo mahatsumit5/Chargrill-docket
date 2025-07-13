@@ -7,7 +7,8 @@ import { usePathname, useRouter } from "next/navigation";
 const ClientSideButton = ({ btnName }: { btnName: string }) => {
   const router = useRouter();
   const pathname = usePathname();
-  return (
+  console.log();
+  return !pathname.includes("/new") ? (
     <div className="flex gap-4">
       <Button
         variant={"secondary"}
@@ -32,7 +33,7 @@ const ClientSideButton = ({ btnName }: { btnName: string }) => {
         {btnName}
       </Button>
     </div>
-  );
+  ) : null;
 };
 
 export default ClientSideButton;

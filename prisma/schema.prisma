@@ -58,7 +58,7 @@ model Item {
   id          String       @id @default(uuid())
   name        String
   description String?
-  images      String[]
+  images     String
   dietary     Dietary[]
   category    Category     @relation("CategoryItems", fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   categoryId  String

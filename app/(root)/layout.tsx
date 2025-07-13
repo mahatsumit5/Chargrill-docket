@@ -27,13 +27,12 @@ export default function Layout({
           <header className="flex w-full justify-between items-center py-3  border-b border-primary/10 px-4 ">
             <div className="flex gap-5 justify-start items-center  w-full">
               <SidebarTrigger className="" />
-              <span>
-                <Input
-                  className="w-[250px]  rounded-full shadow-primary shadow-lg "
-                  type="text"
-                  placeholder="search......"
-                />
-              </span>
+
+              <Input
+                className="w-[250px]  rounded-full shadow-primary shadow-lg "
+                type="text"
+                placeholder="search......"
+              />
             </div>
             <div className="flex w-full justify-end gap-2">
               <Button variant={"ghost"} size={"icon"}>
