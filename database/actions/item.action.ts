@@ -42,16 +42,11 @@ export async function createItem(data: CreateItemParams) {
 }
 
 export async function getAllItems() {
-  try {
-    const items = await prisma.item.findMany({
+  return await executeQuery<Item[]>(
+    prisma.item.findMany({
       include: {
         category: true,
       },
-    });
-
-    return JSON.parse(JSON.stringify(items));
-  } catch (error) {
-    console.error("Error fetching items:", error);
-    throw new Error("Failed to fetch items");
-  }
+    })
+  );
 }
