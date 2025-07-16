@@ -35,13 +35,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Customer } from "@prisma/client";
+import { Dietary } from "@prisma/client";
 import Image from "next/image";
 
 interface DataTableProps<T> {
   data: T[];
   type: "customer" | "items" | "user" | "order";
 }
+
 export function DataTable<T>({ data, type }: DataTableProps<T>) {
   const customerColumns: ColumnDef<T>[] = [
     {
@@ -211,9 +212,17 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
       header: ({ column }) => {
         return "Dietary";
       },
-      cell: ({ row }) => (
-        <div className="lowercase">{row.getValue("dietary")}</div>
-      ),
+      cell: ({ row }) => {
+        const diet = row.getValue("dietary") as Dietary[];
+        console.log(diet.length);
+        return (
+          <ul className="uppercase flex flex-col list-disc">
+            {diet.map((i) => (
+              <li key={i}>{i}</li>
+            ))}
+          </ul>
+        );
+      },
     },
     {
       accessorKey: "images",
