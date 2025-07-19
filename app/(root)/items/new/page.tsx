@@ -37,7 +37,7 @@ const page = async () => {
         </div>
       </div>
       <div className="flex items-center w-full justify-center">
-        <CreateNewItemForm categories={result!} />
+        <CreateNewItemForm categories={result || []} />
       </div>
     </div>
   );
