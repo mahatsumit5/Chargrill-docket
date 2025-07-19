@@ -1,4 +1,8 @@
-import { createUser, updateUser } from "@/database/actions/user.action";
+import {
+  createUser,
+  deleteUser,
+  updateUser,
+} from "@/database/actions/user.action";
 import { CreateUserParams } from "@/types";
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
 import { NextRequest, NextResponse } from "next/server";
@@ -56,6 +60,15 @@ export async function POST(req: NextRequest) {
         photo: image_url,
         userName: username!,
       });
+      if (error) {
+        throw new Error(error);
+      } else {
+        return NextResponse.json({ message: "OK", user: result });
+      }
+    }
+    if (eventType === "user.deleted") {
+      const { id } = evt.data;
+      const { error, result } = await deleteUser(id!);
       if (error) {
         throw new Error(error);
       } else {

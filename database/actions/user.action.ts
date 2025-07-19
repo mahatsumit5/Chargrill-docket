@@ -40,3 +40,13 @@ export async function updateUser(
     })
   );
 }
+
+export async function deleteUser(id: string) {
+  return await executeQuery<{ id: string }>(
+    prisma.user.delete({
+      where: {
+        clerkId: id,
+      },
+    })
+  );
+}
