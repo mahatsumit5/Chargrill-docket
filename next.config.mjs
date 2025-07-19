@@ -6,6 +6,7 @@ const nextConfig = {
   eslint: {
     dirs: ["lib"],
   },
+  experimental: {},
 };
 
 export default nextConfig;
