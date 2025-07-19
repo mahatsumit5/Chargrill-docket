@@ -1,6 +1,11 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-const isPublicRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
+const isPublicRoute = createRouteMatcher([
+  "/sign-in(.*)",
+  "/sign-up(.*)",
+  "/api/webhook/clerk",
+]);
+const isApiKeyAccessible = createRouteMatcher(["/api(.*)"]);
 export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
     const { isAuthenticated, factorVerificationAge, redirectToSignIn } =
@@ -10,6 +15,7 @@ export default clerkMiddleware(async (auth, req) => {
   } else {
     console.log("inside public route ");
   }
+  if (isApiKeyAccessible(req)) await auth.protect({ token: "api_key" });
 });
 
 export const config = {
