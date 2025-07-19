@@ -6,7 +6,7 @@ import {
   SidebarHeader,
 } from "@/components/ui/sidebar";
 import { Concert_One } from "next/font/google";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, SignedIn } from "@clerk/nextjs";
 const conConcert_One = Concert_One({
   weight: ["400"],
   subsets: ["latin"],
@@ -84,7 +84,9 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="">
-        <UserButton signInUrl="/sign-in" />
+        <SignedIn>
+          <UserButton signInUrl="/sign-in" />
+        </SignedIn>
       </SidebarFooter>
     </Sidebar>
   );
