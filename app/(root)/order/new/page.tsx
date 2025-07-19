@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 import UserCard from "@/components/user-card/UserCard";
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
-const page = ({ params }: { params: Promise<{ id: string }> }) => {
+const Page = ({ params }: { params: Promise<{ id: string }> }) => {
   const [email, setEmail] = useState<string>("");
   const [data, setData] = useState<Customer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -34,7 +34,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
     return () => {
       clearTimeout(1);
     };
-  }, [email]);
+  }, [email, handleOnSearch]);
 
   return (
     <div className="bg-background-secondary rounded-md p-4 mt-4 h-full min-h-[70vh] flex flex-col gap-10 justify-start items-center">
@@ -57,7 +57,7 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
   );
 };
 
-export default page;
+export default Page;
 
 const DisplayUserSection = ({
   data,

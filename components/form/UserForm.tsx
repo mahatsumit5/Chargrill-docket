@@ -84,7 +84,7 @@ function UserForm() {
             Create a new user
           </h4>
           <p className="text-muted-foreground text-sm col-span-2 mb-8">
-            Let's start with some facts about you.
+            Let&apos;s start with some facts about you.
           </p>
           <FormField
             control={form.control}

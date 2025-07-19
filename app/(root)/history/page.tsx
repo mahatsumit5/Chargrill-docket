@@ -2,7 +2,7 @@
 import CalendarPage from "@/components/FullCalendar";
 import React from "react";
 import Calendar from "@/components/calendar/Calendar";
-const page = () => {
+const History = () => {
   const [date, setDate] = React.useState<Date | undefined>(new Date());
   return (
     <div className=" w-full p-4">
@@ -11,4 +11,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default History;

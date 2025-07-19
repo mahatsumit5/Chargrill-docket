@@ -3,7 +3,7 @@ import { useParams, usePathname } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const page = () => {
+const CreateNewOrder = () => {
   const form = useForm({
     defaultValues: {},
   });
@@ -12,4 +12,4 @@ const page = () => {
   return <div className="">{id}</div>;
 };
 
-export default page;
+export default CreateNewOrder;
