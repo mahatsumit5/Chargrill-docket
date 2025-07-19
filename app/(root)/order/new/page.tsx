@@ -1,16 +1,15 @@
 "use client";
 import { getAllCustomers } from "@/database/actions/customer.action";
 import React, { useEffect, useState } from "react";
-
-import { SearchUser } from "@/components/search-user/SearchUserComponet";
 import { Input } from "@/components/ui/input";
 import { Ubuntu } from "next/font/google";
 import { Customer } from "@prisma/client";
 import { toast } from "sonner";
-
 import UserCard from "@/components/user-card/UserCard";
+
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
-const Page = ({ params }: { params: Promise<{ id: string }> }) => {
+
+const Page = () => {
   const [email, setEmail] = useState<string>("");
   const [data, setData] = useState<Customer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);

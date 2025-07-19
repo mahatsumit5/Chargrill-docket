@@ -2,18 +2,12 @@
 import React, { Suspense } from "react";
 import { Button } from "../ui/button";
 import { Link, List, Plus } from "lucide-react";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 const ClientSideButton = ({ btnName }: { btnName: string }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const params = useSearchParams();
-  console.log(params);
+
   return !pathname.includes("/new") ? (
     <Suspense>
       <div className="flex gap-4">
