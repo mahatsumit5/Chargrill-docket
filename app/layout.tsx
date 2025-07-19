@@ -4,7 +4,6 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { createItem, getAllItems } from "@/database/actions/item.action";
 const inter = Montserrat({ subsets: ["latin"], weight: ["400"] });
 
 export const metadata: Metadata = {
