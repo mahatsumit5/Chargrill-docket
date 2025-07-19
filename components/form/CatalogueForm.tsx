@@ -38,7 +38,7 @@ const CatalogueForm = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const name = values.name as Categories;
-    const { data, error, status, message } = await createCategory({ name });
+    const data = await createCategory({ name });
   }
   return (
     <Form {...form}>

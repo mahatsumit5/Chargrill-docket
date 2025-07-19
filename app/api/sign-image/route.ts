@@ -5,7 +5,7 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   const body = await req.json();
   const signature = cloudinary.utils.api_sign_request(
     body.paramsToSign,

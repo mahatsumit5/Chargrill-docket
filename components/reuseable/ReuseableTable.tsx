@@ -149,9 +149,7 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(customer.id)}
-              >
+              <DropdownMenuItem onClick={() => {}}>
                 Copy payment ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />

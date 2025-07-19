@@ -34,7 +34,7 @@ const Page = ({ params }: { params: Promise<{ id: string }> }) => {
     return () => {
       clearTimeout(1);
     };
-  }, [email, handleOnSearch]);
+  }, [email]);
 
   return (
     <div className="bg-background-secondary rounded-md p-4 mt-4 h-full min-h-[70vh] flex flex-col gap-10 justify-start items-center">
