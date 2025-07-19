@@ -6,7 +6,7 @@ export default clerkMiddleware(async (auth, req) => {
     const { isAuthenticated, factorVerificationAge, redirectToSignIn } =
       await auth();
     console.log("is authenticated", isAuthenticated);
-    if (!isAuthenticated) redirectToSignIn();
+    if (!isAuthenticated && !isPublicRoute(req)) redirectToSignIn();
   } else {
     console.log("inside public route ");
   }

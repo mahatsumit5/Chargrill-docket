@@ -84,7 +84,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="">
-        <UserButton />
+        <UserButton signInUrl="/sign-in" />
       </SidebarFooter>
     </Sidebar>
   );
