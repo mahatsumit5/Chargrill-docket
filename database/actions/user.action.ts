@@ -2,20 +2,13 @@
 
 import { CreateUserParams } from "@/types";
 import { executeQuery, prisma } from "..";
+import { Prisma, User } from "@prisma/client";
 export async function createUser(data: CreateUserParams) {
-  try {
-    const newUser = executeQuery<{ id: string }>(
-      await prisma.user.create({
-        data,
-      })
-    );
-
-    return JSON.parse(JSON.stringify(newUser));
-  } catch (error) {
-    // todo handle error
-
-    console.log(error);
-  }
+  return await executeQuery<User>(
+    await prisma.user.create({
+      data,
+    })
+  );
 }
 export async function getUserByEmail(email: string) {
   try {
@@ -32,4 +25,18 @@ export async function getUserByEmail(email: string) {
     console.log(error);
     throw new Error("Failed to fetch user by email");
   }
+}
+
+export async function updateUser(
+  id: string,
+  data: Omit<CreateUserParams, "clerkId">
+) {
+  return await executeQuery<User>(
+    prisma.user.update({
+      where: {
+        clerkId: id,
+      },
+      data,
+    })
+  );
 }
