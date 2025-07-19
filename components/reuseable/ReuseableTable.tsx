@@ -282,6 +282,7 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
 
   return (
     <div className="w-full">
+      {/*  */}
       <div className="flex items-center py-4">
         {/* <Input
           placeholder="Filter emails..."
@@ -318,6 +319,8 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/*  */}
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -368,6 +371,8 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
           </TableBody>
         </Table>
       </div>
+
+      {/*  */}
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-muted-foreground flex-1 text-sm">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
