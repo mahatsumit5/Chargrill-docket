@@ -12,10 +12,8 @@ import React from "react";
 
 const BreadCrumbComponent = () => {
   const pathname = usePathname();
-  console.log(pathname);
   const links = pathname.split("/").filter(Boolean);
 
-  console.log(links);
   return (
     <Breadcrumb className="py-4">
       <BreadcrumbList>

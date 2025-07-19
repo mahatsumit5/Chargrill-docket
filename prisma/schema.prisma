@@ -30,7 +30,7 @@ model Order {
   id            String        @id @default(uuid())
   user          User          @relation(fields: [createdBy], references: [clerkId])
   createdBy     String
-  totalAmount   Float
+  totalAmount   Float         @default(0)
   status        OrderStatus   @default(DRAFT)
   paymentStatus PaymentStatus @default(AWAITING_PAYMENT)
   pickupTime    DateTime

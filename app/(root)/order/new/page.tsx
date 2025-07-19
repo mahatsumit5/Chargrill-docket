@@ -1,33 +1,13 @@
 "use client";
-import {
-  getAllCustomers,
-  getCustomerById,
-} from "@/database/actions/customer.action";
+import { getAllCustomers } from "@/database/actions/customer.action";
 import React, { useEffect, useState } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import UserForm from "@/components/form/UserForm";
 
 import { SearchUser } from "@/components/search-user/SearchUserComponet";
 import { Input } from "@/components/ui/input";
 import { Ubuntu } from "next/font/google";
 import { Customer } from "@prisma/client";
 import { toast } from "sonner";
-import { fa } from "zod/v4/locales";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
 import UserCard from "@/components/user-card/UserCard";
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
 const page = ({ params }: { params: Promise<{ id: string }> }) => {
@@ -78,54 +58,6 @@ const page = ({ params }: { params: Promise<{ id: string }> }) => {
 };
 
 export default page;
-
-const OrderAccordian = () => {
-  return (
-    <Accordion
-      type="single"
-      collapsible
-      className="w-full"
-      defaultValue="item-1"
-    >
-      <AccordionItem value="item-1">
-        <AccordionTrigger className="text-xl font-semibold">
-          Select Customer
-        </AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-4 ">
-          {/* search */}
-          <div className="flex gap-2"></div>
-          <SearchUser customers={[]} />
-          <UserForm />
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-2">
-        <AccordionTrigger>Select Items</AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-4 text-balance">
-          <p>
-            We offer worldwide shipping through trusted courier partners.
-            Standard delivery takes 3-5 business days, while express shipping
-            ensures delivery within 1-2 business days.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-      <AccordionItem value="item-3">
-        <AccordionTrigger>Payment</AccordionTrigger>
-        <AccordionContent className="flex flex-col gap-4 text-balance">
-          <p>
-            We stand behind our products with a comprehensive 30-day return
-            policy. If you&apos;re not completely satisfied, simply return the
-            item in its original condition.
-          </p>
-          <p>
-            Our hassle-free return process includes free return shipping and
-            full refunds processed within 48 hours of receiving the returned
-            item.
-          </p>
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
-  );
-};
 
 const DisplayUserSection = ({
   data,

@@ -397,6 +397,8 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
           </Button>
         </div>
       </div>
+
+      {/*  */}
     </div>
   );
 }

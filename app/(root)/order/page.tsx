@@ -1,11 +1,14 @@
 import OrderForm from "@/components/form/OrderForm";
 import UserForm from "@/components/form/UserForm";
+import { createNewOrder } from "@/database/actions/order.action";
 import React from "react";
 
 interface Components {
   [key: string]: React.ReactNode;
 }
 function Page() {
+  createNewOrder();
+
   const components: Components = {
     UserForm: <UserForm />,
   };

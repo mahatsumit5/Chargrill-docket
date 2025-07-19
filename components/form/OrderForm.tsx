@@ -20,9 +20,8 @@ import { cn } from "@/lib/utils";
 import { IoCaretBackOutline } from "react-icons/io5";
 import { LiaCartPlusSolid } from "react-icons/lia";
 import { v4 } from "uuid";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown } from "lucide-react";
 import { Textarea } from "../ui/textarea";
-import { useRouter } from "next/navigation";
 import { CartItem } from "@/types";
 import { setCart, setDisplay } from "@/redux/features/cart.slice";
 
@@ -45,7 +44,6 @@ const OrderForm = ({
   item?: CartItem;
   type: "new" | "update";
 }) => {
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const { items } = useAppSelector((store) => store.cart);
 
@@ -69,7 +67,6 @@ const OrderForm = ({
         break;
       case "update":
         dispatch(setCart({ id: (item?.id as string) || "", ...values }));
-        router.push("/dashboard/cart");
 
         break;
     }
@@ -85,11 +82,7 @@ const OrderForm = ({
         >
           <IoCaretBackOutline /> Back
         </Button>
-        <Button
-          variant={"link"}
-          className="relative "
-          onClick={() => router.push("/dashboard/cart")}
-        >
+        <Button variant={"link"} className="relative ">
           {/* {items.length} */}
           <LiaCartPlusSolid size={30} color="" />
           {items.length && (
