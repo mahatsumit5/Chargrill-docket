@@ -6,17 +6,19 @@ const isPublicRoute = createRouteMatcher([
   "/api/webhook/clerk",
 ]);
 const isApiKeyAccessible = createRouteMatcher(["/api(.*)"]);
-export default clerkMiddleware(async (auth, req) => {
-  if (!isPublicRoute(req)) {
-    const { isAuthenticated, factorVerificationAge, redirectToSignIn } =
-      await auth();
-    console.log("is authenticated", isAuthenticated);
-    if (!isAuthenticated && !isPublicRoute(req)) redirectToSignIn();
-  } else {
-    console.log("inside public route ");
-  }
-  if (isApiKeyAccessible(req)) await auth.protect({ token: "api_key" });
-});
+export default clerkMiddleware(
+  async (auth, req) => {
+    if (!isPublicRoute(req)) {
+      const { isAuthenticated, factorVerificationAge, redirectToSignIn } =
+        await auth();
+      console.log("is authenticated", isAuthenticated);
+      if (!isAuthenticated && !isPublicRoute(req)) redirectToSignIn();
+    } else {
+      console.log("inside public route ");
+    }
+  },
+  { debug: true }
+);
 
 export const config = {
   matcher: [
