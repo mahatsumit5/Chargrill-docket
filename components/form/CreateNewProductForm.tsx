@@ -397,24 +397,25 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
             render={({ field }) => (
               <FormItem>
                 <FormLabel> Categories</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={categories?.[0].id}
-                >
+                <Select onValueChange={field.onChange}>
                   <FormControl className="">
                     <SelectTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-input rounded-md ">
                       <SelectValue
-                        placeholder="Select your size"
+                        placeholder="Select Category"
                         className="border-input"
                       />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {categories.map((item) => (
-                      <SelectItem value={item.id} key={item.id}>
-                        {item.name}
-                      </SelectItem>
-                    ))}
+                    {categories.length ? (
+                      categories.map((item) => (
+                        <SelectItem value={item.id} key={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <p className="p-2">No categories available</p>
+                    )}
                   </SelectContent>
                 </Select>
                 <FormDescription>Select your category.</FormDescription>
