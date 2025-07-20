@@ -5,9 +5,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 const inter = Montserrat({ subsets: ["latin"], weight: ["400"] });
-
-import { cookies } from "next/headers";
-import { createNewOrder } from "@/database/actions/order.action";
 export const metadata: Metadata = {
   title: "Create Docket",
   description: "Create docket for CharGrill",

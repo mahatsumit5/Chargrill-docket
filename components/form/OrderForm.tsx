@@ -39,6 +39,9 @@ import {
 import { cn } from "@/lib/utils";
 import { Calendar } from "../ui/calendar";
 import { Label } from "../ui/label";
+import { createNewOrder } from "@/database/actions/order.action";
+import { toast } from "sonner";
+import { usePathname, useRouter } from "next/navigation";
 const status = [
   "AWAITING_PICKUP",
   "COMPLETED",
@@ -60,13 +63,16 @@ const orderFormSchema = z.object({
   totalAmount: z.number(),
   status: z.enum(status),
   pickupTime: z.date(),
-  customerId: z.string(),
+  customerId: z.string({ required_error: "Customer is required" }),
   paymentStatus: z.enum(paymentStatus),
-  cartItems: z.array(z.string()).optional(),
+  cartItems: z.array(z.string()),
 });
 
 const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
-  const [open, setOpen] = React.useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
+  console.log(pathname);
+  const [open, setOpen] = React.useState(false);
   const [calendarOpen, setCalendarOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   const { user } = useUser();
@@ -74,16 +80,23 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
     resolver: zodResolver(orderFormSchema),
     defaultValues: {
       createdBy: user?.id,
-      customerId: "",
       status: "DRAFT",
       paymentStatus: "AWAITING_PAYMENT",
       pickupTime: new Date(),
       totalAmount: 0,
       cartItems: [],
+      customerId: undefined,
     },
   });
   async function onSubmit(values: z.infer<typeof orderFormSchema>) {
     console.log(values);
+    const { error, result } = await createNewOrder(values);
+    if (error) {
+      toast["error"]("unexpected");
+    } else {
+      toast["success"]("Order created now select your items");
+      router.push(pathname + "/" + result?.id);
+    }
   }
 
   React.useEffect(() => {
@@ -169,41 +182,41 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
           name="customerId"
           render={({ field }) => (
             <FormItem>
-              <FormControl>
+              <FormControl {...field}>
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="w-[200px] justify-between"
+                      className="w-[250px] justify-between"
                     >
-                      {value
-                        ? customers.find((c) => c.email === value)?.email
+                      {form.getValues("customerId")
+                        ? customers.find(
+                            (c) => c.id === form.getValues("customerId")
+                          )?.email
                         : "Select Customer..."}
                       <ChevronsUpDown className="opacity-50" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-[250px] p-0">
                     <Command>
                       <CommandInput
                         placeholder="Search users..."
                         className="h-9"
                       />
-                      <CommandList
-                        onChange={(e) => {
-                          console.log(e);
-                        }}
-                      >
+                      <CommandList>
                         <CommandEmpty>No customer found.</CommandEmpty>
                         <CommandGroup>
                           {customers.map((user) => (
                             <CommandItem
                               key={user.id}
                               value={user.id}
-                              onSelect={(currentValue) => {
-                                console.log(currentValue);
-                                form.setValue("customerId", user.id);
+                              onSelect={() => {
+                                form.getValues("customerId") === user.id
+                                  ? form.resetField("customerId")
+                                  : form.setValue("customerId", user.id);
+
                                 setOpen(false);
                               }}
                             >
@@ -211,11 +224,12 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
                               <Check
                                 className={cn(
                                   "ml-auto",
-                                  value === user.id
+                                  form.getValues("customerId") === user.id
                                     ? "opacity-100"
                                     : "opacity-0"
                                 )}
                               />
+                              {value}
                             </CommandItem>
                           ))}
                         </CommandGroup>
@@ -229,6 +243,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
             </FormItem>
           )}
         />
+        {/* pickup time */}
         <FormField
           control={form.control}
           name="pickupTime"
@@ -282,7 +297,9 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
           )}
         />
 
-        <Button type="submit">Create</Button>
+        <Button type="submit" className="w-full" variant={"secondary"}>
+          Next
+        </Button>
       </form>
     </Form>
   );

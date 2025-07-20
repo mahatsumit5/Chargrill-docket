@@ -1,6 +1,6 @@
 "use server";
 
-import { CreateItemParams } from "@/types";
+import { CreateItemParams, GetAllItemsResponse } from "@/types";
 import { executeQuery, prisma } from "..";
 import { Item } from "@prisma/client";
 
@@ -42,10 +42,11 @@ export async function createItem(data: CreateItemParams) {
 }
 
 export async function getAllItems() {
-  return await executeQuery<Item[]>(
+  return await executeQuery<GetAllItemsResponse[]>(
     prisma.item.findMany({
       include: {
         category: true,
+        sizes: true,
       },
     })
   );

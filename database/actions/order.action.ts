@@ -1,22 +1,40 @@
 "use server";
-import { Order } from "@prisma/client";
+import { Order, OrderStatus, PaymentStatus } from "@prisma/client";
 import { executeQuery, prisma } from "..";
-
-export async function createNewOrder() {
+type CreateNewOrderParams = {
+  createdBy: string;
+  customerId: string;
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  pickupTime: Date;
+  totalAmount: number;
+  cartItems: string[];
+};
+export async function createNewOrder({
+  createdBy,
+  customerId,
+  paymentStatus,
+  pickupTime,
+  status,
+  totalAmount,
+}: CreateNewOrderParams) {
   const result = await executeQuery<Order>(
     await prisma.order.create({
       data: {
         user: {
           connect: {
-            clerkId: "user_305SWg6R95Bd7ZTFNOdTmhBqozG",
+            clerkId: createdBy,
           },
         },
         customer: {
           connect: {
-            id: "6bfed2cd-7962-498b-8458-ca1e24231e40",
+            id: customerId,
           },
         },
-        pickupTime: new Date(),
+        pickupTime,
+        paymentStatus,
+        status,
+        totalAmount,
       },
     })
   );

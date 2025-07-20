@@ -52,6 +52,8 @@ model OrderItems {
   orderId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  size      ItemSize @relation("size",fields: [sizeId],references: [id])
+  sizeId String
 }
 
 model Item {
@@ -82,6 +84,7 @@ model ItemSize {
   size   Size     @relation(fields: [sizeId], references: [name])
   sizeId SizeEnum
   price  Float
+  cart   OrderItems[]@relation("size")
 
   @@unique([itemId, sizeId])
 }

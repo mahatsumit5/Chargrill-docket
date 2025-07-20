@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Category, Item, ItemSize, Prisma } from "@prisma/client";
 
 export type CartItem = {
   id: string;
@@ -77,5 +77,9 @@ export type NewOrderParams = {
 };
 export type SearchParamProps = {
   params: { email: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+};
+
+export type GetAllItemsResponse = Item & { category: Category } & {
+  sizes: ItemSize[];
 };

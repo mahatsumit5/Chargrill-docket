@@ -8,8 +8,12 @@ import { AlertCircleIcon } from "lucide-react";
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
 
-const Page = async ({ searchParams }: SearchParamProps) => {
-  const email = (searchParams?.email as string) || "";
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const email = ((await searchParams)?.email as string) || "";
   const { error, result } = await getAllCustomers(email);
   return (
     <div className=" rounded-md p-4 mt-4 h-full min-h-[70vh] flex flex-col gap-5 justify-start items-start">
@@ -28,9 +32,6 @@ const Page = async ({ searchParams }: SearchParamProps) => {
         </Alert>
       )}
       <OrderForm customers={result ?? []} />
-      {email}
     </div>
   );
-};
-
-export default Page;
+}

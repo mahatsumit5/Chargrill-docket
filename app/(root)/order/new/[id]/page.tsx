@@ -1,14 +1,24 @@
-"use client";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import ItemCard from "@/components/item-card/ItemCard";
+import { getAllItems } from "@/database/actions/item.action";
 import React from "react";
-import { useForm } from "react-hook-form";
 
-const CreateNewOrder = () => {
-  const form = useForm({
-    defaultValues: {},
-  });
+const CreateNewOrder = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const id = (await params)?.id;
+  const { error, result } = await getAllItems();
 
-  return <div className="">{id}</div>;
+  return error ? (
+    <>error</>
+  ) : (
+    <div className="w-full flex gap-2">
+      {result?.map((item) => (
+        <ItemCard key={item.id} item={item} orderId={id} />
+      ))}
+    </div>
+  );
 };
 
 export default CreateNewOrder;
