@@ -7,9 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { setThemeCookie } from "@/lib/theme";
 import { store } from "@/redux/store";
 import { MoonStar, ShoppingBag, ShoppingCart, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useEffect } from "react";
 import { Provider } from "react-redux";
 
 export default function Layout({
@@ -18,13 +20,14 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   const { setTheme, theme } = useTheme();
+
   return (
     <Provider store={store()}>
       <SidebarProvider>
         <AppSidebar />
         <div className="flex w-full flex-col min-h-screen ">
           {/* header */}
-          <header className="flex w-full justify-between items-center py-3  border-b border-primary/10 px-4 ">
+          <header className="flex w-full justify-between items-center py-3  border-b border-border px-4 ">
             <div className="flex gap-5 justify-start items-center  w-full">
               <SidebarTrigger className="" />
 

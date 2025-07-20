@@ -54,7 +54,7 @@ const UserCard: FC<{ customer: Customer; user?: User }> = ({
           variant={"default"}
           className="w-full  "
           onClick={() => {
-            router.push(`${pathname}/${id}`);
+            router.push(`${pathname}?cid=${id}`);
           }}
         >
           Select

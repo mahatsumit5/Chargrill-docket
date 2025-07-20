@@ -66,4 +66,16 @@ export const SIZE = {
 
 export type Dietary = (typeof Dietary)[keyof typeof Dietary];
 export type Size = (typeof SIZE)[keyof typeof SIZE];
-console.log(typeof SIZE);
+
+export type NewOrderParams = {
+  createdBy: string;
+  pickupTime: Date;
+  customerId: string;
+  totalAmount?: number;
+  status?: Prisma.EnumOrderStatusFilter;
+  paymentStatus?: Prisma.EnumPaymentStatusFilter;
+};
+export type SearchParamProps = {
+  params: { email: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};

@@ -15,6 +15,7 @@ interface options {
 export async function executeQuery<TResult>(query: any): ReturnType<TResult> {
   try {
     const result: TResult = await query;
+
     return {
       result,
       error: undefined,

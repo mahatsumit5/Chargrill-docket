@@ -48,7 +48,7 @@ export async function getCustomerById(id: string) {
 }
 
 export async function getAllCustomers(email: string) {
-  return await executeQuery<Customer[]>(
+  const { error, result } = await executeQuery<Customer[]>(
     await prisma.customer.findMany({
       where: {
         email: {
@@ -57,4 +57,9 @@ export async function getAllCustomers(email: string) {
       },
     })
   );
+  if (!result?.length) {
+    return { error: { message: "error occurred" }, result: undefined };
+  }
+
+  return { error, result };
 }

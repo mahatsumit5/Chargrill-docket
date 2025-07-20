@@ -11,13 +11,12 @@ export default clerkMiddleware(
     if (!isPublicRoute(req)) {
       const { isAuthenticated, factorVerificationAge, redirectToSignIn } =
         await auth();
-      console.log("is authenticated", isAuthenticated);
       if (!isAuthenticated && !isPublicRoute(req)) redirectToSignIn();
     } else {
-      console.log("inside public route ");
+      // console.log("inside public route ");
     }
-  },
-  { debug: true }
+  }
+  // { debug: true }
 );
 
 export const config = {

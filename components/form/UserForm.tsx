@@ -77,7 +77,7 @@ function UserForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-5 w-full md:w-[400px]   my-4 border rounded-md p-4 bg-form "
+        className="flex flex-col gap-5 w-full md:w-[700px] p-4 my-4 bg-background-secondary rounded-md "
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <h4 className="scroll-m-20 text-lg font-semibold tracking-tight col-span-2 ">
@@ -93,7 +93,7 @@ function UserForm() {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Harry " {...field} />
+                  <Input placeholder="Harry " {...field} className="" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -114,7 +114,7 @@ function UserForm() {
           />
         </div>
 
-        {/* Phone */}
+        {/* email */}
         <FormField
           control={form.control}
           name="email"

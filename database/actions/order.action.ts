@@ -1,15 +1,22 @@
 "use server";
-import { Order, Prisma } from "@prisma/client";
+import { Order } from "@prisma/client";
 import { executeQuery, prisma } from "..";
 
 export async function createNewOrder() {
   const result = await executeQuery<Order>(
-    prisma.order.create({
+    await prisma.order.create({
       data: {
-        totalAmount: 0,
+        user: {
+          connect: {
+            clerkId: "user_305SWg6R95Bd7ZTFNOdTmhBqozG",
+          },
+        },
+        customer: {
+          connect: {
+            id: "6bfed2cd-7962-498b-8458-ca1e24231e40",
+          },
+        },
         pickupTime: new Date(),
-        customerId: "19c41049-3d9d-49b3-9f4c-81f271735819",
-        createdBy: "",
       },
     })
   );

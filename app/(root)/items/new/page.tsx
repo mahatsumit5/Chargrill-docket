@@ -22,14 +22,14 @@ const page = async () => {
         <div className="flex items-center gap-2">
           <Button
             variant={"outline"}
-            className="flex gap-2 items-center rounded-full"
+            className="flex gap-2 items-center rounded-full border border-primary"
           >
             <Save size={16} /> Save Draft
           </Button>
           <Button
             className=" flex gap-2 items-center rounded-full"
             type="reset"
-            variant={"destructive"}
+            variant={"default"}
           >
             <RotateCcw size={18} />
             Reset

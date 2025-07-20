@@ -1,77 +1,36 @@
-"use client";
 import { getAllCustomers } from "@/database/actions/customer.action";
-import React, { useEffect, useState } from "react";
-import { Input } from "@/components/ui/input";
+import React from "react";
 import { Ubuntu } from "next/font/google";
-import { Customer } from "@prisma/client";
-import { toast } from "sonner";
-import UserCard from "@/components/user-card/UserCard";
+import OrderForm from "@/components/form/OrderForm";
+import { SearchParamProps } from "@/types";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircleIcon } from "lucide-react";
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
 
-const Page = () => {
-  const [email, setEmail] = useState<string>("");
-  const [data, setData] = useState<Customer[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const handleOnSearch = async () => {
-    setLoading(true);
-    const { error, result } = await getAllCustomers(email);
-    console.log(error, result);
-    if (!result?.length) {
-      toast["error"]("No user found with that email");
-    } else {
-      console.log(result);
-      setData(result!);
-    }
-    setLoading(false);
-  };
-  useEffect(() => {
-    setTimeout(() => {
-      handleOnSearch();
-    }, 2000);
-
-    return () => {
-      clearTimeout(1);
-    };
-  }, [email]);
-
+const Page = async ({ searchParams }: SearchParamProps) => {
+  const email = (searchParams?.email as string) || "";
+  const { error, result } = await getAllCustomers(email);
   return (
-    <div className="bg-background-secondary rounded-md p-4 mt-4 h-full min-h-[70vh] flex flex-col gap-10 justify-start items-center">
-      <h3
-        className={`scroll-m-20 mt-5 text-3xl font-extrabold tracking-tight text-primary ${ubuntu.className}`}
-      >
-        Search your customer
-      </h3>
-      <Input
-        type="email"
-        placeholder="john@xyz.com"
-        className="rounded-full bg-primary/60 w-full lg:w-1/2 h-16 text-primary-foreground placeholder:text-primary-foreground/60"
-        name="email"
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-      />
-      <DisplayUserSection data={data} loading={loading} />
+    <div className=" rounded-md p-4 mt-4 h-full min-h-[70vh] flex flex-col gap-5 justify-start items-start">
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircleIcon />
+          <AlertTitle>Unable to find the customer with that email.</AlertTitle>
+          <AlertDescription>
+            <p>Please verify your billing information and try again.</p>
+            <ul className="list-inside list-disc text-sm">
+              <li>Check your card details</li>
+              <li>Ensure sufficient funds</li>
+              <li>Verify billing address</li>
+            </ul>
+          </AlertDescription>
+        </Alert>
+      )}
+      <OrderForm customers={result ?? []} />
+      {email}
     </div>
   );
 };
 
 export default Page;
-
-const DisplayUserSection = ({
-  data,
-  loading,
-}: {
-  loading: boolean;
-  data: Customer[];
-}) => {
-  return loading ? (
-    "loading"
-  ) : (
-    <div className="flex gap-4 w-full  flex-wrap items-center justify-center">
-      {data.map((item) => (
-        <UserCard customer={item} key={item.id} />
-      ))}
-    </div>
-  );
-};

@@ -1,7 +1,8 @@
 "use client";
-import { useAppDispatch, useAppSelector } from "@/hooks";
-import React from "react";
-import { Button } from "../ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React, { FC } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import {
   Form,
   FormControl,
@@ -11,192 +12,279 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Customer, OrderStatus, PaymentStatus } from "@prisma/client";
+import { useUser } from "@clerk/nextjs";
 import { Input } from "../ui/input";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Popover } from "@radix-ui/react-popover";
+import { PopoverContent, PopoverTrigger } from "../ui/popover";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { Button } from "../ui/button";
+import { Check, ChevronDownIcon, ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "../ui/command";
 import { cn } from "@/lib/utils";
-import { IoCaretBackOutline } from "react-icons/io5";
-import { LiaCartPlusSolid } from "react-icons/lia";
-import { v4 } from "uuid";
-import { ChevronsUpDown } from "lucide-react";
-import { Textarea } from "../ui/textarea";
-import { CartItem } from "@/types";
-import { setCart, setDisplay } from "@/redux/features/cart.slice";
-
-const size = [
-  { label: "Large", value: "LG" },
-  { label: "Regular", value: "RG" },
-];
-
-const formSchema = z.object({
-  name: z.string({ required_error: "Name is required" }).min(3).max(50),
-  instructions: z.string().max(500).optional(),
-  quantity: z.string({ required_error: "Quantity is required" }).min(1),
-  size: z.string().optional(),
+import { Calendar } from "../ui/calendar";
+import { Label } from "../ui/label";
+const status = [
+  "AWAITING_PICKUP",
+  "COMPLETED",
+  "CONFIRMED",
+  "DELIVERED",
+  "DISPATCHED",
+  "DRAFT",
+  "PENDING",
+  "READY",
+] as const;
+const paymentStatus = [
+  "AWAITING_PAYMENT",
+  "DECLINED",
+  "PAYMENT_COMPLETED",
+  "REFUNDED",
+] as const;
+const orderFormSchema = z.object({
+  createdBy: z.string(),
+  totalAmount: z.number(),
+  status: z.enum(status),
+  pickupTime: z.date(),
+  customerId: z.string(),
+  paymentStatus: z.enum(paymentStatus),
+  cartItems: z.array(z.string()).optional(),
 });
 
-const OrderForm = ({
-  item,
-  type,
-}: {
-  item?: CartItem;
-  type: "new" | "update";
-}) => {
-  const dispatch = useAppDispatch();
-  const { items } = useAppSelector((store) => store.cart);
-
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
+  const [open, setOpen] = React.useState(true);
+  const [calendarOpen, setCalendarOpen] = React.useState(false);
+  const [value, setValue] = React.useState("");
+  const { user } = useUser();
+  const form = useForm<z.infer<typeof orderFormSchema>>({
+    resolver: zodResolver(orderFormSchema),
     defaultValues: {
-      name: item?.name || "",
-      instructions: item?.instructions || "",
-      quantity: item?.quantity || "",
-      size: item?.size || "",
+      createdBy: user?.id,
+      customerId: "",
+      status: "DRAFT",
+      paymentStatus: "AWAITING_PAYMENT",
+      pickupTime: new Date(),
+      totalAmount: 0,
+      cartItems: [],
     },
   });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    switch (type) {
-      case "new":
-        dispatch(setCart({ id: v4(), ...values }));
-        form.clearErrors();
-        form.reset();
-
-        break;
-      case "update":
-        dispatch(setCart({ id: (item?.id as string) || "", ...values }));
-
-        break;
-    }
+  async function onSubmit(values: z.infer<typeof orderFormSchema>) {
+    console.log(values);
   }
+
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
   return (
-    <div className="flex flex-col min-w-[400px]">
-      <div className="flex justify-between">
-        <Button
-          variant={"link"}
-          onClick={() => {
-            dispatch(setDisplay("UserForm"));
-          }}
-        >
-          <IoCaretBackOutline /> Back
-        </Button>
-        <Button variant={"link"} className="relative ">
-          {/* {items.length} */}
-          <LiaCartPlusSolid size={30} color="" />
-          {items.length && (
-            <span className="absolute right-2 -top-1 font-bold  rounded-full text-sm  h-5 w-5">
-              {items.length}
-            </span>
-          )}
-        </Button>
-      </div>
-
-      <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 "
-        >
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="BBQ chicken" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="quantity"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Quantity</FormLabel>
-                <FormControl>
-                  <Input {...field} placeholder="10" type="number" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Size */}
-
-          <FormField
-            control={form.control}
-            name="size"
-            render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>Select Size</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        className={cn(" justify-between")}
-                      >
-                        {field.value
-                          ? size.find((item) => item.value === field.value)
-                              ?.label
-                          : "Select Size"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-4">
-                    <div className="flex flex-col gap-4">
-                      {size.map((item) => (
-                        <button
-                          className="bg-slate-200 p-2 rounded-md"
-                          key={item.value}
-                          value={item.value}
-                          onClick={() => {
-                            form.setValue("size", item.value);
-                          }}
-                        >
-                          {item.label}
-                        </button>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="">
+        {/* Order status */}
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel> Status</FormLabel>
+              <FormControl>
+                <Select
+                  defaultValue={form.getValues("status")}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Order Status" />
+                  </SelectTrigger>
+                  <SelectContent onChange={field.onChange}>
+                    <SelectGroup>
+                      <SelectLabel>Order Status</SelectLabel>
+                      {status.map((stat) => (
+                        <SelectItem value={stat} key={stat}>
+                          {stat}
+                        </SelectItem>
                       ))}
-                    </div>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>Select order status.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Payment status */}
+        <FormField
+          control={form.control}
+          name="paymentStatus"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel> Payment Status</FormLabel>
+              <FormControl>
+                <Select
+                  defaultValue={form.getValues("paymentStatus")}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Order Status" />
+                  </SelectTrigger>
+                  <SelectContent onChange={field.onChange}>
+                    <SelectGroup>
+                      <SelectLabel>Payment Status</SelectLabel>
+                      {paymentStatus.map((stat) => (
+                        <SelectItem value={stat} key={stat}>
+                          {stat}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>Select order status.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* Customer */}
+        <FormField
+          control={form.control}
+          name="customerId"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-[200px] justify-between"
+                    >
+                      {value
+                        ? customers.find((c) => c.email === value)?.email
+                        : "Select Customer..."}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search users..."
+                        className="h-9"
+                      />
+                      <CommandList
+                        onChange={(e) => {
+                          console.log(e);
+                        }}
+                      >
+                        <CommandEmpty>No customer found.</CommandEmpty>
+                        <CommandGroup>
+                          {customers.map((user) => (
+                            <CommandItem
+                              key={user.id}
+                              value={user.id}
+                              onSelect={(currentValue) => {
+                                console.log(currentValue);
+                                form.setValue("customerId", user.id);
+                                setOpen(false);
+                              }}
+                            >
+                              {user.email}
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  value === user.id
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
                   </PopoverContent>
                 </Popover>
-                <FormDescription>Select the size if applicable</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="instructions"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Order notes</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Any special instructions"
-                    className="resize-none"
-                    {...field}
-                    rows={5}
-                  />
-                </FormControl>
+              </FormControl>
+              <FormDescription>Select your customer.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="pickupTime"
+          render={({ field }) => (
+            <div className="flex gap-4">
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="date-picker" className="px-1">
+                  Date
+                </Label>
+                <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      id="date-picker"
+                      className="w-32 justify-between font-normal"
+                    >
+                      {form.getValues("pickupTime")
+                        ? form.getValues("pickupTime").toLocaleDateString()
+                        : "Select date"}
+                      <ChevronDownIcon />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    className="w-auto overflow-hidden p-0"
+                    align="start"
+                  >
+                    <Calendar
+                      mode="single"
+                      captionLayout="dropdown"
+                      onSelect={(date) => {
+                        form.setValue("pickupTime", new Date(date!));
+                        setOpen(false);
+                      }}
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <div className="flex flex-col gap-3">
+                <Label htmlFor="time-picker" className="px-1">
+                  Time
+                </Label>
+                <Input
+                  type="time"
+                  id="time-picker"
+                  step="1"
+                  defaultValue="00:00:00"
+                  className=" appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                />
+              </div>
+            </div>
+          )}
+        />
 
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <div className=" flex items-end">
-            <Button type="submit" variant={"default"} className=" w-full">
-              {type === "new" ? "Add" : "Update"} Order
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+        <Button type="submit">Create</Button>
+      </form>
+    </Form>
   );
 };
 

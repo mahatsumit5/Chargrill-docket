@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
+import { dark, neobrutalism, shadesOfPurple } from "@clerk/themes";
+
 const links = [
   {
     href: "/",
@@ -58,8 +60,8 @@ const links = [
 export function AppSidebar() {
   const { setTheme } = useTheme();
   return (
-    <Sidebar className="  border-r border-primary/10  ">
-      <SidebarHeader className=" border-b flex  justify-between p-3">
+    <Sidebar className="  border-r  border-border ">
+      <SidebarHeader className=" border-b border-border flex  justify-between py-3">
         <p
           className={`${conConcert_One.className} text-3xl text-primary flex items-center gap-2 font-bold`}
         >
@@ -67,7 +69,7 @@ export function AppSidebar() {
           Docker
         </p>
       </SidebarHeader>
-      <SidebarContent draggable={true} className=" border-b">
+      <SidebarContent draggable={true} className=" border-b border-border">
         <SidebarGroup>
           <ul className="flex gap-2 flex-col">
             {links.map((item) => (
@@ -85,7 +87,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="">
         <SignedIn>
-          <UserButton signInUrl="/sign-in" />
+          <UserButton />
         </SignedIn>
       </SidebarFooter>
     </Sidebar>

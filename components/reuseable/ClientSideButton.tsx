@@ -12,7 +12,7 @@ const ClientSideButton = ({ btnName }: { btnName: string }) => {
     <Suspense>
       <div className="flex gap-4">
         <Button
-          variant={"secondary"}
+          variant={"outline"}
           className="gap-2"
           size={"sm"}
           onClick={() => {
@@ -23,7 +23,7 @@ const ClientSideButton = ({ btnName }: { btnName: string }) => {
           List View
         </Button>
         <Button
-          variant={"secondary"}
+          variant={"outline"}
           className="gap-2"
           size={"sm"}
           onClick={() => {
@@ -35,7 +35,7 @@ const ClientSideButton = ({ btnName }: { btnName: string }) => {
         </Button>
         <Button
           variant={"default"}
-          className="gap-2"
+          className="gap-2 hover:bg-primary/75"
           size={"sm"}
           onClick={() => {
             router.push(pathname + "/new");

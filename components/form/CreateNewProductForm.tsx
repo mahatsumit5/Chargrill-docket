@@ -332,105 +332,111 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
 
           <div className="flex  h-full justify-start col-end-2 items-end gap-3"></div>
         </div>
-        <div className="flex flex-col gap-3 bg-background-secondary p-5 rounded-md w-full md:w-2/5">
-          <p className="leading-7 font-semibold">Upload Image</p>
-          {/* Images */}
-          <CldUploadWidget
-            options={{
-              sources: ["local", "google_drive", "camera", "url"],
-              maxFiles: 1,
-              multiple: false,
-              showPoweredBy: false,
-              folder: "docket",
-            }}
-            signatureEndpoint={"/api/sign-image"}
-            onSuccess={(result) => {
-              console.log(result?.info); // { public_id, secure_url, etc }
+        <div className="flex flex-col gap-3   w-full md:w-2/5 ">
+          <div className="flex flex-col gap-3  p-5 bg-background-secondary rounded-md  w-full ">
+            <p className="leading-7 font-semibold">Upload Image</p>
+            {/* Images */}
+            <CldUploadWidget
+              options={{
+                sources: ["local", "google_drive", "camera", "url"],
+                maxFiles: 1,
+                multiple: false,
+                showPoweredBy: false,
+                folder: "docket",
+              }}
+              signatureEndpoint={"/api/sign-image"}
+              onSuccess={(result) => {
+                console.log(result?.info); // { public_id, secure_url, etc }
 
-              const imageUrl: CloudinaryUploadWidgetInfo =
-                result?.info as CloudinaryUploadWidgetInfo; // Get the secure URL of the uploaded image
+                const imageUrl: CloudinaryUploadWidgetInfo =
+                  result?.info as CloudinaryUploadWidgetInfo; // Get the secure URL of the uploaded image
 
-              form.setValue(
-                "images",
-                typeof imageUrl?.secure_url === "string"
-                  ? imageUrl.secure_url
-                  : ""
-              ); // Set the image URL in the form
-            }}
-            onQueuesEnd={(result, { widget }) => {
-              widget.close();
-            }}
-          >
-            {({ open, results }) => {
-              if (form.getValues("images").length === 0) {
-                return (
+                form.setValue(
+                  "images",
+                  typeof imageUrl?.secure_url === "string"
+                    ? imageUrl.secure_url
+                    : ""
+                ); // Set the image URL in the form
+              }}
+              onQueuesEnd={(result, { widget }) => {
+                widget.close();
+              }}
+            >
+              {({ open, results }) => {
+                if (form.getValues("images").length === 0) {
+                  return (
+                    <Button
+                      onClick={() => open()}
+                      type="button"
+                      variant={"ghost"}
+                      className="border-dashed border-2  h-52 text-input hover:text-primary "
+                    >
+                      <BadgePlus />
+                      Select an Image
+                    </Button>
+                  );
+                } else {
+                  return (
+                    <CldImage
+                      width="960"
+                      height="600"
+                      src={
+                        form.getValues("images") ||
+                        "docket/jqglaowddha2j6xrvyvy"
+                      }
+                      sizes="100vw"
+                      alt="Description of my image"
+                      className="w-full  object-cover rounded-md hover:opacity-70 transition-opacity duration-300 ease-in-out h-52"
+                    />
+                  );
+                }
+              }}
+            </CldUploadWidget>
+          </div>
+          <div className="bg-background-secondary p-5 rounded-md">
+            {/* category */}
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel> Categories</FormLabel>
+                  <Select onValueChange={field.onChange}>
+                    <FormControl className="">
+                      <SelectTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-input rounded-md ">
+                        <SelectValue
+                          placeholder="Select Category"
+                          className="border-input"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {categories.length ? (
+                        categories.map((item) => (
+                          <SelectItem value={item.id} key={item.id}>
+                            {item.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <p className="p-2">No categories available</p>
+                      )}
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>Select your category.</FormDescription>
                   <Button
-                    onClick={() => open()}
+                    className="rounded-full font-semibold"
+                    variant={"secondary"}
+                    size={"sm"}
                     type="button"
-                    variant={"ghost"}
-                    className="border-dashed border-2  h-52 text-primary "
                   >
-                    <BadgePlus />
-                    Select an Image
+                    Add Category
                   </Button>
-                );
-              } else {
-                return (
-                  <CldImage
-                    width="960"
-                    height="600"
-                    src={
-                      form.getValues("images") || "docket/jqglaowddha2j6xrvyvy"
-                    }
-                    sizes="100vw"
-                    alt="Description of my image"
-                    className="w-full  object-cover rounded-md hover:opacity-70 transition-opacity duration-300 ease-in-out h-52"
-                  />
-                );
-              }
-            }}
-          </CldUploadWidget>{" "}
-          {/* category */}
-          <FormField
-            control={form.control}
-            name="categoryId"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel> Categories</FormLabel>
-                <Select onValueChange={field.onChange}>
-                  <FormControl className="">
-                    <SelectTrigger className="flex w-full sm:h-10  items-center justify-center bg-input text-center border-input rounded-md ">
-                      <SelectValue
-                        placeholder="Select Category"
-                        className="border-input"
-                      />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {categories.length ? (
-                      categories.map((item) => (
-                        <SelectItem value={item.id} key={item.id}>
-                          {item.name}
-                        </SelectItem>
-                      ))
-                    ) : (
-                      <p className="p-2">No categories available</p>
-                    )}
-                  </SelectContent>
-                </Select>
-                <FormDescription>Select your category.</FormDescription>
-                <Button
-                  className="rounded-full font-semibold"
-                  variant={"secondary"}
-                  size={"sm"}
-                  type="button"
-                >
-                  Add Category
-                </Button>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           {/* Buttons */}
           <Button
             className="text-lg flex gap-2 items-center"
