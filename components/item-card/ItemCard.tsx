@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import Image from "next/image";
@@ -10,18 +10,22 @@ import { z } from "zod";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "../ui/label";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "path";
+import { useAppDispatch, useAppSelector } from "@/hooks";
+import { setCart } from "@/redux/features/cart.slice";
 const orderItemsSchema = z.object({
   sizeId: z.string(),
   itemId: z.string(),
   orderId: z.string(),
-  quantity: z.number(),
+  quantity: z.number().min(1),
+  sizeName: z.string(),
+  itemName: z.string(),
+  thumbnail: z.string(),
 });
-type da = {
-  sizeId: string;
-  quantity: number;
-  price: number;
-  totalAmount: number;
-};
+type OrderItemType = z.infer<typeof orderItemsSchema>;
+
 const ItemCard = ({
   item,
   orderId,
@@ -29,14 +33,50 @@ const ItemCard = ({
   item: GetAllItemsResponse;
   orderId: string;
 }) => {
-  const [data, setData] = useState<da>({
-    price: item.sizes[0].price,
-    quantity: 1,
-    sizeId: item.sizes[0].id,
-    totalAmount: 0,
+  const dispatch = useAppDispatch();
+  const { items } = useAppSelector((store) => store.cart);
+  const defaultSize = item.sizes[0];
+
+  const {
+    handleSubmit,
+    watch,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<OrderItemType>({
+    resolver: zodResolver(orderItemsSchema),
+    defaultValues: {
+      itemId: item.id,
+      orderId: orderId,
+      sizeId: defaultSize.id,
+      quantity: 1,
+      sizeName: item.sizes[0].sizeId,
+      itemName: item.name,
+      thumbnail: item.images,
+    },
   });
+  const selectedSizeId = watch("sizeId");
+  const quantity = watch("quantity");
+  const selectedSize = item.sizes.find((size) => size.id === selectedSizeId);
+  const price = selectedSize?.price ?? 0;
+  const totalAmount = price * quantity;
+
+  const onSubmit = (data: OrderItemType) => {
+    dispatch(
+      setCart({
+        ...data,
+        totalAmount,
+        price,
+        itemName: item.name,
+        thumbnail: item.images,
+      })
+    );
+  };
   return (
-    <div className="w-full sm:w-[300px] hover:cursor-pointer  flex flex-col gap-4 shadow-accent shadow-lg rounded-xl border border-border ">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="w-full sm:w-[300px] hover:cursor-pointer  flex flex-col gap-4 shadow-accent shadow-lg rounded-xl border border-border "
+    >
       <Image
         width={300}
         height={5}
@@ -59,6 +99,7 @@ const ItemCard = ({
           <RadioGroup
             defaultValue={item.sizes[0].id}
             className="flex flex-wrap"
+            onValueChange={(val) => setValue("sizeId", val)}
           >
             {item.sizes.map((size: ItemSize) => (
               <div
@@ -68,14 +109,7 @@ const ItemCard = ({
                 <RadioGroupItem
                   value={size.id}
                   id={size.id}
-                  onClick={() => {
-                    setData({
-                      price: size.price,
-                      quantity: 1,
-                      sizeId: size.id,
-                      totalAmount: size.price,
-                    });
-                  }}
+                  onClick={() => setValue("sizeName", size.sizeId)}
                 />
                 <Label htmlFor={size.id}>
                   {size.sizeId}-${size.price}
@@ -89,41 +123,38 @@ const ItemCard = ({
           <Button
             variant={"ghost"}
             size={"sm"}
+            type="button"
             onClick={() => {
-              setData((prev) => ({
-                price: prev?.price || 0,
-                quantity: prev?.quantity - 1,
-                sizeId: prev.sizeId,
-                totalAmount: (prev.quantity - 1) * prev.price,
-              }));
+              const newQty = Math.max(1, quantity - 1);
+              setValue("quantity", newQty);
             }}
           >
             -
           </Button>
           <Button disabled variant={"ghost"} size={"sm"}>
-            {data.quantity}
+            {quantity}
           </Button>
           <Button
+            type="button"
             variant={"ghost"}
             size={"sm"}
             onClick={() => {
-              setData((prev) => ({
-                price: prev?.price || 0,
-                quantity: prev?.quantity + 1,
-                sizeId: prev.sizeId,
-                totalAmount: (prev.quantity + 1) * prev.price,
-              }));
+              setValue("quantity", quantity + 1);
             }}
           >
             +
           </Button>
         </div>
-        <Button size={"sm"} className="flex justify-between">
-          <span>${data?.totalAmount}</span>
+        <Button
+          size={"sm"}
+          className="flex justify-between hover:cursor-pointer hover:bg-primary/75"
+          type="submit"
+        >
+          <span>${totalAmount}</span>
           Add to cart
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 

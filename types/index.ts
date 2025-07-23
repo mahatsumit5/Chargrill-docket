@@ -1,11 +1,15 @@
 import { Category, Item, ItemSize, Prisma } from "@prisma/client";
 
 export type CartItem = {
-  id: string;
-  name: string;
-  instructions?: string;
-  quantity: string;
-  size?: string;
+  sizeId: string;
+  itemId: string;
+  orderId: string;
+  quantity: number;
+  sizeName: string;
+  totalAmount: number;
+  itemName: string;
+  price: number;
+  thumbnail: string;
 };
 
 export interface ICustomer {
