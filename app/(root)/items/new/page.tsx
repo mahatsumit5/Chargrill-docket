@@ -12,27 +12,28 @@ const page = async () => {
   const { result } = await getAllCategories();
   return (
     <div className=" p-3 h-full   my-3 flex flex-col gap-4">
-      <div className="flex items-center justify-between w-full">
-        <span className="flex items-center gap-2">
-          <Store />
-          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+      <div className="flex items-center justify-between w-full flex-wrap">
+        <span className="flex items-center gap-2 ">
+          <Store size={16} />
+          <h4 className="scroll-m-20 text-xs md:text-xl font-semibold tracking-tight">
             Add New Item
           </h4>
         </span>
         <div className="flex items-center gap-2">
           <Button
-            variant={"outline"}
-            className="flex gap-2 items-center rounded-full border border-primary"
+            variant={"secondary"}
+            className="flex gap-2 items-center rounded-md "
+            size={"sm"}
           >
             <Save size={16} /> Save Draft
           </Button>
           <Button
-            className=" flex gap-2 items-center rounded-full"
+            className=" flex gap-2 items-center rounded-md"
             type="reset"
             variant={"default"}
+            size={"sm"}
           >
-            <RotateCcw size={18} />
-            Reset
+            <RotateCcw size={18} /> Reset
           </Button>
         </div>
       </div>

@@ -111,7 +111,10 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
   }, []);
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="bg-card p-3 rounded-lg"
+      >
         {/* Order status */}
         <FormField
           control={form.control}
@@ -297,7 +300,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
           )}
         />
 
-        <Button type="submit" className="w-full" variant={"secondary"}>
+        <Button type="submit" className="w-full" variant={"default"}>
           Next
         </Button>
       </form>

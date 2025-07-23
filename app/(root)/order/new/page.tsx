@@ -16,7 +16,7 @@ export default async function Page({
   const email = ((await searchParams)?.email as string) || "";
   const { error, result } = await getAllCustomers(email);
   return (
-    <div className=" rounded-md p-4 mt-4 h-full min-h-[70vh] flex flex-col gap-5 justify-start items-start">
+    <div className=" rounded-md  mt-4 h-full min-h-[70vh] flex flex-col gap-5 justify-start items-start">
       {error && (
         <Alert variant="destructive">
           <AlertCircleIcon />

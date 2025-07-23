@@ -15,33 +15,32 @@ import Image from "next/image";
 const CartPage = () => {
   const { items } = useAppSelector((store) => store.cart);
   return (
-    <Table className=" rounded-md border-none">
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow className=" border-none">
+    <Table className="  rounded-md bg-card">
+      <TableHeader className="border-none">
+        <TableRow className=" ">
           <TableHead className="w-fit">Product</TableHead>
           <TableHead>Size</TableHead>
           <TableHead>Quantity</TableHead>
           <TableHead className="text-right">Price</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody className="border-none">
+      <TableBody className="mt-2">
         {items.map((item) => (
           <TableRow
             key={item.itemId + item.sizeId}
-            className="border-none bg-card mt-2"
+            className=" border-none  mt-2"
           >
             <TableCell className="font-medium flex gap-2">
               <Image
                 src={item.thumbnail}
                 className="rounded-md object-cover"
-                width={100}
-                height={100}
+                width={150}
+                height={150}
                 alt={item.itemName}
               />
               <span className="flex flex-col gap-2 items-center justify-center">
                 <p className="text-sm">{item.itemName}</p>
-                <p className="text-sm text-muted">{item.itemName}</p>
+                <p className="text-sm text-muted-foreground">{item.itemName}</p>
               </span>
             </TableCell>
             <TableCell className="font-semibold">{item.sizeName}</TableCell>

@@ -60,8 +60,8 @@ const links = [
 export function AppSidebar() {
   const { setTheme } = useTheme();
   return (
-    <Sidebar className="  border-r  border-border  ">
-      <SidebarHeader className=" border-b border-border bg-background flex  justify-between py-3">
+    <Sidebar className="    ">
+      <SidebarHeader className="   flex  justify-between py-3">
         <p
           className={`${conConcert_One.className} text-3xl text-primary flex items-center gap-2 font-bold`}
         >
@@ -69,17 +69,14 @@ export function AppSidebar() {
           Docker
         </p>
       </SidebarHeader>
-      <SidebarContent
-        draggable={true}
-        className=" border-b border-border bg-background"
-      >
+      <SidebarContent draggable={true} className="  ">
         <SidebarGroup>
           <ul className="flex gap-2 flex-col">
             {links.map((item) => (
               <Link key={item.href} href={item.href}>
                 <li
                   key={item.href}
-                  className="font-bold text-sm flex gap-2 items-center dark:text-primary-foreground  hover:bg-primary/75 hover:text-primary-foreground p-3 hover:scale-125 transition-all duration-200  rounded-md cursor-pointer"
+                  className="font-bold text-sm flex gap-2 items-center  hover:bg-primary/75 hover:text-primary-foreground p-3 hover:scale-125 transition-all duration-200  rounded-md cursor-pointer"
                 >
                   {item.icon} {item.label}
                 </li>
@@ -88,7 +85,7 @@ export function AppSidebar() {
           </ul>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="bg-background">
+      <SidebarFooter className="">
         <SignedIn>
           <UserButton />
         </SignedIn>

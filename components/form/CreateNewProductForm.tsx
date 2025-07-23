@@ -122,7 +122,7 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col md:flex-row gap-5 items-start w-full rounded-md "
       >
-        <div className="flex flex-col gap-3 bg-background-secondary p-5 rounded-md w-full md:w-3/5">
+        <div className="flex flex-col gap-3 bg-card p-5 rounded-md w-full md:w-3/5">
           <p className="leading-7 font-semibold">General Information</p>
           {/* Name */}
           <FormField
@@ -333,7 +333,7 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
           <div className="flex  h-full justify-start col-end-2 items-end gap-3"></div>
         </div>
         <div className="flex flex-col gap-3   w-full md:w-2/5 ">
-          <div className="flex flex-col gap-3  p-5 bg-background-secondary rounded-md  w-full ">
+          <div className="flex flex-col gap-3  p-5 bg-card rounded-md  w-full ">
             <p className="leading-7 font-semibold">Upload Image</p>
             {/* Images */}
             <CldUploadWidget
@@ -393,7 +393,7 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
               }}
             </CldUploadWidget>
           </div>
-          <div className="bg-background-secondary p-5 rounded-md">
+          <div className="bg-card p-5 rounded-md">
             {/* category */}
             <FormField
               control={form.control}

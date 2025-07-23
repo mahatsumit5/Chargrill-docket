@@ -24,24 +24,24 @@ export default function Layout({
       <PersistGate loading={<>Please wait</>} persistor={persistor}>
         <SidebarProvider>
           <AppSidebar />
-          <div className="flex w-full flex-col min-h-screen ">
+          <div className="flex w-full flex-col min-h-screen bg-background ">
             {/* header */}
-            <header className="bg-background flex w-full justify-between items-center py-3  border-b border-border px-4 ">
+            <header className=" flex w-full justify-between items-center p-2  border-b border-border  ">
               <div className="flex gap-5 justify-start items-center  w-full">
                 <SidebarTrigger className="" />
 
                 <Input
-                  className="w-[250px]  rounded-full shadow-primary shadow-lg "
+                  className="w-[250px]  rounded-full h-6 hidden md:block bg-card "
                   type="text"
                   placeholder="search......"
                 />
               </div>
               <div className="flex w-full justify-end gap-2">
-                <Button variant={"ghost"} size={"icon"}>
+                <Button variant={"secondary"} size={"icon"}>
                   <ShoppingCart />
                 </Button>
                 <Button
-                  variant={"ghost"}
+                  variant={"secondary"}
                   size={"icon"}
                   onClick={() => setTheme(theme === "light" ? "dark" : "light")}
                 >
@@ -53,8 +53,8 @@ export default function Layout({
                 </Button>
               </div>
             </header>
-            <main className="flex-1 h-full w-full p-3 bg-background">
-              <div className="px-3">
+            <main className="flex-1 h-full w-full   p-2">
+              <div className="">
                 <BreadCrumbComponent />
               </div>
               {children}

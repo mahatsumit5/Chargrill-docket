@@ -13,7 +13,7 @@ const CreateNewOrder = async ({
   return error ? (
     <>error</>
   ) : (
-    <div className="w-full flex gap-2">
+    <div className="w-full flex gap-4 mt-2 p-2 flex-wrap">
       {result?.map((item) => (
         <ItemCard key={item.id} item={item} orderId={id} />
       ))}

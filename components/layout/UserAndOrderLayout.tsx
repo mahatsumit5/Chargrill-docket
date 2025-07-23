@@ -12,8 +12,8 @@ const UserAndOrderLayout = ({
 }) => {
   return (
     <div className="flex flex-col w-full  ">
-      <div className="flex justify-between flex-col gap-3 sm:flex-row">
-        <h4 className="scroll-m-20 text-2xl font-semibold tracking-tight px-3">
+      <div className="flex justify-between flex-row items-center">
+        <h4 className="scroll-m-20 text-md font-bold tracking-tight px-3 text-primary">
           {title}
         </h4>
         <ClientSideButton btnName={btnName} />

@@ -75,17 +75,19 @@ const ItemCard = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full sm:w-[300px] hover:cursor-pointer  flex flex-col gap-4 shadow-accent shadow-lg rounded-xl border border-border "
+      className="w-full  sm:w-[320px] hover:cursor-pointer  shadow-2xl shadow-secondary flex flex-col gap-4  rounded-xl border  bg-card "
     >
-      <Image
-        width={300}
-        height={5}
-        src={item.images}
-        className=" object-fill rounded-t-md"
-        alt={item.name}
-        loading="lazy"
-        objectFit="cover"
-      />
+      <div className="relative w-full h-[200px]">
+        <Image
+          fill
+          src={item.images}
+          className=" object-cover rounded-t-md"
+          alt={item.name}
+          loading="lazy"
+          objectFit="cover"
+        />
+      </div>
+
       <div className="p-2 flex flex-col justify-between gap-3">
         {/* name */}
         <div className="flex justify-between items-center ">
