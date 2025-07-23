@@ -12,13 +12,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "../ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "path";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setCart } from "@/redux/features/cart.slice";
 const orderItemsSchema = z.object({
   sizeId: z.string(),
   itemId: z.string(),
-  orderId: z.string(),
   quantity: z.number().min(1),
   sizeName: z.string(),
   itemName: z.string(),
@@ -26,15 +24,8 @@ const orderItemsSchema = z.object({
 });
 type OrderItemType = z.infer<typeof orderItemsSchema>;
 
-const ItemCard = ({
-  item,
-  orderId,
-}: {
-  item: GetAllItemsResponse;
-  orderId: string;
-}) => {
+const ItemCard = ({ item }: { item: GetAllItemsResponse }) => {
   const dispatch = useAppDispatch();
-  const { items } = useAppSelector((store) => store.cart);
   const defaultSize = item.sizes[0];
 
   const {
@@ -47,7 +38,6 @@ const ItemCard = ({
     resolver: zodResolver(orderItemsSchema),
     defaultValues: {
       itemId: item.id,
-      orderId: orderId,
       sizeId: defaultSize.id,
       quantity: 1,
       sizeName: item.sizes[0].sizeId,
@@ -84,7 +74,7 @@ const ItemCard = ({
           className=" object-cover rounded-t-md"
           alt={item.name}
           loading="lazy"
-          objectFit="cover"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
       </div>
 

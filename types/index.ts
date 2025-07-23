@@ -3,7 +3,6 @@ import { Category, Item, ItemSize, Prisma } from "@prisma/client";
 export type CartItem = {
   sizeId: string;
   itemId: string;
-  orderId: string;
   quantity: number;
   sizeName: string;
   totalAmount: number;
@@ -86,4 +85,10 @@ export type SearchParamProps = {
 
 export type GetAllItemsResponse = Item & { category: Category } & {
   sizes: ItemSize[];
+};
+
+export type CreateNewOrderParams = {
+  sizeId: string;
+  itemId: string;
+  orderId: string;
 };

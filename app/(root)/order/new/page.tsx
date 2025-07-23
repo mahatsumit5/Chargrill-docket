@@ -5,6 +5,8 @@ import OrderForm from "@/components/form/OrderForm";
 import { SearchParamProps } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
+import { getAllItems } from "@/database/actions/item.action";
+import ItemCard from "@/components/item-card/ItemCard";
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
 
@@ -15,8 +17,9 @@ export default async function Page({
 }) {
   const email = ((await searchParams)?.email as string) || "";
   const { error, result } = await getAllCustomers(email);
+  const { result: items } = await getAllItems();
   return (
-    <div className=" rounded-md  mt-4 h-full min-h-[70vh] flex flex-col gap-5 justify-start items-start">
+    <div className=" rounded-md  mt-4 h-full min-h-[70vh] flex flex-col gap-5 justify-start items-start p-2">
       {error && (
         <Alert variant="destructive">
           <AlertCircleIcon />
@@ -31,7 +34,16 @@ export default async function Page({
           </AlertDescription>
         </Alert>
       )}
+      <p>Customer Details</p>
       <OrderForm customers={result ?? []} />
+
+      <p>Select Items</p>
+
+      <div className="flex gap-3">
+        {items?.map((item) => (
+          <ItemCard item={item} key={item.id} />
+        ))}
+      </div>
     </div>
   );
 }

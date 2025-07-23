@@ -1,5 +1,5 @@
 "use server";
-import { Order, OrderStatus, PaymentStatus } from "@prisma/client";
+import { Order, OrderStatus, PaymentStatus, Prisma } from "@prisma/client";
 import { executeQuery, prisma } from "..";
 type CreateNewOrderParams = {
   createdBy: string;
@@ -35,6 +35,15 @@ export async function createNewOrder({
         paymentStatus,
         status,
         totalAmount,
+        cartItems: {
+          create: [
+            {
+              itemId: "1f6c6623-cb04-4e69-998a-4851aa799bcb",
+              sizeId: "880f389f-408a-4988-a34c-493fdc966884",
+              quantity: 10,
+            },
+          ],
+        },
       },
     })
   );

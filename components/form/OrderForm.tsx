@@ -27,7 +27,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
-import { Check, ChevronDownIcon, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronDownIcon, ChevronsUpDown, Save } from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -42,6 +42,9 @@ import { Label } from "../ui/label";
 import { createNewOrder } from "@/database/actions/order.action";
 import { toast } from "sonner";
 import { usePathname, useRouter } from "next/navigation";
+import { useAppDispatch } from "@/hooks";
+import { setDetails } from "@/redux/features/cart.slice";
+import { ResetIcon } from "@radix-ui/react-icons";
 const status = [
   "AWAITING_PICKUP",
   "COMPLETED",
@@ -58,6 +61,7 @@ const paymentStatus = [
   "PAYMENT_COMPLETED",
   "REFUNDED",
 ] as const;
+
 const orderFormSchema = z.object({
   createdBy: z.string(),
   totalAmount: z.number(),
@@ -71,7 +75,7 @@ const orderFormSchema = z.object({
 const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
   const router = useRouter();
   const pathname = usePathname();
-  console.log(pathname);
+  const dispatch = useAppDispatch();
   const [open, setOpen] = React.useState(false);
   const [calendarOpen, setCalendarOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
@@ -90,13 +94,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
   });
   async function onSubmit(values: z.infer<typeof orderFormSchema>) {
     console.log(values);
-    const { error, result } = await createNewOrder(values);
-    if (error) {
-      toast["error"]("unexpected");
-    } else {
-      toast["success"]("Order created now select your items");
-      router.push(pathname + "/" + result?.id);
-    }
+    dispatch(setDetails(values));
   }
 
   React.useEffect(() => {
@@ -113,72 +111,76 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-card p-3 rounded-lg"
+        className="bg-card p-3 rounded-lg w-full flex flex-col gap-3"
+        onReset={() => form.reset()}
       >
-        {/* Order status */}
-        <FormField
-          control={form.control}
-          name="status"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel> Status</FormLabel>
-              <FormControl>
-                <Select
-                  defaultValue={form.getValues("status")}
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Order Status" />
-                  </SelectTrigger>
-                  <SelectContent onChange={field.onChange}>
-                    <SelectGroup>
-                      <SelectLabel>Order Status</SelectLabel>
-                      {status.map((stat) => (
-                        <SelectItem value={stat} key={stat}>
-                          {stat}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>Select order status.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        {/* Payment status */}
-        <FormField
-          control={form.control}
-          name="paymentStatus"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel> Payment Status</FormLabel>
-              <FormControl>
-                <Select
-                  defaultValue={form.getValues("paymentStatus")}
-                  onValueChange={field.onChange}
-                >
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Order Status" />
-                  </SelectTrigger>
-                  <SelectContent onChange={field.onChange}>
-                    <SelectGroup>
-                      <SelectLabel>Payment Status</SelectLabel>
-                      {paymentStatus.map((stat) => (
-                        <SelectItem value={stat} key={stat}>
-                          {stat}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>Select order status.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="flex w-full justify-between">
+          {/* Order status */}
+          <FormField
+            control={form.control}
+            name="status"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel> Status</FormLabel>
+                <FormControl className="w-full">
+                  <Select
+                    defaultValue={form.getValues("status")}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Order Status" />
+                    </SelectTrigger>
+                    <SelectContent onChange={field.onChange}>
+                      <SelectGroup>
+                        <SelectLabel>Order Status</SelectLabel>
+                        {status.map((stat) => (
+                          <SelectItem value={stat} key={stat}>
+                            {stat}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription>Select order status.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          {/* Payment status */}
+          <FormField
+            control={form.control}
+            name="paymentStatus"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel> Payment Status</FormLabel>
+                <FormControl>
+                  <Select
+                    defaultValue={form.getValues("paymentStatus")}
+                    onValueChange={field.onChange}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Order Status" />
+                    </SelectTrigger>
+                    <SelectContent onChange={field.onChange}>
+                      <SelectGroup>
+                        <SelectLabel>Payment Status</SelectLabel>
+                        {paymentStatus.map((stat) => (
+                          <SelectItem value={stat} key={stat}>
+                            {stat}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription>Select order status.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         {/* Customer */}
         <FormField
           control={form.control}
@@ -192,7 +194,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="w-[250px] justify-between"
+                      className="w-full md:w-xs justify-between bg-transparent hover:bg-accent "
                     >
                       {form.getValues("customerId")
                         ? customers.find(
@@ -251,7 +253,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
           control={form.control}
           name="pickupTime"
           render={({ field }) => (
-            <div className="flex gap-4">
+            <div className="flex gap-4 w-full  justify-between md:justify-start">
               <div className="flex flex-col gap-3">
                 <Label htmlFor="date-picker" className="px-1">
                   Date
@@ -299,10 +301,14 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
             </div>
           )}
         />
-
-        <Button type="submit" className="w-full" variant={"default"}>
-          Next
-        </Button>
+        <div className="flex gap-5">
+          <Button type="reset" className="" variant={"outline"}>
+            <ResetIcon /> Reset
+          </Button>
+          <Button type="submit" className="" variant={"default"}>
+            <Save /> Save
+          </Button>
+        </div>
       </form>
     </Form>
   );

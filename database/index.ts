@@ -21,6 +21,7 @@ export async function executeQuery<TResult>(query: any): ReturnType<TResult> {
       error: undefined,
     };
   } catch (error) {
+    console.log("Error coming from database");
     let message = "Unknown database operation failed";
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
       console.log("this is error code", error.code);

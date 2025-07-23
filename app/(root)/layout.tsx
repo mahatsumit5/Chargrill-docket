@@ -2,6 +2,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import BreadCrumbComponent from "@/components/breadCrumb/BreadCrumb";
 import Footer from "@/components/Footer";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -9,6 +10,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { persistor, store } from "@/redux/store";
 import { MoonStar, ShoppingCart, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
@@ -18,7 +20,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   const { setTheme, theme } = useTheme();
-
+  const router = useRouter();
   return (
     <Provider store={store}>
       <PersistGate loading={<>Please wait</>} persistor={persistor}>
@@ -37,7 +39,13 @@ export default function Layout({
                 />
               </div>
               <div className="flex w-full justify-end gap-2">
-                <Button variant={"secondary"} size={"icon"}>
+                <Button
+                  variant={"secondary"}
+                  size={"icon"}
+                  onClick={() => {
+                    router.push("/cart");
+                  }}
+                >
                   <ShoppingCart />
                 </Button>
                 <Button

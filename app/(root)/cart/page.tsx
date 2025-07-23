@@ -1,5 +1,5 @@
 "use client";
-import { useAppSelector } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import React from "react";
 import {
   Table,
@@ -12,8 +12,33 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { CreateNewOrderItems } from "@/database/actions/orderItems.action";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { CreateNewOrderParams } from "@/types";
+import { resetCart } from "@/redux/features/cart.slice";
 const CartPage = () => {
-  const { items } = useAppSelector((store) => store.cart);
+  const { cartItems: items } = useAppSelector((store) => store.cart);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  async function handleCheckout() {
+    const data: CreateNewOrderParams[] = items.map((item) => ({
+      itemId: item.itemId,
+      orderId: item.orderId,
+      quantity: item.quantity,
+      sizeId: item.sizeId,
+    }));
+    const { error, result } = await CreateNewOrderItems(data);
+    if (error) {
+      console.log(error);
+      toast.error("Unable to add items");
+    } else {
+      console.log(result);
+      toast.success("New order created");
+      router.push("/");
+    }
+  }
   return (
     <Table className="  rounded-md bg-card">
       <TableHeader className="border-none">
@@ -54,6 +79,17 @@ const CartPage = () => {
           <TableCell colSpan={3}>Total</TableCell>
           <TableCell className="text-right">$2,500.00</TableCell>
         </TableRow>
+        <Button variant={"ghost"} onClick={handleCheckout}>
+          Checkout
+        </Button>
+        <Button
+          variant={"destructive"}
+          onClick={() => {
+            dispatch(resetCart());
+          }}
+        >
+          Clear
+        </Button>
       </TableFooter>
     </Table>
   );

@@ -47,20 +47,20 @@ model OrderItems {
   id        String   @id @default(uuid())
   items     Item     @relation("cartItems", fields: [itemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   itemId    String
-  quanity   Int      @default(1)
+  quantity  Int      @default(1)
   order     Order    @relation("OrderItems", fields: [orderId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   orderId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  size      ItemSize @relation("size",fields: [sizeId],references: [id])
-  sizeId String
+  size      ItemSize @relation("size", fields: [sizeId], references: [id])
+  sizeId    String
 }
 
 model Item {
   id          String       @id @default(uuid())
   name        String
   description String?
-  images     String
+  images      String
   dietary     Dietary[]
   category    Category     @relation("CategoryItems", fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   categoryId  String
@@ -78,13 +78,13 @@ model Size {
 }
 
 model ItemSize {
-  id     String   @id @default(uuid())
-  item   Item     @relation(fields: [itemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id     String       @id @default(uuid())
+  item   Item         @relation(fields: [itemId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   itemId String
-  size   Size     @relation(fields: [sizeId], references: [name])
+  size   Size         @relation(fields: [sizeId], references: [name])
   sizeId SizeEnum
   price  Float
-  cart   OrderItems[]@relation("size")
+  cart   OrderItems[] @relation("size")
 
   @@unique([itemId, sizeId])
 }
