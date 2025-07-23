@@ -70,7 +70,7 @@ const PdfFile = ({
         </View>
         {cart.map((item) => (
           <View
-            key={item.id}
+            key={item.orderId}
             style={{
               display: "flex",
               flexDirection: "row",
@@ -78,12 +78,9 @@ const PdfFile = ({
               margin: 10,
             }}
           >
-            <Text style={{ width: "25%", fontSize: 15 }}>{item.name}</Text>
+            <Text style={{ width: "25%", fontSize: 15 }}>{item.itemName}</Text>
             <Text style={{ width: "25%", fontSize: 15 }}>{item.quantity}</Text>
-            <Text style={{ width: "25%", fontSize: 15 }}>{item.size}</Text>
-            <Text style={{ width: "25%", fontSize: 15 }}>
-              {item.instructions ? item.instructions : "none"}
-            </Text>
+            <Text style={{ width: "25%", fontSize: 15 }}>{item.sizeName}</Text>
           </View>
         ))}
       </Page>
