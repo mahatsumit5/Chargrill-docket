@@ -8,7 +8,7 @@ type CreateNewOrderParams = {
   paymentStatus: PaymentStatus;
   pickupTime: Date;
   totalAmount: number;
-  cartItems: string[];
+  cartItems: { itemId: string; sizeId: string; quantity: number }[];
 };
 export async function createNewOrder({
   createdBy,
@@ -17,6 +17,7 @@ export async function createNewOrder({
   pickupTime,
   status,
   totalAmount,
+  cartItems,
 }: CreateNewOrderParams) {
   const result = await executeQuery<Order>(
     await prisma.order.create({
@@ -36,13 +37,11 @@ export async function createNewOrder({
         status,
         totalAmount,
         cartItems: {
-          create: [
-            {
-              itemId: "1f6c6623-cb04-4e69-998a-4851aa799bcb",
-              sizeId: "880f389f-408a-4988-a34c-493fdc966884",
-              quantity: 10,
-            },
-          ],
+          create: cartItems.map(({ itemId, sizeId, quantity }) => ({
+            itemId,
+            sizeId,
+            quantity,
+          })),
         },
       },
     })

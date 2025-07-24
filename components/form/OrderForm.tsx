@@ -127,7 +127,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
                     defaultValue={form.getValues("status")}
                     onValueChange={field.onChange}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full bg-input dark:bg-input/30 ">
                       <SelectValue placeholder="Order Status" />
                     </SelectTrigger>
                     <SelectContent onChange={field.onChange}>
@@ -159,7 +159,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
                     defaultValue={form.getValues("paymentStatus")}
                     onValueChange={field.onChange}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="w-full bg-input hover:bg-input/75 dark:bg-input/30 dark:hover:bg-input">
                       <SelectValue placeholder="Order Status" />
                     </SelectTrigger>
                     <SelectContent onChange={field.onChange}>
@@ -194,7 +194,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="w-full md:w-xs justify-between bg-transparent hover:bg-accent "
+                      className="w-full md:w-xs justify-between bg-input hover:bg-input/55  dark:bg-input/30 dark:hover:bg-input"
                     >
                       {form.getValues("customerId")
                         ? customers.find(
@@ -263,7 +263,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
                     <Button
                       variant="outline"
                       id="date-picker"
-                      className="w-32 justify-between font-normal"
+                      className="w-32 justify-between font-normal bg-input hover:bg-input/55"
                     >
                       {form.getValues("pickupTime")
                         ? form.getValues("pickupTime").toLocaleDateString()
@@ -295,7 +295,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
                   id="time-picker"
                   step="1"
                   defaultValue="00:00:00"
-                  className=" appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                  className=" border appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none bg-input hover:bg-input/55"
                 />
               </div>
             </div>

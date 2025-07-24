@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircleIcon } from "lucide-react";
 import { getAllItems } from "@/database/actions/item.action";
 import ItemCard from "@/components/item-card/ItemCard";
+import UserForm from "@/components/form/UserForm";
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
 
@@ -35,11 +36,15 @@ export default async function Page({
         </Alert>
       )}
       <p>Customer Details</p>
-      <OrderForm customers={result ?? []} />
+      <div className="flex gap-4 w-full flex-col md:flex-row">
+        <OrderForm customers={result ?? []} />
+
+        <UserForm />
+      </div>
 
       <p>Select Items</p>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 flex-wrap">
         {items?.map((item) => (
           <ItemCard item={item} key={item.id} />
         ))}

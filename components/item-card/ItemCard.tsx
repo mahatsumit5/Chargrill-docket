@@ -139,8 +139,9 @@ const ItemCard = ({ item }: { item: GetAllItemsResponse }) => {
         </div>
         <Button
           size={"sm"}
-          className="flex justify-between hover:cursor-pointer hover:bg-primary/75"
+          className="flex justify-between hover:cursor-pointer border border-primary/50 "
           type="submit"
+          variant={"ghost"}
         >
           <span>${totalAmount}</span>
           Add to cart
