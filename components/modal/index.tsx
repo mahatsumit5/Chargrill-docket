@@ -4,7 +4,7 @@ import React, { useRef, useEffect } from "react";
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  className?: string;
+  modalClassName?: string;
   children: React.ReactNode;
   showCloseButton?: boolean; // New prop to control close button visibility
   isFullscreen?: boolean; // Default to false for backwards compatibility
@@ -14,8 +14,8 @@ export const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   children,
-  className,
-  showCloseButton = true, // Default to true for backwards compatibility
+  modalClassName = "",
+  showCloseButton = false, // Default to true for backwards compatibility
   isFullscreen = false,
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -51,21 +51,19 @@ export const Modal: React.FC<ModalProps> = ({
   if (!isOpen) return null;
 
   const contentClasses = isFullscreen
-    ? "w-full h-full"
+    ? "w-full h-full items-center flex justify-center"
     : "relative w-full rounded-3xl bg-white  dark:bg-gray-900";
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center overflow-y-auto modal z-99999">
-      {!isFullscreen && (
-        <div
-          className="fixed inset-0 h-full w-full bg-gray-400/50 backdrop-blur-[32px]"
-          onClick={onClose}
-        ></div>
-      )}
+    <div
+      className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/25 backdrop-blur-sm p-2"
+      onClick={onClose}
+    >
+      {" "}
       <div
         ref={modalRef}
-        className={`${contentClasses}  ${className}`}
         onClick={(e) => e.stopPropagation()}
+        className={` ${modalClassName} p-3 relative  rounded-lg  w-fit max-w-full max-h-full `}
       >
         {showCloseButton && (
           <button
@@ -88,7 +86,7 @@ export const Modal: React.FC<ModalProps> = ({
             </svg>
           </button>
         )}
-        <div>{children}</div>
+        {children}
       </div>
     </div>
   );

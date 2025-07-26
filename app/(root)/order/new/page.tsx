@@ -4,12 +4,19 @@ import { Ubuntu } from "next/font/google";
 import OrderForm from "@/components/form/OrderForm";
 import { SearchParamProps } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircleIcon, Save } from "lucide-react";
+import { AlertCircleIcon, Save, User } from "lucide-react";
 import { getAllItems } from "@/database/actions/item.action";
 import ItemCard from "@/components/item-card/ItemCard";
 import UserForm from "@/components/form/UserForm";
 import { Button } from "@/components/ui/button";
 import { ResetIcon } from "@radix-ui/react-icons";
+import { Input } from "@/components/ui/input";
+import UserSearch from "@/components/User-search/UserSearch";
+import UserCard from "@/components/user-card/UserCard";
+import { Modal } from "@/components/modal";
+import ErrorFindingCustomer from "@/components/error/ErrorFindingCustomer";
+import RenderCards from "@/components/card-display/RenderCards";
+import { Customer } from "@prisma/client";
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
 
@@ -19,47 +26,48 @@ export default async function Page({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const email = ((await searchParams)?.email as string) || "";
-  const { error, result } = await getAllCustomers(email);
-  const { result: items } = await getAllItems();
+
+  const { error, result } = await getAllCustomers(email, !email);
+  // const { result: items } = await getAllItems();
   return (
     <div className=" rounded-md  mt-5 h-full min-h-[70vh] flex flex-col gap-5 justify-start items-start ">
-      {error && (
-        <Alert variant="destructive">
-          <AlertCircleIcon />
-          <AlertTitle>Unable to find the customer with that email.</AlertTitle>
-          <AlertDescription>
-            <p>Please verify your billing information and try again.</p>
-            <ul className="list-inside list-disc text-sm">
-              <li>Check your card details</li>
-              <li>Ensure sufficient funds</li>
-              <li>Verify billing address</li>
-            </ul>
-          </AlertDescription>
-        </Alert>
-      )}
       <div className="flex items-center justify-between w-full">
         <p className="font-semibold text-sm">Customer Details</p>
         <span className="flex gap-3">
           <Button variant={"outline"}>
             <Save /> Save Draft
           </Button>
-          <Button variant={"destructive"}>
-            <ResetIcon /> Reset
+          <Button variant={"default"}>
+            <User /> Add new user
           </Button>
         </span>
       </div>
-      <div className="flex gap-4 w-full flex-col md:flex-row">
-        <OrderForm customers={result ?? []} />
-        <UserForm />
+
+      <div className="flex flex-col gap-4 items-center justify-center w-full">
+        <div className="border rounded-md p-3 w-full bg-card">Stepper</div>
+        <p
+          className={`${ubuntu.className} text-3xl font-semibold text-primary`}
+        >
+          Search your customer
+        </p>
+        <UserSearch />
+
+        {error ? (
+          <ErrorFindingCustomer message={error?.message} />
+        ) : (
+          <RenderCards data={result!} type="customers" />
+        )}
       </div>
+      {/* <div className="flex gap-4 w-full flex-col md:flex-row">
+        <OrderForm customers={result ?? []} /> 
+         <UserForm />
+      </div> */}
 
-      <p>Select Items</p>
-
-      <div className="flex gap-3 flex-wrap">
+      {/* <div className="flex gap-3 flex-wrap">
         {items?.map((item) => (
           <ItemCard item={item} key={item.id} />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 }

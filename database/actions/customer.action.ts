@@ -47,7 +47,13 @@ export async function getCustomerById(id: string) {
   });
 }
 
-export async function getAllCustomers(email: string) {
+export async function getAllCustomers(email: string, skip: boolean) {
+  if (skip) {
+    return {
+      error: undefined,
+      result: [],
+    };
+  }
   const { error, result } = await executeQuery<Customer[]>(
     await prisma.customer.findMany({
       where: {
@@ -58,7 +64,10 @@ export async function getAllCustomers(email: string) {
     })
   );
   if (!result?.length) {
-    return { error: { message: "error occurred" }, result: undefined };
+    return {
+      error: { message: "No users found with that email" },
+      result: undefined,
+    };
   }
 
   return { error, result };

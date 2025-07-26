@@ -1,10 +1,11 @@
+"use client";
 import React, { FC } from "react";
 import { Card } from "../ui/card";
 import { Customer, User } from "@prisma/client";
 import { MapPinCheckInside, Phone } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const UserCard: FC<{ customer: Customer; user?: User }> = ({
   user,
@@ -23,9 +24,7 @@ const UserCard: FC<{ customer: Customer; user?: User }> = ({
   },
 }) => {
   const router = useRouter();
-  const pathname = usePathname();
 
-  console.log(pathname);
   return (
     <Card key={id} className="w-full sm:w-[300px] pb-0">
       <header className="flex flex-col items-center justify-center gap-4">
@@ -51,10 +50,10 @@ const UserCard: FC<{ customer: Customer; user?: User }> = ({
           {phone}
         </p>
         <Button
-          variant={"default"}
+          variant={"ghost"}
           className="w-full  "
           onClick={() => {
-            router.push(`${pathname}?cid=${id}`);
+            // router.push(`${pathname}?cid=${id}`);
           }}
         >
           Select

@@ -2,6 +2,8 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import BreadCrumbComponent from "@/components/breadCrumb/BreadCrumb";
 import Footer from "@/components/Footer";
+import { Modal } from "@/components/modal";
+import LoadingModal from "@/components/modal/LoadingModal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +13,7 @@ import { persistor, store } from "@/redux/store";
 import { MoonStar, ShoppingCart, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
@@ -26,6 +29,7 @@ export default function Layout({
       <PersistGate loading={<>Please wait</>} persistor={persistor}>
         <SidebarProvider>
           <AppSidebar />
+          <LoadingModal />
           <div className="flex w-full flex-col min-h-screen bg-background ">
             {/* header */}
             <div className="mx-auto w-full  bg-primary">
