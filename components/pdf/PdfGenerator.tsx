@@ -70,7 +70,7 @@ const PdfFile = ({
         </View>
         {cart.map((item) => (
           <View
-            key={item.orderId}
+            key={item.itemId}
             style={{
               display: "flex",
               flexDirection: "row",

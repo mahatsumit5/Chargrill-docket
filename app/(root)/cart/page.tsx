@@ -25,7 +25,7 @@ const CartPage = () => {
   async function handleCheckout() {
     const data: CreateNewOrderParams[] = items.map((item) => ({
       itemId: item.itemId,
-      orderId: item.orderId,
+      orderId: "",
       quantity: item.quantity,
       sizeId: item.sizeId,
     }));
