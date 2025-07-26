@@ -28,40 +28,45 @@ export default function Layout({
           <AppSidebar />
           <div className="flex w-full flex-col min-h-screen bg-background ">
             {/* header */}
-            <header className=" flex w-full justify-between items-center p-2  border-b border-border  ">
-              <div className="flex gap-5 justify-start items-center  w-full">
-                <SidebarTrigger className="" />
+            <div className="mx-auto w-full  bg-primary">
+              <header className=" flex w-full justify-between items-center p-2   max-w-[1400px]">
+                <div className="flex gap-5 justify-start items-center  w-full">
+                  <SidebarTrigger className="" />
 
-                <Input
-                  className="w-[250px]  rounded-full h-6 hidden md:block bg-card "
-                  type="text"
-                  placeholder="search......"
-                />
-              </div>
-              <div className="flex w-full justify-end gap-2">
-                <Button
-                  variant={"secondary"}
-                  size={"icon"}
-                  onClick={() => {
-                    router.push("/cart");
-                  }}
-                >
-                  <ShoppingCart />
-                </Button>
-                <Button
-                  variant={"secondary"}
-                  size={"icon"}
-                  onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-                >
-                  {theme === "light" ? (
-                    <Sun color="gold" className="animate-spin" />
-                  ) : (
-                    <MoonStar color="skyblue" className="animate-bounce" />
-                  )}
-                </Button>
-              </div>
-            </header>
-            <main className="flex-1 h-full w-full   p-2">
+                  <Input
+                    className="w-[250px]  rounded-full h-6 hidden md:block bg-input "
+                    type="text"
+                    placeholder="search......"
+                  />
+                </div>
+                <div className="flex w-full justify-end gap-2">
+                  <Button
+                    variant={"outline"}
+                    size={"icon"}
+                    onClick={() => {
+                      router.push("/cart");
+                    }}
+                  >
+                    <ShoppingCart />
+                  </Button>
+                  <Button
+                    variant={"outline"}
+                    size={"icon"}
+                    onClick={() =>
+                      setTheme(theme === "light" ? "dark" : "light")
+                    }
+                  >
+                    {theme === "light" ? (
+                      <Sun color="gold" className="animate-spin" />
+                    ) : (
+                      <MoonStar color="skyblue" className="animate-bounce" />
+                    )}
+                  </Button>
+                </div>
+              </header>
+            </div>
+
+            <main className="flex-1 h-full w-full   p-2 max-w-7xl m-auto">
               <div className="">
                 <BreadCrumbComponent />
               </div>

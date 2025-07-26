@@ -15,7 +15,7 @@ const BreadCrumbComponent = () => {
   const links = pathname.split("/").filter(Boolean);
 
   return (
-    <Breadcrumb className="p-3">
+    <Breadcrumb className="py-3 ">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/">Home</BreadcrumbLink>

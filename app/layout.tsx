@@ -25,7 +25,7 @@ export default async function RootLayout({
       }}
     >
       <html lang="en">
-        <body className={`${inter.className}`}>
+        <body className={`${inter.className} `}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
             <Toaster />

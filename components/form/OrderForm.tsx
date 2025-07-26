@@ -27,7 +27,17 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Button } from "../ui/button";
-import { Check, ChevronDownIcon, ChevronsUpDown, Save } from "lucide-react";
+import {
+  BadgeDollarSign,
+  BookA,
+  CalendarDays,
+  Check,
+  ChevronDownIcon,
+  ChevronsUpDown,
+  Clock,
+  Save,
+  Users,
+} from "lucide-react";
 import {
   Command,
   CommandEmpty,
@@ -39,11 +49,10 @@ import {
 import { cn } from "@/lib/utils";
 import { Calendar } from "../ui/calendar";
 import { Label } from "../ui/label";
-import { createNewOrder } from "@/database/actions/order.action";
-import { toast } from "sonner";
+
 import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch } from "@/hooks";
-import { setDetails } from "@/redux/features/cart.slice";
+import { setCustomer, setDetails } from "@/redux/features/cart.slice";
 import { ResetIcon } from "@radix-ui/react-icons";
 const status = [
   "AWAITING_PICKUP",
@@ -111,18 +120,92 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="bg-card p-3 rounded-lg w-full flex flex-col gap-3"
+        className="  w-full flex flex-col gap-4 h-fit"
         onReset={() => form.reset()}
       >
-        <div className="flex w-full justify-between">
+        {/* Customer */}
+        <FormField
+          control={form.control}
+          name="customerId"
+          render={({ field }) => (
+            <FormItem className="p-3 bg-card rounded-md ">
+              <FormLabel className="flex items-center gap-2">
+                <Users />
+                Customer
+              </FormLabel>
+              <FormControl {...field}>
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                      className="w-full  justify-between bg-input hover:bg-input/55  dark:bg-input/30 dark:hover:bg-input hover:text-foreground"
+                    >
+                      {form.getValues("customerId")
+                        ? customers.find(
+                            (c) => c.id === form.getValues("customerId")
+                          )?.email
+                        : "Select Customer..."}
+                      <ChevronsUpDown className="opacity-50" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[350px] p-0">
+                    <Command>
+                      <CommandInput
+                        placeholder="Search users..."
+                        className="h-9"
+                      />
+                      <CommandList>
+                        <CommandEmpty>No customer found.</CommandEmpty>
+                        <CommandGroup>
+                          {customers.map((user) => (
+                            <CommandItem
+                              key={user.id}
+                              value={user.id}
+                              onSelect={() => {
+                                form.getValues("customerId") === user.id
+                                  ? form.resetField("customerId")
+                                  : form.setValue("customerId", user.id);
+                                dispatch(setCustomer(user));
+                                setOpen(false);
+                              }}
+                            >
+                              {user.email}
+                              <Check
+                                className={cn(
+                                  "ml-auto",
+                                  form.getValues("customerId") === user.id
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {value}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+              </FormControl>
+              <FormDescription>Select your customer.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div className="flex flex-col sm:flex-row w-full justify-start gap-4 p-3 bg-card rounded-md ">
           {/* Order status */}
           <FormField
             control={form.control}
             name="status"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel> Status</FormLabel>
-                <FormControl className="w-full">
+              <FormItem className="w-full">
+                <FormLabel className="flex  gap-2 items-center">
+                  <BookA />
+                  Status
+                </FormLabel>
+                <FormControl className="">
                   <Select
                     defaultValue={form.getValues("status")}
                     onValueChange={field.onChange}
@@ -152,8 +235,11 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
             control={form.control}
             name="paymentStatus"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel> Payment Status</FormLabel>
+              <FormItem className="w-full">
+                <FormLabel className="flex gap-2 items-center">
+                  {" "}
+                  <BadgeDollarSign /> Payment Status
+                </FormLabel>
                 <FormControl>
                   <Select
                     defaultValue={form.getValues("paymentStatus")}
@@ -181,89 +267,25 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
           />
         </div>
 
-        {/* Customer */}
-        <FormField
-          control={form.control}
-          name="customerId"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl {...field}>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="w-full md:w-xs justify-between bg-input hover:bg-input/55  dark:bg-input/30 dark:hover:bg-input"
-                    >
-                      {form.getValues("customerId")
-                        ? customers.find(
-                            (c) => c.id === form.getValues("customerId")
-                          )?.email
-                        : "Select Customer..."}
-                      <ChevronsUpDown className="opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[250px] p-0">
-                    <Command>
-                      <CommandInput
-                        placeholder="Search users..."
-                        className="h-9"
-                      />
-                      <CommandList>
-                        <CommandEmpty>No customer found.</CommandEmpty>
-                        <CommandGroup>
-                          {customers.map((user) => (
-                            <CommandItem
-                              key={user.id}
-                              value={user.id}
-                              onSelect={() => {
-                                form.getValues("customerId") === user.id
-                                  ? form.resetField("customerId")
-                                  : form.setValue("customerId", user.id);
-
-                                setOpen(false);
-                              }}
-                            >
-                              {user.email}
-                              <Check
-                                className={cn(
-                                  "ml-auto",
-                                  form.getValues("customerId") === user.id
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {value}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-              </FormControl>
-              <FormDescription>Select your customer.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         {/* pickup time */}
         <FormField
           control={form.control}
           name="pickupTime"
           render={({ field }) => (
-            <div className="flex gap-4 w-full  justify-between md:justify-start">
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="date-picker" className="px-1">
-                  Date
+            <div className="flex gap-4 w-full  justify-between bg-card p-3 rounded-md ">
+              <div className="flex flex-col gap-3 w-full">
+                <Label
+                  htmlFor="date-picker"
+                  className="px-1 flex items-center gap-3"
+                >
+                  <CalendarDays /> Date
                 </Label>
                 <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       id="date-picker"
-                      className="w-32 justify-between font-normal bg-input hover:bg-input/55"
+                      className="w-full justify-between font-normal bg-input hover:bg-input/55 hover:text-foreground"
                     >
                       {form.getValues("pickupTime")
                         ? form.getValues("pickupTime").toLocaleDateString()
@@ -272,7 +294,7 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-auto overflow-hidden p-0"
+                    className="w-full overflow-hidden p-0"
                     align="start"
                   >
                     <Calendar
@@ -286,9 +308,12 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="time-picker" className="px-1">
-                  Time
+              <div className="flex flex-col gap-3 w-full">
+                <Label
+                  htmlFor="time-picker"
+                  className="px-1 flex gap-3 items-center"
+                >
+                  <Clock /> Time
                 </Label>
                 <Input
                   type="time"
@@ -301,12 +326,9 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
             </div>
           )}
         />
-        <div className="flex gap-5">
-          <Button type="reset" className="" variant={"outline"}>
-            <ResetIcon /> Reset
-          </Button>
-          <Button type="submit" className="" variant={"default"}>
-            <Save /> Save
+        <div className="">
+          <Button type="submit" className="w-full" variant={"ghost"}>
+            <Save /> Next
           </Button>
         </div>
       </form>

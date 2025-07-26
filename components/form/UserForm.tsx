@@ -45,18 +45,19 @@ const formSchema = z.object({
 });
 
 function UserForm() {
+  const { customer } = useAppSelector((store) => store.cart);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      address: "",
-      city: "",
-      state: "",
-      postCode: "",
-      country: "",
+      firstName: customer?.firstName,
+      lastName: customer?.lastName,
+      phone: customer?.phone,
+      email: customer?.email || "",
+      address: customer?.address || "",
+      city: customer?.city || "",
+      state: customer?.state || "",
+      postCode: customer?.postCode || "",
+      country: customer?.country || "",
     },
   });
 

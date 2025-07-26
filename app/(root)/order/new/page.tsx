@@ -4,10 +4,12 @@ import { Ubuntu } from "next/font/google";
 import OrderForm from "@/components/form/OrderForm";
 import { SearchParamProps } from "@/types";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircleIcon } from "lucide-react";
+import { AlertCircleIcon, Save } from "lucide-react";
 import { getAllItems } from "@/database/actions/item.action";
 import ItemCard from "@/components/item-card/ItemCard";
 import UserForm from "@/components/form/UserForm";
+import { Button } from "@/components/ui/button";
+import { ResetIcon } from "@radix-ui/react-icons";
 
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
 
@@ -20,7 +22,7 @@ export default async function Page({
   const { error, result } = await getAllCustomers(email);
   const { result: items } = await getAllItems();
   return (
-    <div className=" rounded-md  mt-4 h-full min-h-[70vh] flex flex-col gap-5 justify-start items-start p-2">
+    <div className=" rounded-md  mt-5 h-full min-h-[70vh] flex flex-col gap-5 justify-start items-start ">
       {error && (
         <Alert variant="destructive">
           <AlertCircleIcon />
@@ -35,10 +37,19 @@ export default async function Page({
           </AlertDescription>
         </Alert>
       )}
-      <p>Customer Details</p>
+      <div className="flex items-center justify-between w-full">
+        <p className="font-semibold text-sm">Customer Details</p>
+        <span className="flex gap-3">
+          <Button variant={"outline"}>
+            <Save /> Save Draft
+          </Button>
+          <Button variant={"destructive"}>
+            <ResetIcon /> Reset
+          </Button>
+        </span>
+      </div>
       <div className="flex gap-4 w-full flex-col md:flex-row">
         <OrderForm customers={result ?? []} />
-
         <UserForm />
       </div>
 
