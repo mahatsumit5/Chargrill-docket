@@ -6,7 +6,7 @@ import { DataTable } from "@/components/reuseable/ReuseableTable";
 const page = async () => {
   const pageNum = 1;
 
-  const { error, result } = await getAllCustomers("");
+  const { error, result } = await getAllCustomers("", false);
   return (
     <div>
       <DataTable data={result ?? []} type="customer" />

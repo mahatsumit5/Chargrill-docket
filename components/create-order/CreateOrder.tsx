@@ -19,7 +19,7 @@ const Stepper: Record<key, TCartState> = {
   Order: "order_details",
   Items: "select_items",
 };
-Object.keys(Stepper);
+
 const ubuntu = Ubuntu({ subsets: ["latin"], weight: ["700"] });
 type PropsType = {
   error?: { message: string };
