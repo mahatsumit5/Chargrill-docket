@@ -1,8 +1,9 @@
 import { CartItem, CreateCustomerParams, ICustomer } from "@/types";
 import { Customer, OrderStatus, PaymentStatus, Prisma } from "@prisma/client";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { toast } from "sonner";
 
-type CartState = "";
+export type TCartState = "select_customer" | "order_details" | "select_items";
 export type form = "UserForm" | "OrderForm";
 interface IinitialState {
   cartItems: CartItem[];
@@ -13,6 +14,7 @@ interface IinitialState {
   customerId: string;
   paymentStatus: PaymentStatus;
   customer: Customer | undefined;
+  cartState: TCartState;
 }
 const initialState: IinitialState = {
   cartItems: [],
@@ -23,7 +25,9 @@ const initialState: IinitialState = {
   customerId: "",
   paymentStatus: "AWAITING_PAYMENT",
   customer: undefined,
+  cartState: "select_customer",
 };
+type setDetails = Pick<IinitialState, "createdBy">;
 const cartSlice = createSlice({
   name: "cart",
   initialState,
@@ -59,21 +63,27 @@ const cartSlice = createSlice({
       } else {
         state.cartItems = [...state.cartItems, payload];
       }
+      toast("Item added to cart");
     },
     resetCart: (state) => {
-      state.cartItems = [];
-      state.customer = undefined;
+      Object.assign(state, initialState);
     },
     setDetails: (
       state,
       {
         payload,
-      }: PayloadAction<Omit<Omit<IinitialState, "cartItems">, "customer">>
+      }: PayloadAction<
+        Omit<IinitialState, "cartItems" | "customer" | "customerId">
+      >
     ) => {
       Object.assign(state, payload);
     },
     setCustomer: (state, { payload }: PayloadAction<Customer>) => {
       state.customer = payload;
+      state.customerId = payload.id;
+    },
+    setCartState: (state, { payload }: PayloadAction<TCartState>) => {
+      state.cartState = payload;
     },
   },
 });
@@ -82,4 +92,5 @@ const { actions, reducer } = cartSlice;
 
 export default reducer;
 
-export const { setCart, resetCart, setDetails, setCustomer } = actions;
+export const { setCart, resetCart, setDetails, setCustomer, setCartState } =
+  actions;

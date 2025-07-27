@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 
 import Image from "next/image";
 import { GetAllItemsResponse } from "@/types";
-import { ItemSize } from "@prisma/client";
-import { SquareArrowOutUpRight } from "lucide-react";
+import { ItemSize, SizeEnum } from "@prisma/client";
+import { ShoppingBasket, SquareArrowOutUpRight } from "lucide-react";
 import { z } from "zod";
 
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -23,7 +23,15 @@ const orderItemsSchema = z.object({
   thumbnail: z.string(),
 });
 type OrderItemType = z.infer<typeof orderItemsSchema>;
-
+type SizeCode = "SM" | "MD" | "RG" | "LG" | "FM" | "RD" | "RCT";
+const test: Record<SizeEnum, SizeCode> = {
+  SMALL: "SM",
+  MEDIUM: "MD",
+  LARGE: "LG",
+  FAMILY: "FM",
+  REGULAR: "RG",
+  EXTRA_LARGE: "RD",
+};
 const ItemCard = ({ item }: { item: GetAllItemsResponse }) => {
   const dispatch = useAppDispatch();
   const defaultSize = item.sizes[0];
@@ -87,7 +95,8 @@ const ItemCard = ({ item }: { item: GetAllItemsResponse }) => {
         {/* border */}
         <div className="border-b border-border" />
         {/* radio */}
-        <div className="flex gap-2 items-center justify-between flex-wrap min-h-12">
+        <div className="flex gap-2 items-center justify-start flex-wrap min-h-12">
+          <p>Size</p>
           <RadioGroup
             defaultValue={item.sizes[0].id}
             className="flex flex-wrap"
@@ -103,19 +112,19 @@ const ItemCard = ({ item }: { item: GetAllItemsResponse }) => {
                   id={size.id}
                   onClick={() => setValue("sizeName", size.sizeId)}
                 />
-                <Label htmlFor={size.id}>
-                  {size.sizeId}-${size.price}
-                </Label>
+                <Label htmlFor={size.id}>{test[size.sizeId]}</Label>
               </div>
             ))}
           </RadioGroup>
         </div>
         {/* qunantity */}
-        <div className="justify-between w-full  items-center flex">
+        <div className="justify-start w-full  items-center flex">
+          <p className="text-pretty text-primary mr-4">Quantity</p>
           <Button
             variant={"ghost"}
             size={"sm"}
             type="button"
+            className="rounded-none rounded-l-lg"
             onClick={() => {
               const newQty = Math.max(1, quantity - 1);
               setValue("quantity", newQty);
@@ -123,13 +132,14 @@ const ItemCard = ({ item }: { item: GetAllItemsResponse }) => {
           >
             -
           </Button>
-          <Button disabled variant={"ghost"} size={"sm"}>
+          <Button variant={"ghost"} size={"sm"} className="rounded-none">
             {quantity}
           </Button>
           <Button
             type="button"
             variant={"ghost"}
             size={"sm"}
+            className="rounded-none rounded-r-lg"
             onClick={() => {
               setValue("quantity", quantity + 1);
             }}
@@ -137,15 +147,20 @@ const ItemCard = ({ item }: { item: GetAllItemsResponse }) => {
             +
           </Button>
         </div>
-        <Button
-          size={"sm"}
-          className="flex justify-between hover:cursor-pointer border border-primary/50 "
-          type="submit"
-          variant={"ghost"}
-        >
-          <span>${totalAmount}</span>
-          Add to cart
-        </Button>
+        <div className="flex justify-between items-end">
+          <span>
+            <p className="text-xs">Price</p>
+            <p className="text-md font-semibold text-primary">${totalAmount}</p>
+          </span>
+          <Button
+            size={"sm"}
+            className="flex  hover:cursor-pointer  "
+            type="submit"
+            variant={"default"}
+          >
+            <ShoppingBasket /> Add to cart
+          </Button>
+        </div>
       </div>
     </form>
   );

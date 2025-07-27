@@ -12,7 +12,7 @@ const ErrorFindingCustomer = ({ message }: { message: string }) => {
     dispatch(setLoading(false));
   }, [message, dispatch]);
   return (
-    <Alert variant="default">
+    <Alert variant="destructive">
       <AlertCircleIcon />
       <AlertTitle>Error occurred.</AlertTitle>
       <AlertDescription className="">

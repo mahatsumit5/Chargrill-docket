@@ -76,14 +76,10 @@ const orderFormSchema = z.object({
   totalAmount: z.number(),
   status: z.enum(status),
   pickupTime: z.date(),
-  customerId: z.string({ required_error: "Customer is required" }),
   paymentStatus: z.enum(paymentStatus),
-  cartItems: z.array(z.string()),
 });
 
-const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
-  const router = useRouter();
-  const pathname = usePathname();
+const OrderForm = () => {
   const dispatch = useAppDispatch();
   const [open, setOpen] = React.useState(false);
   const [calendarOpen, setCalendarOpen] = React.useState(false);
@@ -97,13 +93,11 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
       paymentStatus: "AWAITING_PAYMENT",
       pickupTime: new Date(),
       totalAmount: 0,
-      cartItems: [],
-      customerId: undefined,
     },
   });
   async function onSubmit(values: z.infer<typeof orderFormSchema>) {
     console.log(values);
-    dispatch(setDetails(values));
+    dispatch(setDetails({ cartState: "select_items", ...values }));
   }
 
   React.useEffect(() => {
@@ -120,152 +114,79 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="  w-full flex flex-col gap-4 h-fit"
+        className="  w-full flex flex-col gap-4  p-4  rounded-md max-w-[400px] bg-card"
         onReset={() => form.reset()}
       >
-        {/* Customer */}
+        {/* Order status */}
         <FormField
           control={form.control}
-          name="customerId"
+          name="status"
           render={({ field }) => (
-            <FormItem className="p-3 bg-card rounded-md ">
-              <FormLabel className="flex items-center gap-2">
-                <Users />
-                Customer
+            <FormItem className="w-full">
+              <FormLabel className="flex  gap-2 items-center">
+                <BookA />
+                Status
               </FormLabel>
-              <FormControl {...field}>
-                <Popover open={open} onOpenChange={setOpen}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="w-full  justify-between bg-input hover:bg-input/55  dark:bg-input/30 dark:hover:bg-input hover:text-foreground"
-                    >
-                      {form.getValues("customerId")
-                        ? customers.find(
-                            (c) => c.id === form.getValues("customerId")
-                          )?.email
-                        : "Select Customer..."}
-                      <ChevronsUpDown className="opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[350px] p-0">
-                    <Command>
-                      <CommandInput
-                        placeholder="Search users..."
-                        className="h-9"
-                      />
-                      <CommandList>
-                        <CommandEmpty>No customer found.</CommandEmpty>
-                        <CommandGroup>
-                          {customers.map((user) => (
-                            <CommandItem
-                              key={user.id}
-                              value={user.id}
-                              onSelect={() => {
-                                form.getValues("customerId") === user.id
-                                  ? form.resetField("customerId")
-                                  : form.setValue("customerId", user.id);
-                                dispatch(setCustomer(user));
-                                setOpen(false);
-                              }}
-                            >
-                              {user.email}
-                              <Check
-                                className={cn(
-                                  "ml-auto",
-                                  form.getValues("customerId") === user.id
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {value}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
+              <FormControl className="">
+                <Select
+                  defaultValue={form.getValues("status")}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-full bg-input dark:bg-input/30 ">
+                    <SelectValue placeholder="Order Status" />
+                  </SelectTrigger>
+                  <SelectContent onChange={field.onChange}>
+                    <SelectGroup>
+                      <SelectLabel>Order Status</SelectLabel>
+                      {status.map((stat) => (
+                        <SelectItem value={stat} key={stat}>
+                          {stat}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
               </FormControl>
-              <FormDescription>Select your customer.</FormDescription>
+              <FormDescription>Select order status.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <div className="flex flex-col sm:flex-row w-full justify-start gap-4 p-3 bg-card rounded-md ">
-          {/* Order status */}
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="flex  gap-2 items-center">
-                  <BookA />
-                  Status
-                </FormLabel>
-                <FormControl className="">
-                  <Select
-                    defaultValue={form.getValues("status")}
-                    onValueChange={field.onChange}
-                  >
-                    <SelectTrigger className="w-full bg-input dark:bg-input/30 ">
-                      <SelectValue placeholder="Order Status" />
-                    </SelectTrigger>
-                    <SelectContent onChange={field.onChange}>
-                      <SelectGroup>
-                        <SelectLabel>Order Status</SelectLabel>
-                        {status.map((stat) => (
-                          <SelectItem value={stat} key={stat}>
-                            {stat}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormDescription>Select order status.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          {/* Payment status */}
-          <FormField
-            control={form.control}
-            name="paymentStatus"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormLabel className="flex gap-2 items-center">
-                  {" "}
-                  <BadgeDollarSign /> Payment Status
-                </FormLabel>
-                <FormControl>
-                  <Select
-                    defaultValue={form.getValues("paymentStatus")}
-                    onValueChange={field.onChange}
-                  >
-                    <SelectTrigger className="w-full bg-input hover:bg-input/75 dark:bg-input/30 dark:hover:bg-input">
-                      <SelectValue placeholder="Order Status" />
-                    </SelectTrigger>
-                    <SelectContent onChange={field.onChange}>
-                      <SelectGroup>
-                        <SelectLabel>Payment Status</SelectLabel>
-                        {paymentStatus.map((stat) => (
-                          <SelectItem value={stat} key={stat}>
-                            {stat}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </FormControl>
-                <FormDescription>Select order status.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
+        {/* Payment status */}
+        <FormField
+          control={form.control}
+          name="paymentStatus"
+          render={({ field }) => (
+            <FormItem className="w-full">
+              <FormLabel className="flex gap-2 items-center">
+                {" "}
+                <BadgeDollarSign /> Payment Status
+              </FormLabel>
+              <FormControl>
+                <Select
+                  defaultValue={form.getValues("paymentStatus")}
+                  onValueChange={field.onChange}
+                >
+                  <SelectTrigger className="w-full bg-input hover:bg-input/75 dark:bg-input/30 dark:hover:bg-input">
+                    <SelectValue placeholder="Order Status" />
+                  </SelectTrigger>
+                  <SelectContent onChange={field.onChange}>
+                    <SelectGroup>
+                      <SelectLabel>Payment Status</SelectLabel>
+                      {paymentStatus.map((stat) => (
+                        <SelectItem value={stat} key={stat}>
+                          {stat}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormDescription>Select order status.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         {/* pickup time */}
         <FormField
@@ -326,11 +247,9 @@ const OrderForm: FC<{ customers: Customer[] }> = ({ customers }) => {
             </div>
           )}
         />
-        <div className="">
-          <Button type="submit" className="w-full" variant={"ghost"}>
-            <Save /> Next
-          </Button>
-        </div>
+        <Button type="submit" className="w-full" variant={"ghost"}>
+          <Save /> Next
+        </Button>
       </form>
     </Form>
   );

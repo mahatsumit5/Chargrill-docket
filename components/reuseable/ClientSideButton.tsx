@@ -1,8 +1,11 @@
 "use client";
 import React, { Suspense } from "react";
 import { Button } from "../ui/button";
-import { Link, List, Plus } from "lucide-react";
+import { Link, List, Plus, Save, User } from "lucide-react";
 import { useParams, usePathname, useRouter } from "next/navigation";
+import { ResetIcon } from "@radix-ui/react-icons";
+import { useAppDispatch } from "@/hooks";
+import { resetCart } from "@/redux/features/cart.slice";
 
 const ClientSideButton = ({ btnName }: { btnName: string }) => {
   const router = useRouter();
@@ -46,7 +49,22 @@ const ClientSideButton = ({ btnName }: { btnName: string }) => {
         </Button>
       </div>
     </Suspense>
-  ) : null;
+  ) : (
+    <Btn />
+  );
 };
 
 export default ClientSideButton;
+const Btn = () => {
+  const dispatch = useAppDispatch();
+  return (
+    <div className="flex  justify-end gap-3 ">
+      <Button variant={"outline"} onClick={() => dispatch(resetCart())}>
+        <ResetIcon /> Reset Cart
+      </Button>
+      <Button variant={"default"}>
+        <User /> Add new user
+      </Button>
+    </div>
+  );
+};
