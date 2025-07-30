@@ -5,7 +5,6 @@ import React from "react";
 
 async function Page() {
   const { error, result } = await getAllOrders();
-  console.log(result);
 
   return !error ? (
     <div className="  flex flex-col items-center justify-center p-3">

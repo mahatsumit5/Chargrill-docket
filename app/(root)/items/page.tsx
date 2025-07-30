@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { DataTable } from "@/components/reuseable/ReuseableTable";
 import { getAllItems } from "@/database/actions/item.action";
 import { Item } from "@prisma/client";
