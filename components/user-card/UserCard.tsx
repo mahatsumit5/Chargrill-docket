@@ -2,10 +2,10 @@
 import React, { FC } from "react";
 import { Card } from "../ui/card";
 import { Customer, User } from "@prisma/client";
-import { MapPinCheckInside, Phone } from "lucide-react";
+import { MapPinCheckInside, Phone, Trash } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { useAppDispatch } from "@/hooks";
+import { useAppDispatch, useAppSelector } from "@/hooks";
 import { setCartState, setCustomer } from "@/redux/features/cart.slice";
 
 const UserCard: FC<{ customer: Customer; user?: User }> = ({
@@ -13,8 +13,16 @@ const UserCard: FC<{ customer: Customer; user?: User }> = ({
   customer,
 }) => {
   const dispatch = useAppDispatch();
+  const { customer: selectedCustomer } = useAppSelector((store) => store.cart);
   return (
-    <Card key={customer.id} className="w-full sm:w-[300px] pb-0">
+    <Card
+      key={customer.id}
+      className={`w-full sm:w-[300px] pb-0  ${
+        selectedCustomer?.id === customer.id
+          ? "border-2 border-primary shadow-primary"
+          : ""
+      }`}
+    >
       <header className="flex flex-col items-center justify-center gap-4">
         <Avatar className="h-24 w-24">
           <AvatarImage src="https://github.com/shadcn.png" />
@@ -40,16 +48,28 @@ const UserCard: FC<{ customer: Customer; user?: User }> = ({
           <Phone size={14} />
           {customer.phone}
         </p>
-        <Button
-          variant={"ghost"}
-          className="w-full  "
-          onClick={() => {
-            dispatch(setCustomer(customer));
-            dispatch(setCartState("order_details"));
-          }}
-        >
-          Select
-        </Button>
+        {customer?.id === selectedCustomer?.id ? (
+          <Button
+            variant={"ghost"}
+            className="w-full hover:bg-destructive  "
+            onClick={() => {
+              dispatch(setCustomer());
+            }}
+          >
+            <Trash /> Remove
+          </Button>
+        ) : (
+          <Button
+            variant={"ghost"}
+            className="w-full  "
+            onClick={() => {
+              dispatch(setCustomer(customer));
+              dispatch(setCartState("order_details"));
+            }}
+          >
+            Select
+          </Button>
+        )}
       </section>
     </Card>
   );

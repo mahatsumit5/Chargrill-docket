@@ -1,4 +1,11 @@
-import { Category, Item, ItemSize, Prisma } from "@prisma/client";
+import {
+  Category,
+  Item,
+  ItemSize,
+  OrderStatus,
+  PaymentStatus,
+  Prisma,
+} from "@prisma/client";
 
 export type CartItem = {
   sizeId: string;
@@ -88,7 +95,11 @@ export type GetAllItemsResponse = Item & { category: Category } & {
 };
 
 export type CreateNewOrderParams = {
-  sizeId: string;
-  itemId: string;
-  orderId: string;
+  createdBy: string;
+  customerId: string;
+  status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  pickupTime: Date;
+  totalAmount: number;
+  cartItems: { itemId: string; sizeId: string; quantity: number }[];
 };

@@ -22,7 +22,7 @@ const RenderCards = ({
   switch (type) {
     case "customers":
       return (
-        <div className="flex gap-3 flex-wrap items-center">
+        <div className="flex gap-3 flex-wrap items-center justify-center">
           {data?.map((item) => (
             <UserCard customer={item as Customer} key={item.id} />
           ))}

@@ -32,8 +32,8 @@ export default function Layout({
           <LoadingModal />
           <div className="flex w-full flex-col min-h-screen bg-background ">
             {/* header */}
-            <div className="mx-auto w-full  bg-primary">
-              <header className=" flex w-full justify-between items-center p-2   max-w-[1400px]">
+            <div className=" w-full  bg-primary">
+              <header className=" flex w-full justify-between items-center p-2   max-w-[1400px] m-auto">
                 <div className="flex gap-5 justify-start items-center  w-full">
                   <SidebarTrigger className="" />
 
@@ -50,6 +50,7 @@ export default function Layout({
                     onClick={() => {
                       router.push("/cart");
                     }}
+                    className="hover:bg-secondary"
                   >
                     <ShoppingCart />
                   </Button>
@@ -59,6 +60,7 @@ export default function Layout({
                     onClick={() =>
                       setTheme(theme === "light" ? "dark" : "light")
                     }
+                    className="hover:bg-secondary"
                   >
                     {theme === "light" ? (
                       <Sun color="gold" className="animate-spin" />
@@ -70,7 +72,7 @@ export default function Layout({
               </header>
             </div>
 
-            <main className="flex-1 h-full w-full   p-2 max-w-7xl m-auto">
+            <main className="flex-1 h-full w-full   p-2 max-w-[1400px] mx-auto">
               <div className="">
                 <BreadCrumbComponent />
               </div>

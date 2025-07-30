@@ -1,15 +1,8 @@
 "use server";
-import { Order, OrderStatus, PaymentStatus, Prisma } from "@prisma/client";
+import { Order } from "@prisma/client";
 import { executeQuery, prisma } from "..";
-type CreateNewOrderParams = {
-  createdBy: string;
-  customerId: string;
-  status: OrderStatus;
-  paymentStatus: PaymentStatus;
-  pickupTime: Date;
-  totalAmount: number;
-  cartItems: { itemId: string; sizeId: string; quantity: number }[];
-};
+import { CreateNewOrderParams } from "@/types";
+
 export async function createNewOrder({
   createdBy,
   customerId,
@@ -48,4 +41,16 @@ export async function createNewOrder({
   );
   console.log("New order created", result);
   return result;
+}
+
+export async function getAllOrders() {
+  return await executeQuery<Order[]>(
+    prisma.order.findMany({
+      include: {
+        customer: true,
+        user: true,
+        cartItems: true,
+      },
+    })
+  );
 }

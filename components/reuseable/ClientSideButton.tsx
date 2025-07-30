@@ -59,7 +59,7 @@ const Btn = () => {
   const dispatch = useAppDispatch();
   return (
     <div className="flex  justify-end gap-3 ">
-      <Button variant={"outline"} onClick={() => dispatch(resetCart())}>
+      <Button variant={"secondary"} onClick={() => dispatch(resetCart())}>
         <ResetIcon /> Reset Cart
       </Button>
       <Button variant={"default"}>

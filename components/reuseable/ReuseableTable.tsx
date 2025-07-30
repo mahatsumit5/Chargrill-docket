@@ -35,8 +35,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Dietary } from "@prisma/client";
+import { Customer, Dietary, OrderItems } from "@prisma/client";
 import Image from "next/image";
+import { da } from "date-fns/locale";
 
 interface DataTableProps<T> {
   data: T[];
@@ -240,6 +241,102 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
       },
     },
   ];
+  const orderColumns: ColumnDef<T>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("status")}</div>
+      ),
+    },
+    {
+      accessorKey: "customer",
+      header: "Full Name",
+      cell: ({ row }) => {
+        const customer: Customer = row.getValue("customer");
+        return (
+          <div className="capitalize">
+            {customer.firstName} {customer.lastName}
+          </div>
+        );
+      },
+    },
+    // {
+    //   accessorKey: "customer",
+    //   header: "Email",
+    //   cell: ({ row }) => {
+    //     const customer: Customer = row.getValue("customer");
+    //     return <div className="">{customer.email}</div>;
+    //   },
+    // },
+    // {
+    //   accessorKey: "customer",
+    //   header: "Phone",
+    //   cell: ({ row }) => {
+    //     const customer: Customer = row.getValue("customer");
+    //     return <div className="capitalize">{customer.phone}</div>;
+    //   },
+    // },
+    {
+      accessorKey: "totalAmount",
+
+      header: "Total",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("totalAmount")}</div>
+      ),
+    },
+    {
+      accessorKey: "pickupTime",
+      header: "Order Date",
+      cell: ({ row }) => {
+        const date = new Date(row.getValue("pickupTime"));
+        const orderDate = date.toLocaleDateString();
+        const time = date.toLocaleTimeString();
+        return (
+          <div className="capitalize">
+            {orderDate}-{time}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: "paymentStatus",
+      header: "Payment Status",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("paymentStatus")}</div>
+      ),
+    },
+    {
+      accessorKey: "cartItems",
+      header: "Items",
+      cell: ({ row }) => {
+        const items: OrderItems[] = row.getValue("cartItems");
+        return <div className="capitalize">{items.length}</div>;
+      },
+    },
+  ];
 
   function getColumns(): ColumnDef<T>[] {
     switch (type) {
@@ -247,6 +344,8 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
         return customerColumns;
       case "items":
         return itemColumns;
+      case "order":
+        return orderColumns;
       default:
         return itemColumns;
     }

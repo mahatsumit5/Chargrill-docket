@@ -1,14 +1,21 @@
-import UserForm from "@/components/form/UserForm";
+import { DataTable } from "@/components/reuseable/ReuseableTable";
+import { getAllOrders } from "@/database/actions/order.action";
 import React from "react";
 
 interface Components {
   [key: string]: React.ReactNode;
 }
-function Page() {
-  return (
+async function Page() {
+  const { error, result } = await getAllOrders();
+  console.log(result);
+
+  return !error ? (
     <div className="  flex flex-col items-center justify-center p-3">
       list of orders
+      <DataTable type="order" data={result!} />
     </div>
+  ) : (
+    <div>Eror Occured</div>
   );
 }
 

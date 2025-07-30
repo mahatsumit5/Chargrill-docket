@@ -78,9 +78,9 @@ const cartSlice = createSlice({
     ) => {
       Object.assign(state, payload);
     },
-    setCustomer: (state, { payload }: PayloadAction<Customer>) => {
+    setCustomer: (state, { payload }: PayloadAction<Customer | undefined>) => {
       state.customer = payload;
-      state.customerId = payload.id;
+      state.customerId = payload?.id || "";
     },
     setCartState: (state, { payload }: PayloadAction<TCartState>) => {
       state.cartState = payload;

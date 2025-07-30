@@ -10,7 +10,6 @@ export default async function Page({
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const email = ((await searchParams)?.email as string) || "";
-
   const { error, result } = await getAllCustomers(email, !email);
   const { error: itemsErr, result: items } = await getAllItems();
   return (
