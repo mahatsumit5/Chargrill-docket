@@ -7,6 +7,7 @@ import { getAllCategories } from "@/database/actions/category.action";
 import { Category } from "@prisma/client";
 import { Check, RotateCcw, Save, Store } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import CategoryModal from "@/components/modal/CategoryModal";
 
 const page = async () => {
   const { result } = await getAllCategories();
@@ -40,6 +41,7 @@ const page = async () => {
       <div className="flex items-center w-full justify-center">
         <CreateNewItemForm categories={result || []} />
       </div>
+      <CategoryModal />
     </div>
   );
 };

@@ -15,7 +15,7 @@ const ClientSideButton = ({ btnName }: { btnName: string }) => {
     <Suspense>
       <div className="flex gap-4">
         <Button
-          variant={"outline"}
+          variant={"secondary"}
           className="gap-2"
           size={"sm"}
           onClick={() => {
@@ -26,7 +26,7 @@ const ClientSideButton = ({ btnName }: { btnName: string }) => {
           List View
         </Button>
         <Button
-          variant={"outline"}
+          variant={"secondary"}
           className="gap-2"
           size={"sm"}
           onClick={() => {

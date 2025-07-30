@@ -11,6 +11,7 @@ import { CheckCircle2Icon, Edit, ShoppingBag } from "lucide-react";
 import { createNewOrder } from "@/database/actions/order.action";
 import { setLoading } from "@/redux/features/modal.slice";
 import { resetCart } from "@/redux/features/cart.slice";
+import { ReloadIcon, ResetIcon } from "@radix-ui/react-icons";
 const CartPage = () => {
   const {
     cartItems,
@@ -24,6 +25,10 @@ const CartPage = () => {
   } = useAppSelector((store) => store.cart);
   const router = useRouter();
   const dispatch = useAppDispatch();
+  const total = cartItems.reduce(
+    (acc, current) => acc + current.totalAmount,
+    0
+  );
   async function handleCheckout() {
     dispatch(setLoading(true));
     const data: CreateNewOrderParams = {
@@ -32,7 +37,7 @@ const CartPage = () => {
       customerId,
       paymentStatus,
       pickupTime,
-      totalAmount,
+      totalAmount: total,
       cartItems,
     };
     const { error, result } = await createNewOrder(data);
@@ -101,10 +106,19 @@ const CartPage = () => {
         </div>
       </div>
 
-      <div className="bg-secondary p-5 rounded-md flex flex-col gap-5 w-full md:w-2/3">
-        <p className="font-bold text-lg border-b pb-5 border-border/40 ">
-          Order Summary
-        </p>
+      <div className="bg-card p-5 rounded-md flex flex-col gap-5 w-full md:w-2/3">
+        <div className="flex justify-between border-b pb-5 border-border/40">
+          <p className="font-bold text-lg  ">Order Summary</p>
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => {
+              dispatch(resetCart());
+            }}
+          >
+            <ReloadIcon />
+          </Button>
+        </div>
         {/* details */}
         <div className="flex justify-between pb-5 border-dashed border-b-2">
           {/* Status */}

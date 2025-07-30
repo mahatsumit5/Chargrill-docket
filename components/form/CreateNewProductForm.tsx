@@ -48,6 +48,8 @@ import { Size } from "@/types";
 import { executeDatabaseAction } from "@/database";
 import { toast } from "sonner";
 import { BadgePlus, RotateCcw, Save } from "lucide-react";
+import { useAppDispatch } from "@/hooks";
+import { setmodal } from "@/redux/features/modal.slice";
 const imageSchema = z
   .array(
     z
@@ -88,6 +90,7 @@ const formSchema = z.object({
   categoryId: z.string({}),
 });
 const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
+  const dispatch = useAppDispatch();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -428,6 +431,9 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
                     variant={"secondary"}
                     size={"sm"}
                     type="button"
+                    onClick={() => {
+                      dispatch(setmodal(true));
+                    }}
                   >
                     Add Category
                   </Button>

@@ -37,7 +37,6 @@ const cartSlice = createSlice({
         (item) =>
           item.itemId === payload.itemId && item.sizeId === payload.sizeId
       );
-      console.log("item already exist");
       // to do replace cartItems in cart with new payload
 
       if (Boolean(itemExistinCart)) {
@@ -63,6 +62,10 @@ const cartSlice = createSlice({
       } else {
         state.cartItems = [...state.cartItems, payload];
       }
+      state.totalAmount = state.cartItems.reduce(
+        (sum, current) => sum + current.totalAmount,
+        0
+      );
       toast("Item added to cart");
     },
     resetCart: (state) => {

@@ -23,13 +23,13 @@ const UserSearch = () => {
       >
         <Input
           ref={inputRef}
-          className=" rounded-full   "
+          className=" rounded-full shadow-sm   "
           placeholder="search..."
         />
         <Button
           type="submit"
           variant={"secondary"}
-          className="rounded-full bg-background hover:bg-secondary"
+          className="rounded-full bg-secondary shadow-lg "
         >
           <Search />
         </Button>

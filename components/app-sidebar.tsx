@@ -4,6 +4,8 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarHeader,
+  SidebarRail,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Concert_One } from "next/font/google";
 import { UserButton, SignedIn } from "@clerk/nextjs";
@@ -19,15 +21,15 @@ import {
   History,
   House,
   LayoutDashboard,
+  Ship,
   Users,
 } from "lucide-react";
-import { useTheme } from "next-themes";
-import { Button } from "./ui/button";
-import { dark, neobrutalism, shadesOfPurple } from "@clerk/themes";
+
+import { usePathname } from "next/navigation";
 
 const links = [
   {
-    href: "/",
+    href: "/home",
     label: "Home",
     icon: <House size={16} />,
   },
@@ -58,25 +60,46 @@ const links = [
   },
 ];
 export function AppSidebar() {
-  const { setTheme } = useTheme();
+  const { state } = useSidebar();
+  const Display: Record<typeof state, React.ReactNode> = {
+    collapsed: <CollapsedSidebarContent />,
+    expanded: <ExpandedSideBarContent />,
+  };
   return (
-    <Sidebar className="    ">
-      <SidebarHeader className="   flex  justify-between py-3">
+    <Sidebar className="bg-card" variant="inset" collapsible="icon">
+      {Display[state]}
+      <SidebarFooter className="bg-card">
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+      </SidebarFooter>
+    </Sidebar>
+  );
+}
+const ExpandedSideBarContent = () => {
+  const pathname = usePathname();
+  return (
+    <>
+      <SidebarHeader className="   flex  justify-between py-3 bg-card ">
         <p
-          className={`${conConcert_One.className} text-3xl text-primary flex items-center gap-2 font-bold`}
+          className={`${conConcert_One.className} text-3xl text-primary flex items-center gap-2 font-bold `}
         >
-          <Dock />
+          <Ship />
           Docker
         </p>
       </SidebarHeader>
-      <SidebarContent draggable={true} className="  ">
+      <SidebarContent draggable={true} className=" bg-card">
         <SidebarGroup>
           <ul className="flex gap-2 flex-col">
             {links.map((item) => (
               <Link key={item.href} href={item.href}>
                 <li
                   key={item.href}
-                  className="font-bold text-sm flex gap-2 items-center  hover:bg-primary/75 hover:text-primary-foreground p-3 hover:scale-125 transition-all duration-200  rounded-md cursor-pointer"
+                  className={`font-bold text-sm flex gap-2 items-center  p-3   cursor-pointer hover:text-muted-foreground  ${
+                    pathname.includes(item.href)
+                      ? "text-primary border-primary border-l-4"
+                      : ""
+                  } `}
                 >
                   {item.icon} {item.label}
                 </li>
@@ -85,11 +108,37 @@ export function AppSidebar() {
           </ul>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="">
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </SidebarFooter>
-    </Sidebar>
+    </>
   );
-}
+};
+const CollapsedSidebarContent = () => {
+  const pathname = usePathname();
+  return (
+    <>
+      <SidebarHeader className="flex justify-center items-center bg-card ">
+        <p className={` text-5xl text-primary  `}>
+          <Ship />
+        </p>
+      </SidebarHeader>
+      <SidebarContent draggable={true} className=" bg-card pt-5">
+        <SidebarGroup>
+          <ul className="flex gap-2 flex-col">
+            {links.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={` w-full flex justify-center   gap-2 items-center bg-background hover:bg-secondary rounded-md p-2   cursor-pointer  ${
+                  pathname.includes(item.href)
+                    ? "text-primary  border-primary/85 border-2"
+                    : ""
+                } `}
+              >
+                <li key={item.href}>{item.icon}</li>
+              </Link>
+            ))}
+          </ul>
+        </SidebarGroup>
+      </SidebarContent>
+    </>
+  );
+};

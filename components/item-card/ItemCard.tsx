@@ -58,8 +58,8 @@ const ItemCard = ({ item }: { item: GetAllItemsResponse }) => {
   const selectedSize = item.sizes.find((size) => size.id === selectedSizeId);
   const price = selectedSize?.price ?? 0;
   const totalAmount = price * quantity;
-
   const onSubmit = (data: OrderItemType) => {
+    console.log(totalAmount);
     dispatch(
       setCart({
         ...data,
