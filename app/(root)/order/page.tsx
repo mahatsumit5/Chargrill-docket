@@ -1,10 +1,8 @@
+export const dynamic = "force-dynamic";
 import { DataTable } from "@/components/reuseable/ReuseableTable";
 import { getAllOrders } from "@/database/actions/order.action";
 import React from "react";
 
-interface Components {
-  [key: string]: React.ReactNode;
-}
 async function Page() {
   const { error, result } = await getAllOrders();
   console.log(result);
