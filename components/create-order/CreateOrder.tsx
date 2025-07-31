@@ -38,7 +38,7 @@ const CreateOrder = (props: PropsType) => {
   return (
     <div className="flex flex-col gap-4 items-center justify-center w-full">
       {/* sliders */}
-      <div className=" rounded-full p-3 w-fit bg-card/75 flex justify-between  gap-5">
+      <div className=" rounded-full p-3 w-fit bg-secondary flex justify-between  gap-5">
         {Object.keys(Stepper).map((step, index) => (
           <div key={index} className="flex  gap-2 items-center">
             <div

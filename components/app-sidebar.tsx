@@ -22,10 +22,12 @@ import {
   House,
   LayoutDashboard,
   Ship,
+  ShoppingBag,
   Users,
 } from "lucide-react";
 
 import { usePathname } from "next/navigation";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const links = [
   {
@@ -58,6 +60,11 @@ const links = [
     label: "History",
     icon: <History size={16} />,
   },
+  {
+    href: "/cart",
+    label: "Cart",
+    icon: <ShoppingBag size={16} />,
+  },
 ];
 export function AppSidebar() {
   const { state } = useSidebar();
@@ -66,9 +73,13 @@ export function AppSidebar() {
     expanded: <ExpandedSideBarContent />,
   };
   return (
-    <Sidebar className="bg-card" variant="inset" collapsible="icon">
+    <Sidebar
+      className="bg-background border-r-2"
+      variant="inset"
+      collapsible="icon"
+    >
       {Display[state]}
-      <SidebarFooter className="bg-card">
+      <SidebarFooter className="bg-background">
         <SignedIn>
           <UserButton />
         </SignedIn>
@@ -80,7 +91,7 @@ const ExpandedSideBarContent = () => {
   const pathname = usePathname();
   return (
     <>
-      <SidebarHeader className="   flex  justify-between py-3 bg-card ">
+      <SidebarHeader className="   flex  justify-between py-3 bg-background ">
         <p
           className={`${conConcert_One.className} text-3xl text-primary flex items-center gap-2 font-bold `}
         >
@@ -88,7 +99,7 @@ const ExpandedSideBarContent = () => {
           Docker
         </p>
       </SidebarHeader>
-      <SidebarContent draggable={true} className=" bg-card">
+      <SidebarContent draggable={true} className=" bg-background">
         <SidebarGroup>
           <ul className="flex gap-2 flex-col">
             {links.map((item) => (
@@ -97,7 +108,7 @@ const ExpandedSideBarContent = () => {
                   key={item.href}
                   className={`font-bold text-sm flex gap-2 items-center  p-3   cursor-pointer hover:text-muted-foreground  ${
                     pathname.includes(item.href)
-                      ? "text-primary border-primary border-l-4"
+                      ? "text-background-secondary-foreground border-primary border-l-4 bg-background-secondary rounded-r-full"
                       : ""
                   } `}
                 >
@@ -115,25 +126,30 @@ const CollapsedSidebarContent = () => {
   const pathname = usePathname();
   return (
     <>
-      <SidebarHeader className="flex justify-center items-center bg-card ">
+      <SidebarHeader className="flex justify-center items-center bg-background ">
         <p className={` text-5xl text-primary  `}>
           <Ship />
         </p>
       </SidebarHeader>
-      <SidebarContent draggable={true} className=" bg-card pt-5">
+      <SidebarContent draggable={true} className=" bg-background pt-5">
         <SidebarGroup>
           <ul className="flex gap-2 flex-col">
             {links.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className={` w-full flex justify-center   gap-2 items-center bg-background hover:bg-secondary rounded-md p-2   cursor-pointer  ${
+                className={` w-full flex justify-center   gap-2 items-center bg-background-secondary hover:bg-secondary rounded-md p-2   cursor-pointer  ${
                   pathname.includes(item.href)
                     ? "text-primary  border-primary/85 border-2"
                     : ""
                 } `}
               >
-                <li key={item.href}>{item.icon}</li>
+                <li key={item.href}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>{item.icon}</TooltipTrigger>
+                    <TooltipContent>{item.label}</TooltipContent>
+                  </Tooltip>
+                </li>
               </Link>
             ))}
           </ul>

@@ -114,7 +114,7 @@ const OrderForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="  w-full flex flex-col gap-4  p-4  rounded-md max-w-[400px] bg-card"
+        className="  w-full flex flex-col gap-4  p-4  rounded-md max-w-[400px] border "
         onReset={() => form.reset()}
       >
         {/* Order status */}
@@ -193,7 +193,7 @@ const OrderForm = () => {
           control={form.control}
           name="pickupTime"
           render={({ field }) => (
-            <div className="flex gap-4 w-full  justify-between bg-card p-3 rounded-md ">
+            <div className="flex gap-4 w-full  justify-between  p-3 rounded-md ">
               <div className="flex flex-col gap-3 w-full">
                 <Label
                   htmlFor="date-picker"

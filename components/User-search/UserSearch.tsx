@@ -19,19 +19,16 @@ const UserSearch = () => {
           setEmail(inputRef.current?.value!);
           dispatch(setLoading(true));
         }}
-        className="w-full sm:w-1/2 flex gap-2"
+        className="w-full sm:w-1/2 flex gap-2 items-center"
       >
         <Input
           ref={inputRef}
-          className=" rounded-full shadow-sm   "
+          className=" rounded-full shadow-sm bg-secondary dark:bg-secondary border-none   "
           placeholder="search..."
         />
-        <Button
-          type="submit"
-          variant={"secondary"}
-          className="rounded-full bg-secondary shadow-lg "
-        >
+        <Button type="submit" variant={"outline"} className="rounded-full   ">
           <Search />
+          Search
         </Button>
       </form>
     </ReuseableFilter>

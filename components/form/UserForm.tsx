@@ -17,6 +17,8 @@ import { Input } from "../ui/input";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import { createCustomer } from "@/database/actions/customer.action";
 import { toast } from "sonner";
+import { Cross, PlusCircle } from "lucide-react";
+import { Cross1Icon } from "@radix-ui/react-icons";
 
 const formSchema = z.object({
   firstName: z.string({
@@ -76,11 +78,11 @@ function UserForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-5 w-full  p-3  bg-card rounded-md "
+        className="flex flex-col gap-5 w   w-full max-w-[600px]  p-3"
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <h4 className="scroll-m-20 text-lg font-semibold tracking-tight col-span-2 ">
-            Create a new user
+          <h4 className="scroll-m-20 text-lg font-semibold tracking-tight col-span-2 text-primary">
+            User Register
           </h4>
           <p className="text-muted-foreground text-sm col-span-2 mb-8">
             Let&apos;s start with some facts about you.
@@ -92,7 +94,11 @@ function UserForm() {
               <FormItem>
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Harry " {...field} className="bg-input" />
+                  <Input
+                    placeholder="Harry "
+                    {...field}
+                    className="border-none"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -108,7 +114,7 @@ function UserForm() {
                   <Input
                     placeholder=" Potter"
                     {...field}
-                    className="bg-input"
+                    className="border-none"
                   />
                 </FormControl>
                 <FormMessage />
@@ -125,7 +131,12 @@ function UserForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="enter your email" {...field} type="email" />
+                <Input
+                  placeholder="enter your email"
+                  {...field}
+                  type="email"
+                  className="border-none"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -139,7 +150,12 @@ function UserForm() {
             <FormItem>
               <FormLabel>Mobile</FormLabel>
               <FormControl>
-                <Input placeholder="+6145678965" {...field} type="tel" />
+                <Input
+                  placeholder="+6145678965"
+                  {...field}
+                  type="tel"
+                  className="border-none"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -153,7 +169,11 @@ function UserForm() {
             <FormItem className="flex flex-col">
               <FormLabel>Address</FormLabel>
               <FormControl>
-                <Input placeholder="100 king st" {...field} />
+                <Input
+                  placeholder="100 king st"
+                  {...field}
+                  className="border-none"
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -167,7 +187,11 @@ function UserForm() {
               <FormItem className="flex flex-col">
                 <FormLabel>City</FormLabel>
                 <FormControl>
-                  <Input placeholder="sydney" {...field} />
+                  <Input
+                    placeholder="sydney"
+                    {...field}
+                    className="border-none"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -180,7 +204,7 @@ function UserForm() {
               <FormItem className="flex flex-col">
                 <FormLabel>State</FormLabel>
                 <FormControl>
-                  <Input placeholder="NSW" {...field} />
+                  <Input placeholder="NSW" {...field} className="border-none" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -193,7 +217,11 @@ function UserForm() {
               <FormItem className="flex flex-col">
                 <FormLabel>PostCode</FormLabel>
                 <FormControl>
-                  <Input placeholder="2000" {...field} />
+                  <Input
+                    placeholder="2000"
+                    {...field}
+                    className="border-none"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -212,7 +240,7 @@ function UserForm() {
                 <Input
                   {...field}
                   type=""
-                  className=""
+                  className="border-none"
                   placeholder="Australia"
                 />
               </FormControl>
@@ -220,16 +248,19 @@ function UserForm() {
             </FormItem>
           )}
         />
-        {/* Notes
-         */}
 
-        <Button
-          type="submit"
-          variant={"default"}
-          className=" w-full hover:bg-primary/75  hover:cursor-pointer"
-        >
-          Save
-        </Button>
+        <div className="flex justify-end w-full gap-4">
+          <Button variant={"outline"} className="rounded-full">
+            <Cross1Icon /> Reset
+          </Button>
+          <Button
+            type="submit"
+            variant={"default"}
+            className="  rounded-full  hover:cursor-pointer bg-primary/75"
+          >
+            <PlusCircle /> Add New User
+          </Button>
+        </div>
       </form>
     </Form>
   );

@@ -2,7 +2,7 @@
 import React, { FC } from "react";
 import { Card } from "../ui/card";
 import { Customer, User } from "@prisma/client";
-import { MapPinCheckInside, Phone, Trash } from "lucide-react";
+import { Check, MapPinCheckInside, Phone, Trash } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { useAppDispatch, useAppSelector } from "@/hooks";
@@ -33,7 +33,7 @@ const UserCard: FC<{ customer: Customer; user?: User }> = ({
         </small>
       </header>
 
-      <section className=" flex flex-col gap-2 items-center justify-center w-full bg-background-secondary p-2 ">
+      <section className=" flex flex-col gap-2 items-center justify-center w-full bg-secondary/50 p-2 ">
         <small className="text-sm leading-none font-medium">
           {customer.firstName} {customer.lastName}
         </small>
@@ -50,8 +50,8 @@ const UserCard: FC<{ customer: Customer; user?: User }> = ({
         </p>
         {customer?.id === selectedCustomer?.id ? (
           <Button
-            variant={"ghost"}
-            className="w-full hover:bg-destructive  "
+            variant={"outline"}
+            className="w-full   "
             onClick={() => {
               dispatch(setCustomer());
             }}
@@ -60,13 +60,14 @@ const UserCard: FC<{ customer: Customer; user?: User }> = ({
           </Button>
         ) : (
           <Button
-            variant={"ghost"}
-            className="w-full  "
+            variant={"outline"}
+            className="w-full   "
             onClick={() => {
               dispatch(setCustomer(customer));
               dispatch(setCartState("order_details"));
             }}
           >
+            <Check />
             Select
           </Button>
         )}

@@ -135,7 +135,11 @@ const CreateNewItemForm = ({ categories }: { categories: Category[] }) => {
               <FormItem>
                 <FormLabel> Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Salad" {...field} className="sm:h-10" />
+                  <Input
+                    placeholder="Salad"
+                    {...field}
+                    className="sm:h-10 border-none"
+                  />
                 </FormControl>
                 <FormDescription>Enter a item name.</FormDescription>
                 <FormMessage />

@@ -381,14 +381,14 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
     <div className="w-full">
       {/*  */}
       <div className="flex items-center py-4">
-        {/* <Input
+        <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("email")?.setFilterValue(event.target.value)
           }
           className="max-w-sm bg-input"
-        /> */}
+        />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -418,8 +418,8 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
       </div>
 
       {/*  */}
-      <div className="rounded-md border bg-card">
-        <Table className="">
+      <div className="rounded-md  ">
+        <Table className="bg-background-secondary">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

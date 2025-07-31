@@ -35,10 +35,10 @@ export default function Layout({
             <div className=" w-full  bg-primary">
               <header className=" flex w-full justify-between items-center p-2   max-w-[1400px] m-auto">
                 <div className="flex gap-5 justify-start items-center  w-full">
-                  <SidebarTrigger className="" />
+                  <SidebarTrigger className="text-background" />
 
                   <Input
-                    className="w-[250px]  rounded-full h-6 hidden md:block bg-input "
+                    className="w-[250px]  rounded-full h-6 hidden md:block  "
                     type="text"
                     placeholder="search......"
                   />

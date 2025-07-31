@@ -3,9 +3,8 @@ import React from "react";
 
 const page = () => {
   return (
-    <div className="flex justify-start w-full  gap-2  ">
+    <div className="  w-full py-5 gap-2 mt-2 flex justify-start  ">
       <UserForm />
-      <div className="p-4  rounded-md mt-4 w-full">content</div>
     </div>
   );
 };

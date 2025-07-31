@@ -11,60 +11,47 @@ const ClientSideButton = ({ btnName }: { btnName: string }) => {
   const router = useRouter();
   const pathname = usePathname();
 
-  return !pathname.includes("/new") ? (
-    <Suspense>
-      <div className="flex gap-4">
-        <Button
-          variant={"secondary"}
-          className="gap-2"
-          size={"sm"}
-          onClick={() => {
-            router.replace(`${pathname}?view=list`);
-          }}
-        >
-          <List />
-          List View
-        </Button>
-        <Button
-          variant={"secondary"}
-          className="gap-2"
-          size={"sm"}
-          onClick={() => {
-            router.replace(`${pathname}?view=grid`);
-          }}
-        >
-          <List />
-          Grid
-        </Button>
-        <Button
-          variant={"default"}
-          className="gap-2 hover:bg-primary/75"
-          size={"sm"}
-          onClick={() => {
-            router.push(pathname + "/new");
-          }}
-        >
-          <Plus />
-          {btnName}
-        </Button>
-      </div>
-    </Suspense>
-  ) : (
-    <Btn />
+  return (
+    !pathname.includes("/new") && (
+      <Suspense>
+        <div className="flex gap-4">
+          <Button
+            variant={"secondary"}
+            className="gap-2"
+            size={"sm"}
+            onClick={() => {
+              router.replace(`${pathname}?view=list`);
+            }}
+          >
+            <List />
+            List View
+          </Button>
+          <Button
+            variant={"secondary"}
+            className="gap-2"
+            size={"sm"}
+            onClick={() => {
+              router.replace(`${pathname}?view=grid`);
+            }}
+          >
+            <List />
+            Grid
+          </Button>
+          <Button
+            variant={"default"}
+            className="gap-2 hover:bg-primary/75"
+            size={"sm"}
+            onClick={() => {
+              router.push(pathname + "/new");
+            }}
+          >
+            <Plus />
+            {btnName}
+          </Button>
+        </div>
+      </Suspense>
+    )
   );
 };
 
 export default ClientSideButton;
-const Btn = () => {
-  const dispatch = useAppDispatch();
-  return (
-    <div className="flex  justify-end gap-3 ">
-      <Button variant={"secondary"} onClick={() => dispatch(resetCart())}>
-        <ResetIcon /> Reset Cart
-      </Button>
-      <Button variant={"default"}>
-        <User /> Add new user
-      </Button>
-    </div>
-  );
-};
