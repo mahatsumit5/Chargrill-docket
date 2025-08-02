@@ -10,7 +10,7 @@ const page = async () => {
 
   const { error, result } = await getAllCustomers("", false);
   return (
-    <div>
+    <div className="mt-4">
       <DataTable data={result ?? []} type="customer" />
     </div>
   );

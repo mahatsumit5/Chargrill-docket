@@ -13,7 +13,12 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  MoreHorizontal,
+  PlusCircle,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -37,7 +42,8 @@ import {
 } from "@/components/ui/table";
 import { Customer, Dietary, OrderItems } from "@prisma/client";
 import Image from "next/image";
-import { da } from "date-fns/locale";
+import { OrderDropDownMenu, UserDropdownMenu } from "../dropdown/DropdownMenu";
+import { Title } from "../title/Title";
 
 interface DataTableProps<T> {
   data: T[];
@@ -265,6 +271,15 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
       enableHiding: false,
     },
     {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className=" break-words">
+          {(row.getValue("id") as string).slice(0, 4)}
+        </div>
+      ),
+    },
+    {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => (
@@ -277,7 +292,7 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
       cell: ({ row }) => {
         const customer: Customer = row.getValue("customer");
         return (
-          <div className="capitalize">
+          <div className="capitalize w-fit ">
             {customer.firstName} {customer.lastName}
           </div>
         );
@@ -350,6 +365,7 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
         return itemColumns;
     }
   }
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -376,51 +392,121 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
       rowSelection,
     },
   });
+  const UserHeader = () => {
+    return (
+      <div className="flex  justify-between items-center py-4 w-full ">
+        <div className=" w-full">
+          <Title title="All Users" />
+        </div>
+        <div className="flex gap-2 w-full justify-end">
+          <Input
+            placeholder="Filter emails..."
+            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("email")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm bg-secondary sm:h-8 hidden md:block"
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" className="border">
+                Columns <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <UserDropdownMenu />
+        </div>
+      </div>
+    );
+  };
+  const OrderHeader = () => {
+    return (
+      <div className="flex  justify-between items-center py-4 w-full  ">
+        <div className=" w-full">
+          <Title title="All Orders" />
+        </div>
+        <div className="flex gap-2 w-full justify-start sm:justify-end">
+          <Input
+            placeholder="Search your order id"
+            value={(table.getColumn("id")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("id")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm bg-secondary sm:h-8 hidden md:block "
+          />
 
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="secondary" className="border">
+                Columns <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                .getAllColumns()
+                .filter((column) => column.getCanHide())
+                .map((column) => {
+                  return (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      className="capitalize"
+                      checked={column.getIsVisible()}
+                      onCheckedChange={(value) =>
+                        column.toggleVisibility(!!value)
+                      }
+                    >
+                      {column.id}
+                    </DropdownMenuCheckboxItem>
+                  );
+                })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <OrderDropDownMenu />
+        </div>
+      </div>
+    );
+  };
+  function getHeaders(): React.ReactNode {
+    switch (type) {
+      case "customer":
+        return UserHeader();
+      case "items":
+        return UserHeader();
+      case "order":
+        return OrderHeader();
+      default:
+        return UserHeader();
+    }
+  }
   return (
     <div className="w-full">
-      {/*  */}
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm bg-input"
-        />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      {/* Header */}
 
+      {getHeaders()}
       {/*  */}
-      <div className="rounded-md  ">
-        <Table className="bg-background-secondary">
-          <TableHeader>
+      <div className="overflow-hidden rounded-md shadow-black border  ">
+        <Table className="rounded-md ">
+          <TableHeader className="border-none">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
@@ -469,7 +555,6 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
         </Table>
       </div>
 
-      {/*  */}
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="text-muted-foreground flex-1 text-sm">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}

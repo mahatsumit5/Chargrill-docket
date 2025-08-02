@@ -30,7 +30,7 @@ export default function Layout({
         <SidebarProvider>
           <AppSidebar />
           <LoadingModal />
-          <div className="flex w-full flex-col min-h-screen bg-background ">
+          <div className="flex w-full   flex-col min-h-screen bg-background ">
             {/* header */}
             <div className=" w-full  bg-primary">
               <header className=" flex w-full justify-between items-center p-2   max-w-[1400px] m-auto">
@@ -72,7 +72,7 @@ export default function Layout({
               </header>
             </div>
 
-            <main className="flex-1 h-full w-full   p-2 max-w-[1400px] mx-auto">
+            <main className="flex-1 h-full w-full  max-w-[1400px] mx-auto px-4">
               <div className="">
                 <BreadCrumbComponent />
               </div>

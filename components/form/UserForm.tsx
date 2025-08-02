@@ -79,6 +79,7 @@ function UserForm() {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-5 w   w-full max-w-[600px]  p-3"
+        style={{}}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           <h4 className="scroll-m-20 text-lg font-semibold tracking-tight col-span-2 text-primary">

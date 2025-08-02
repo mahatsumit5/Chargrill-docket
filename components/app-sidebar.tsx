@@ -133,7 +133,7 @@ const CollapsedSidebarContent = () => {
       </SidebarHeader>
       <SidebarContent draggable={true} className=" bg-background pt-5">
         <SidebarGroup>
-          <ul className="flex gap-2 flex-col">
+          <ul className="flex gap-5 flex-col">
             {links.map((item) => (
               <Link
                 key={item.href}

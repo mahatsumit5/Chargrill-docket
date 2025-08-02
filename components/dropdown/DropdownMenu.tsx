@@ -1,6 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Grid, List, MoreHorizontal, Table, User } from "lucide-react";
+import {
+  Grid,
+  List,
+  MoreHorizontal,
+  SearchCheck,
+  Table,
+  User,
+} from "lucide-react";
 
 import {
   DropdownMenu,
@@ -17,7 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { usePathname, useRouter } from "next/navigation";
-export function DropdownMenuDemo() {
+function UserDropdownMenu() {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -40,6 +47,10 @@ export function DropdownMenuDemo() {
           <DropdownMenuItem>
             <Grid /> Grid View
             <DropdownMenuShortcut>⇧⌘G</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <SearchCheck /> Search
+            <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
@@ -75,3 +86,61 @@ export function DropdownMenuDemo() {
     </DropdownMenu>
   );
 }
+function OrderDropDownMenu() {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild className="rounded-md bg-secondary w-fit">
+        <Button variant="outline">More...</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-56" align="start">
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            <User /> Profile
+            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <List /> List View
+            <DropdownMenuShortcut>⇧⌘L</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Grid /> Grid View
+            <DropdownMenuShortcut>⇧⌘G</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <SearchCheck /> Search
+            <DropdownMenuShortcut>⇧⌘S</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>Users</DropdownMenuItem>
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent>
+                <DropdownMenuItem>Email</DropdownMenuItem>
+                <DropdownMenuItem>Message</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>More...</DropdownMenuItem>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+          <DropdownMenuItem
+            onClick={() => {
+              router.push(pathname + "/new");
+            }}
+          >
+            New Order
+            <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+export { UserDropdownMenu, OrderDropDownMenu };
