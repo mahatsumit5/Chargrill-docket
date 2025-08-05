@@ -38,7 +38,7 @@ export default function Layout({
                   <SidebarTrigger className="text-background" />
 
                   <Input
-                    className="w-[250px]  rounded-full h-6 hidden md:block  "
+                    className="w-[250px]  rounded-full h-6 hidden md:block bg-white dark:bg-white/65  "
                     type="text"
                     placeholder="search......"
                   />

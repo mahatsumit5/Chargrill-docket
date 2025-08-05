@@ -7,9 +7,6 @@ export default function Page() {
         appearance={{
           elements: {
             formButtonPrimary: "bg-primary",
-            card: {
-              backgroundColor: "blueviolet",
-            },
           },
         }}
       />
