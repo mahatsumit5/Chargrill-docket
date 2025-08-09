@@ -16,7 +16,9 @@ const CreateUserModal = () => {
       showCloseButton
       modalClassName="p-4"
     >
-      <UserForm />
+      <div className="bg-background p-4 rounded-md">
+        <UserForm />
+      </div>
     </Modal>
   );
 };

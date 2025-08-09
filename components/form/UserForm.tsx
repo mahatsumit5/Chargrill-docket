@@ -82,7 +82,7 @@ function UserForm() {
         style={{}}
       >
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <h4 className="scroll-m-20 text-lg font-semibold tracking-tight col-span-2 text-primary">
+          <h4 className="scroll-m-20 text-lg font-semibold tracking-tight col-span-2 ">
             User Register
           </h4>
           <p className="text-muted-foreground text-sm col-span-2 mb-8">

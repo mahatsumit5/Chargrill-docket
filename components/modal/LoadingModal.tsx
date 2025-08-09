@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from ".";
 import { useAppSelector } from "@/hooks";
+import { LoaderFour, LoaderOne, LoaderThree, LoaderTwo } from "../ui/loader";
 
 const LoadingModal = () => {
   const { loading } = useAppSelector((store) => store.modal);
@@ -11,7 +12,7 @@ const LoadingModal = () => {
       showCloseButton={false}
       modalClassName=""
     >
-      <div className="border-white border-y-primary p-5  rounded-full border-2  animate-spin" />
+      <LoaderOne />
     </Modal>
   );
 };

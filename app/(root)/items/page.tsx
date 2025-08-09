@@ -37,7 +37,7 @@ const ItemCard: FC<{ item: GetAllItemsResponse }> = ({
   return (
     <div
       key={id}
-      className="border border-secondary rounded-md w-full max-w-[320px] shadow-lg shadow-secondary"
+      className="border border-secondary rounded-md w-full max-w-[320px] shadow-amber-950 shadow-2xs"
     >
       <div className="relative w-full h-[180px]">
         <Image

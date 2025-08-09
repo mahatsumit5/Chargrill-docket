@@ -18,13 +18,15 @@ const BreadCrumbComponent = () => {
     <Breadcrumb className="py-3 ">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          <BreadcrumbLink href="/" className="text-lg">
+            Home
+          </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         {links.map((item, index) => (
           <div key={index} className="flex items-center gap-">
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/${item}`}>
+              <BreadcrumbLink href={`/${item}`} className="text-lg">
                 {item.charAt(0).toUpperCase() + item.slice(1)}
               </BreadcrumbLink>
             </BreadcrumbItem>
