@@ -2,7 +2,7 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import BreadCrumbComponent from "@/components/breadCrumb/BreadCrumb";
 import Footer from "@/components/Footer";
-import { DesktopView, MobileView } from "@/components/header/Header";
+import { Header } from "@/components/header/Header";
 import LoadingModal from "@/components/modal/LoadingModal";
 import { LoaderOne } from "@/components/ui/loader";
 
@@ -32,7 +32,7 @@ export default function Layout({
           <AppSidebar />
           <LoadingModal />
           <div className="flex w-full   flex-col min-h-screen bg-background ">
-            <DesktopView />
+            <Header />
 
             <main className="flex-1 h-full w-full  max-w-[1400px] mx-auto px-4">
               <div className="">

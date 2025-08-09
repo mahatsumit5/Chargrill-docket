@@ -2,6 +2,7 @@
 
 import { Download, PlusCircle } from "lucide-react";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 function DataDisplay() {
   return (
@@ -16,16 +17,5 @@ function DataDisplay() {
     </div>
   );
 }
-function TopHeaderButtons() {
-  return (
-    <div className="flex gap-2 flex-col md:flex-row">
-      <Button variant={"secondary"} className="rounded-full">
-        <Download /> Download Report
-      </Button>
-      <Button variant={"default"} className="rounded-full">
-        <PlusCircle /> New Order
-      </Button>
-    </div>
-  );
-}
-export { DataDisplay, TopHeaderButtons };
+
+export { DataDisplay };

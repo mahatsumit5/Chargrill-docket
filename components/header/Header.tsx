@@ -3,102 +3,74 @@ import React from "react";
 import { SidebarTrigger } from "../ui/sidebar";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { MoonStar, Search, ShoppingCart, Sun } from "lucide-react";
-import { useTheme } from "next-themes";
+import { LucideShoppingCart, SearchIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { SignedIn, UserButton } from "@clerk/nextjs";
+
+export function Header() {
+  const router = useRouter();
+  return (
+    <div className=" w-full border-b ">
+      <header className=" flex w-full justify-between items-center p-2 ">
+        <div className="flex items-center">
+          <TriggerSideBar />
+          <DisplayCurrentPage />
+        </div>
+
+        <SearchBar />
+        {/* <DisplayCurrentPage /> */}
+        <div className="flex  gap-2">
+          <Button
+            variant={"ghost"}
+            size={"sm"}
+            onClick={() => {
+              router.push("/cart");
+            }}
+            className=" hidden md:flex"
+          >
+            <LucideShoppingCart />
+          </Button>
+          <Button variant={"ghost"} size={"sm"} className=" flex md:hidden">
+            <SearchIcon />
+          </Button>
+
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
+      </header>
+    </div>
+  );
+}
 
 function DisplayCurrentPage() {
   const pathname = usePathname();
   const path = pathname.split("/").filter((item) => item !== "");
   return (
-    <p className="uppercase font-bold text-primary-foreground">{path[0]}</p>
+    <p className=" font-bold text-primary uppercase block md:hidden">
+      {path[0]}
+    </p>
   );
 }
-function SwitchTheme() {
-  const { setTheme, theme } = useTheme();
 
-  return (
-    <Button
-      variant={"outline"}
-      size={"sm"}
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="hover:bg-secondary"
-    >
-      {theme === "light" ? (
-        <Sun color="gold" className="animate-spin" />
-      ) : (
-        <MoonStar color="skyblue" className="animate-bounce" />
-      )}
-    </Button>
-  );
-}
 function TriggerSideBar() {
-  return <SidebarTrigger className="text-white" />;
+  return <SidebarTrigger className="" />;
 }
-function DesktopView() {
-  const router = useRouter();
-  return (
-    <div className=" w-full  bg-primary">
-      <header className=" flex w-full justify-between items-center p-2   max-w-[1400px] m-auto">
-        <div className="flex gap-5 justify-start items-center  w-full">
-          <TriggerSideBar />
 
-          <Input
-            className="w-[350px]  rounded-full h-6 hidden md:block bg-background dark:bg-background/60 hover:bg-background/85 text-foreground "
-            type="text"
-            placeholder="search......"
-          />
-        </div>
-        <DisplayCurrentPage />
-        <div className="flex w-full justify-end gap-2">
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            onClick={() => {
-              router.push("/cart");
-            }}
-            className="hover:bg-secondary hidden md:flex"
-          >
-            <ShoppingCart />
-          </Button>
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            className="hover:bg-secondary flex md:hidden"
-          >
-            <Search />
-          </Button>
-          <SwitchTheme />
-        </div>
-      </header>
+function SearchBar() {
+  return (
+    <div className=" rounded-full md:flex items-center h-6 w-[300px] lg:w-[450px] gap-0 hidden ">
+      <Input
+        className="w-full  rounded-l-full h-6  bg-secondary  dark:bg-seconadary hover:bg-accent/85 text-secondary-foreground "
+        type="text"
+        placeholder="search......"
+      />
+      <Button
+        variant={"ghost"}
+        className="bg-accent rounded-r-full h-10 w-[60px] flex items-center justify-center border"
+      >
+        <SearchIcon />
+      </Button>
     </div>
   );
 }
-function MobileView() {
-  return (
-    <div className=" w-full  bg-primary block sm:hidden">
-      <header className=" flex w-full justify-between items-center p-2   max-w-[1400px] m-auto">
-        <div className="flex gap-5 justify-start items-center  w-full">
-          <TriggerSideBar />
-          <Input
-            className="w-[250px]  rounded-full h-6 hidden md:block bg-white dark:bg-white/65  "
-            type="text"
-            placeholder="search......"
-          />
-        </div>
-        <div className="flex w-full justify-end gap-2">
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            className="hover:bg-secondary"
-          >
-            <Search />
-          </Button>
-          <SwitchTheme />
-        </div>
-      </header>
-    </div>
-  );
-}
-
-export { DesktopView, MobileView };

@@ -270,15 +270,15 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
       enableSorting: false,
       enableHiding: false,
     },
-    {
-      accessorKey: "id",
-      header: "ID",
-      cell: ({ row }) => (
-        <div className=" break-words">
-          {(row.getValue("id") as string).slice(0, 4)}
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "id",
+    //   header: "ID",
+    //   cell: ({ row }) => (
+    //     <div className=" break-words">
+    //       {(row.getValue("id") as string).slice(0, 4)}
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "status",
       header: "Status",
@@ -329,11 +329,7 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
         const date = new Date(row.getValue("pickupTime"));
         const orderDate = date.toLocaleDateString();
         const time = date.toLocaleTimeString();
-        return (
-          <div className="capitalize">
-            {orderDate}-{time}
-          </div>
-        );
+        return <div className="capitalize">{orderDate}</div>;
       },
     },
     {

@@ -7,11 +7,10 @@ import { Customer, Item } from "@prisma/client";
 import UserSearch from "../User-search/UserSearch";
 import { useAppDispatch, useAppSelector } from "@/hooks";
 import OrderForm from "../form/OrderForm";
-import ItemCard from "../item-card/ItemCard";
+import ItemCard from "../items/ItemCard";
 import { GetAllItemsResponse } from "@/types";
 import { setCartState, TCartState } from "@/redux/features/cart.slice";
 import { FastForwardIcon } from "lucide-react";
-import { object } from "zod";
 import { toast } from "sonner";
 
 type key = "Customer" | "Order" | "Items";

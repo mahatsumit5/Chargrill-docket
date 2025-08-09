@@ -1,9 +1,7 @@
 export const dynamic = "force-dynamic";
 
-import { DataTable } from "@/components/reuseable/ReuseableTable";
 import { getAllItems } from "@/database/actions/item.action";
 import { GetAllItemsResponse } from "@/types";
-import { Item } from "@prisma/client";
 import Image from "next/image";
 import React, { FC } from "react";
 
@@ -24,7 +22,7 @@ export default page;
 
 const RenderItems: FC<{ data: GetAllItemsResponse[] }> = ({ data }) => {
   return (
-    <div className="flex flex-wrap gap-3 shadow-sm">
+    <div className="flex flex-wrap gap-4 ">
       {data.map((item) => (
         <ItemCard item={item} key={item.id} />
       ))}
@@ -37,7 +35,7 @@ const ItemCard: FC<{ item: GetAllItemsResponse }> = ({
   return (
     <div
       key={id}
-      className="border border-secondary rounded-md w-full max-w-[320px] shadow-amber-950 shadow-2xs"
+      className="border border-secondary rounded-md w-full max-w-[320px]  shadow-[0_35px_35px_rgba(0,0,0,0.25)] z-50"
     >
       <div className="relative w-full h-[180px]">
         <Image

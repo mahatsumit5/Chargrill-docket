@@ -8,7 +8,6 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { Concert_One } from "next/font/google";
-import { UserButton, SignedIn } from "@clerk/nextjs";
 const conConcert_One = Concert_One({
   weight: ["400"],
   subsets: ["latin"],
@@ -28,6 +27,7 @@ import {
 
 import { usePathname } from "next/navigation";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { SwitchTheme } from "./theme/Theme";
 
 const links = [
   {
@@ -41,7 +41,7 @@ const links = [
     icon: <LayoutDashboard size={16} />,
   },
   {
-    href: "/order",
+    href: "/orders",
     label: "Orders",
     icon: <Book size={16} />,
   },
@@ -79,11 +79,6 @@ export function AppSidebar() {
       collapsible="icon"
     >
       {Display[state]}
-      <SidebarFooter className="bg-background">
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-      </SidebarFooter>
     </Sidebar>
   );
 }
@@ -116,6 +111,12 @@ const ExpandedSideBarContent = () => {
                 </li>
               </Link>
             ))}
+
+            <li
+              className={`font-bold text-sm flex  items-center   cursor-pointer hover:text-muted-foreground   `}
+            >
+              <SwitchTheme /> Theme
+            </li>
           </ul>
         </SidebarGroup>
       </SidebarContent>
@@ -152,8 +153,17 @@ const CollapsedSidebarContent = () => {
                 </li>
               </Link>
             ))}
+            <li className="flex justify-center   gap-2  bg-background-secondary hover:bg-secondary rounded-md  items-center">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <SwitchTheme />
+                </TooltipTrigger>
+                <TooltipContent>Theme</TooltipContent>
+              </Tooltip>
+            </li>
           </ul>
         </SidebarGroup>
+        <SidebarGroup></SidebarGroup>
       </SidebarContent>
     </>
   );
