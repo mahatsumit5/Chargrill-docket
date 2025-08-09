@@ -103,3 +103,4 @@ export type CreateNewOrderParams = {
   totalAmount: number;
   cartItems: { itemId: string; sizeId: string; quantity: number }[];
 };
+export type CurrentPath = "orders" | "users" | "items" | "new";

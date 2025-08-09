@@ -270,15 +270,15 @@ export function DataTable<T>({ data, type }: DataTableProps<T>) {
       enableSorting: false,
       enableHiding: false,
     },
-    // {
-    //   accessorKey: "id",
-    //   header: "ID",
-    //   cell: ({ row }) => (
-    //     <div className=" break-words">
-    //       {(row.getValue("id") as string).slice(0, 4)}
-    //     </div>
-    //   ),
-    // },
+    {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className=" break-words">
+          {(row.getValue("id") as string).slice(0, 4)}
+        </div>
+      ),
+    },
     {
       accessorKey: "status",
       header: "Status",

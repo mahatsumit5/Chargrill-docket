@@ -7,10 +7,8 @@ import React, { FC } from "react";
 
 const page = async ({}: {}) => {
   const { error, result } = await getAllItems();
-  console.log(result);
   return !error ? (
     <div className="mt-3">
-      {/* <DataTable data={result as Item[]} type="items" /> */}
       <RenderItems data={result!} />
     </div>
   ) : (
@@ -44,6 +42,7 @@ const ItemCard: FC<{ item: GetAllItemsResponse }> = ({
           fill
           objectFit="cover"
           className="rounded-t-md"
+          sizes=""
         />
       </div>
       <div className="p-2 flex justify-between items-center mt-2">

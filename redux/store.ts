@@ -3,6 +3,7 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import cartReducer from "./features/cart.slice";
 import modalReducer from "./features/modal.slice";
+import viewReducer from "./features/view.slice";
 const persistConfig = {
   key: "cart",
   storage,
@@ -13,6 +14,7 @@ const store = configureStore({
   reducer: {
     cart: persistedReducer,
     modal: modalReducer,
+    view: viewReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
